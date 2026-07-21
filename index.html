@@ -14,9 +14,9 @@
 </head>
 <body>
 
-  <!-- Site Header Navigation -->
+  <!-- Canonical Header Structure -->
   <header class="site-header">
-    <div class="navbar">
+    <div class="container navbar">
       <a href="index.html" class="brand-logo" aria-label="RenoLeads Homepage">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
         <span>RenoLeads</span>
@@ -24,7 +24,7 @@
 
       <nav aria-label="Main Navigation">
         <ul class="nav-links">
-          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
           <li><a href="properties.html" class="nav-link">Available Lots</a></li>
           <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
           <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
@@ -48,7 +48,7 @@
             RenoLeads • Polomolok, South Cotabato
           </div>
           <h1>Own Your Dream Land Lot Under Mt. Matutum</h1>
-          <p>Accessible residential homesteads, farm lots, and highway commercial properties in Polomolok. Enjoy fresh air, fertile soil, clean titles, and flexible monthly installment options.</p>
+          <p>Accessible residential homesteads, farm lots, and highway commercial properties in Polomolok. Enjoy fresh mountain air, fertile volcanic soil, clean titles, and flexible installment options.</p>
           
           <div class="hero-actions">
             <a href="properties.html" class="btn btn-accent btn-lg">Browse Properties</a>
@@ -109,7 +109,7 @@
           </div>
 
           <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-            <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--status-reserved-bg); color: var(--color-accent); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;" aria-hidden="true">📈</div>
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--status-reserved-bg); color: var(--color-accent-hover); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;" aria-hidden="true">📈</div>
             <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">High Value Appreciation</h3>
             <p style="color: var(--color-text-muted); font-size: 0.95rem;">Land prices in South Cotabato are steadily appreciating due to continuous infrastructure projects, commercial developments, and agricultural expansion.</p>
           </div>
@@ -178,7 +178,7 @@
             <p>Fill out the form below and our RenoLeads team will get back to you immediately.</p>
           </div>
 
-          <div id="form-feedback" style="display: none; margin-bottom: 1.5rem; padding: 1rem; border-radius: 8px;"></div>
+          <div id="form-feedback" role="status" aria-live="polite" style="display: none; margin-bottom: 1.5rem; padding: 1rem; border-radius: 8px;"></div>
 
           <form id="lead-inquiry-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1.25rem;">
             <div class="form-group">
@@ -281,6 +281,7 @@
   </footer>
 
   <!-- JS Scripts -->
+  <script src="js/config.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/app.js"></script>
   <script src="js/properties.js"></script>

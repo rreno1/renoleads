@@ -1,11 +1,19 @@
 /**
- * Lead Inquiry & Site Visit Form Controller
- * Handles form validation, Firestore lead creation, and confirmation handling
+ * Lead Inquiry & Site Tour Form Handling (Phase 10 Conversion & Trust Engine)
  */
 
 document.addEventListener("DOMContentLoaded", () => {
   const inquiryForm = document.getElementById("lead-inquiry-form");
   const formFeedback = document.getElementById("form-feedback");
+
+  // Query Parameter Property Prefill logic
+  const urlParams = new URLSearchParams(window.location.search);
+  const propertyParam = urlParams.get("property");
+  const propertyInterestInput = document.getElementById("form-property-interest") || document.getElementById("propertyInterest");
+
+  if (propertyInterestInput && propertyParam) {
+    propertyInterestInput.value = decodeURIComponent(propertyParam);
+  }
 
   if (!inquiryForm) return;
 
@@ -17,34 +25,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `Submitting...`;
+      submitBtn.innerHTML = `Submitting Inquiry...`;
     }
 
     if (formFeedback) {
       formFeedback.style.display = "none";
+      formFeedback.className = "";
+      formFeedback.innerHTML = "";
     }
 
-    // Extract form data
     const formData = new FormData(inquiryForm);
     const leadPayload = {
-      fullName: formData.get("fullName") || "",
-      mobileNumber: formData.get("mobileNumber") || "",
-      email: formData.get("email") || "",
-      propertyCode: formData.get("propertyInterest") || "General Inquiries",
-      inquiryType: formData.get("inquiryType") || "general",
-      preferredDate: formData.get("preferredDate") || "",
-      preferredContactMethod: formData.get("preferredContactMethod") || "phone",
-      message: formData.get("message") || "",
-      source: "website",
-      status: "new"
+      fullName: (formData.get("fullName") || "").trim(),
+      mobileNumber: (formData.get("mobileNumber") || "").trim(),
+      email: (formData.get("email") || "").trim(),
+      propertyCode: (formData.get("propertyInterest") || "General Inquiries").trim(),
+      inquiryType: (formData.get("inquiryType") || "site_visit").trim(),
+      preferredDate: (formData.get("preferredDate") || "").trim(),
+      preferredContactMethod: (formData.get("preferredContactMethod") || "phone").trim(),
+      message: (formData.get("message") || "").trim(),
+      source: "website_funnel"
     };
 
-    // Basic Validation
-    if (!leadPayload.fullName.trim() || !leadPayload.mobileNumber.trim()) {
+    // Validation
+    if (!leadPayload.fullName || !leadPayload.mobileNumber) {
       if (formFeedback) {
         formFeedback.style.display = "block";
-        formFeedback.className = "alert alert-warning";
-        formFeedback.textContent = "Please fill in your Full Name and Mobile Number.";
+        formFeedback.className = "badge-reserved";
+        formFeedback.setAttribute("role", "alert");
+        formFeedback.style.padding = "1rem";
+        formFeedback.style.borderRadius = "8px";
+        formFeedback.textContent = "Please provide your Full Name and Mobile Number.";
       }
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -57,28 +68,54 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await submitLeadToFirestore(leadPayload);
 
       if (result && result.success) {
-        inquiryForm.reset();
-        
-        if (formFeedback) {
-          formFeedback.style.display = "block";
-          formFeedback.className = "alert alert-success";
-          formFeedback.innerHTML = `
-            <strong>Inquiry Received!</strong><br>
-            Thank you, ${leadPayload.fullName}. Our land sales team will contact you via ${leadPayload.preferredContactMethod.toUpperCase()} shortly regarding your site visit / inquiry.
-          `;
+        if (result.isLive) {
+          // Live Firebase Success
+          inquiryForm.reset();
+          if (formFeedback) {
+            formFeedback.style.display = "block";
+            formFeedback.className = "badge-available";
+            formFeedback.setAttribute("role", "status");
+            formFeedback.style.padding = "1rem";
+            formFeedback.style.borderRadius = "8px";
+            formFeedback.innerHTML = `
+              <strong>Inquiry Received!</strong><br>
+              Thank you, ${DOMUtils.escapeHTML(leadPayload.fullName)}. Your site visit request for ${DOMUtils.escapeHTML(leadPayload.propertyCode)} has been logged. Our land agent will contact you via ${DOMUtils.escapeHTML(leadPayload.preferredContactMethod.toUpperCase())} shortly.
+            `;
+          }
+        } else {
+          // Offline / Local Buffer Notice (Truthful Messaging - Phase 10)
+          if (formFeedback) {
+            formFeedback.style.display = "block";
+            formFeedback.style.background = "#FEF3C7";
+            formFeedback.style.color = "#B45309";
+            formFeedback.style.border = "1px solid #F59E0B";
+            formFeedback.style.padding = "1rem";
+            formFeedback.style.borderRadius = "8px";
+            formFeedback.setAttribute("role", "status");
+            formFeedback.innerHTML = `
+              <strong>Inquiry Saved Locally!</strong><br>
+              ${DOMUtils.escapeHTML(result.message)}
+              <div style="margin-top: 0.75rem;">
+                <a href="${RENO_CONFIG.contact.viberUrl}" class="btn btn-sm btn-accent">Click to Message Agent on Viber</a>
+              </div>
+            `;
+          }
         }
-
-        // Trigger Analytics Event
-        if (typeof trackFunnelEvent === 'function') {
-          trackFunnelEvent('lead_submitted', { inquiry_type: leadPayload.inquiryType });
-        }
+      } else {
+        throw new Error(result.error || "Submission failed");
       }
     } catch (err) {
-      console.error("Form submission error:", err);
+      console.error("[RenoLeads] Lead Form Error:", err);
       if (formFeedback) {
         formFeedback.style.display = "block";
-        formFeedback.className = "alert alert-error";
-        formFeedback.textContent = "Unable to submit inquiry at this time. Please call or message us directly.";
+        formFeedback.className = "badge-sold";
+        formFeedback.setAttribute("role", "alert");
+        formFeedback.style.padding = "1rem";
+        formFeedback.style.borderRadius = "8px";
+        formFeedback.innerHTML = `
+          <strong>Submission Error</strong><br>
+          We could not reach the server at this moment. Please call or SMS us directly at <strong>${RENO_CONFIG.contact.phoneDisplay}</strong>.
+        `;
       }
     } finally {
       if (submitBtn) {

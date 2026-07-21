@@ -13,21 +13,23 @@
 </head>
 <body>
 
-  <!-- Site Header -->
+  <!-- Canonical Header -->
   <header class="site-header">
     <div class="container navbar">
-      <a href="index.html" class="brand-logo">
-        <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+      <a href="index.html" class="brand-logo" aria-label="RenoLeads Homepage">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
         <span>RenoLeads</span>
       </a>
 
-      <ul class="nav-links">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="properties.html" class="nav-link active">Available Lots</a></li>
-        <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
-        <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
-        <li><a href="contact.html" class="nav-link">Contact Us</a></li>
-      </ul>
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="properties.html" class="nav-link active" aria-current="page">Available Lots</a></li>
+          <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
+          <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
+          <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+        </ul>
+      </nav>
 
       <div class="nav-cta">
         <a href="contact.html" class="btn btn-accent">Schedule Site Visit</a>
@@ -35,20 +37,20 @@
     </div>
   </header>
 
-  <main class="section-padding">
+  <main class="section-padding section-shell">
     <div class="container">
       <div class="section-header" style="margin-bottom: 2rem; text-align: left; max-width: 100%;">
         <span class="tagline">Exclusive Inventory</span>
-        <h2>Available Land Lots in Polomolok</h2>
-        <p id="properties-count">Loading property listings...</p>
+        <h1>Available Land Lots in Polomolok</h1>
+        <p id="properties-count" aria-live="polite">Loading property listings...</p>
       </div>
 
       <!-- Quick Filter Pills -->
-      <div class="filter-pills">
-        <button class="pill-btn active" data-type="all">All Categories</button>
-        <button class="pill-btn" data-type="residential">Residential Lots</button>
-        <button class="pill-btn" data-type="agricultural">Homestead & Farm Lots</button>
-        <button class="pill-btn" data-type="commercial">Highway Commercial</button>
+      <div class="filter-pills" role="toolbar" aria-label="Filter land categories">
+        <button class="pill-btn active" data-type="all" aria-pressed="true">All Categories</button>
+        <button class="pill-btn" data-type="residential" aria-pressed="false">Residential Lots</button>
+        <button class="pill-btn" data-type="agricultural" aria-pressed="false">Homestead & Farm Lots</button>
+        <button class="pill-btn" data-type="commercial" aria-pressed="false">Highway Commercial</button>
       </div>
 
       <!-- Filter Controls -->
@@ -80,6 +82,10 @@
             <option value="area-desc">Lot Size: Largest First</option>
           </select>
         </div>
+
+        <div class="form-group" style="align-self: flex-end;">
+          <button id="clear-filters-btn" class="btn btn-outline" style="width: 100%;">Reset Filters</button>
+        </div>
       </div>
 
       <!-- Grid Container -->
@@ -98,6 +104,7 @@
     </div>
   </footer>
 
+  <script src="js/config.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/app.js"></script>
   <script src="js/properties.js"></script>

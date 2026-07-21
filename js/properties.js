@@ -1,6 +1,6 @@
 /**
- * Properties Catalog Page Controller
- * Handles pill filters, dropdown filters, search inputs, and dynamic property rendering.
+ * RenoLeads Properties Catalog Page Controller
+ * Handles intrinsic grids, pill filters (aria-pressed), dropdown filters, results count live region, and clean empty states
  */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -8,84 +8,100 @@ document.addEventListener("DOMContentLoaded", async () => {
   const statusFilter = document.getElementById("filter-status");
   const priceFilter = document.getElementById("filter-max-price");
   const sortFilter = document.getElementById("filter-sort");
+  const clearBtn = document.getElementById("clear-filters-btn");
   const resultsCount = document.getElementById("properties-count");
   const pillBtns = document.querySelectorAll(".pill-btn");
 
+  if (!gridContainer) return;
+
   let selectedCategory = "all";
 
-  // Check URL param for pre-selected type e.g. properties.html?type=residential
+  // Check URL query parameters e.g. properties.html?type=residential
   const urlParams = new URLSearchParams(window.location.search);
   const typeParam = urlParams.get("type");
   if (typeParam) {
     selectedCategory = typeParam;
     pillBtns.forEach(btn => {
-      if (btn.dataset.type === typeParam) {
-        btn.classList.add("active");
-      } else {
-        btn.classList.remove("active");
-      }
+      const isSelected = btn.dataset.type === typeParam;
+      btn.classList.toggle("active", isSelected);
+      btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
     });
   }
 
-  if (!gridContainer) return;
+  // Loading Skeleton State
+  gridContainer.innerHTML = `
+    <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem;">
+      <p style="font-size: 1.1rem; color: var(--color-text-muted);">Loading available land lots in Polomolok...</p>
+    </div>
+  `;
 
-  gridContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem 0;"><p>Loading available land lots in Polomolok...</p></div>`;
-  
   let allProperties = await fetchPublishedProperties();
 
   function renderListings(propertiesToRender) {
+    // Update ARIA live results count
     if (resultsCount) {
-      resultsCount.textContent = `${propertiesToRender.length} Lot${propertiesToRender.length === 1 ? '' : 's'} Found`;
+      const count = propertiesToRender.length;
+      resultsCount.textContent = `${count} Land Parcel${count === 1 ? '' : 's'} Found`;
     }
 
+    // Empty State
     if (propertiesToRender.length === 0) {
       gridContainer.innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; background: #FFF; border-radius: 16px;">
-          <h3>No properties match your selected criteria</h3>
-          <p style="color: var(--text-muted); margin-top: 0.5rem;">Try adjusting your filters or contact us to inquire about upcoming land lot releases.</p>
+        <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; background: #FFF; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+          <div style="font-size: 2.5rem; margin-bottom: 0.75rem;" aria-hidden="true">🍃</div>
+          <h3>No properties match your filter selection</h3>
+          <p style="color: var(--color-text-muted); margin: 0.5rem auto 1.5rem auto;">Try resetting your filters or contacting our sales team for upcoming land lot releases in Polomolok.</p>
+          <button id="reset-filters-action" class="btn btn-outline">Reset All Filters</button>
         </div>
       `;
+
+      const resetBtn = document.getElementById("reset-filters-action");
+      if (resetBtn) {
+        resetBtn.addEventListener("click", resetAllFilters);
+      }
       return;
     }
 
+    // Render Cards
     gridContainer.innerHTML = propertiesToRender.map(prop => {
       const statusClass = prop.status === 'available' ? 'badge-available' : (prop.status === 'reserved' ? 'badge-reserved' : 'badge-sold');
-      const formattedPrice = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP', maximumFractionDigits: 0 }).format(prop.totalPrice);
+      const formattedPrice = DOMUtils.formatCurrency(prop.totalPrice);
+      const formattedPriceSqm = DOMUtils.formatCurrency(prop.pricePerSqm);
       const thumbnail = prop.thumbnailUrl || 'assets/images/sample-res-1.jpg';
 
       return `
-        <div class="property-card">
+        <article class="property-card">
           <div class="card-image-wrap">
-            <span class="badge ${statusClass} card-status-badge">${prop.status.toUpperCase()}</span>
-            <img src="${thumbnail}" alt="${prop.title}" loading="lazy" onerror="this.src='assets/images/sample-res-1.jpg'">
+            <span class="badge ${statusClass} card-status-badge">${DOMUtils.escapeHTML(prop.status.toUpperCase())}</span>
+            <img src="${thumbnail}" alt="${DOMUtils.escapeHTML(prop.title)}" width="400" height="250" loading="lazy" onerror="this.src='assets/images/sample-res-1.jpg'">
             <div class="card-price-tag">${formattedPrice}</div>
           </div>
           <div class="card-body">
-            <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 0.2rem;">
-              ${prop.propertyType.toUpperCase()} LOT
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-accent-hover); text-transform: uppercase; margin-bottom: 0.25rem;">
+              ${DOMUtils.escapeHTML(prop.propertyType.toUpperCase())} LOT
             </span>
-            <h3 class="card-title">${prop.title}</h3>
+            <h3 class="card-title">${DOMUtils.escapeHTML(prop.title)}</h3>
             <div class="card-location">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-              Brgy. ${prop.barangay}, Polomolok, South Cotabato
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Brgy. ${DOMUtils.escapeHTML(prop.barangay)}, Polomolok
             </div>
 
             <div class="card-features">
               <div class="feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                <span>${prop.lotAreaSqm.toLocaleString()} sqm</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                <span>${DOMUtils.formatNumber(prop.lotAreaSqm)} sqm</span>
               </div>
               <div class="feature-item">
-                <span>₱${prop.pricePerSqm.toLocaleString()}/sqm</span>
+                <span>${formattedPriceSqm}/sqm</span>
               </div>
             </div>
 
             <div class="card-footer">
-              <a href="property.html?id=${prop.id}" class="btn btn-outline btn-sm">Details & Map</a>
+              <a href="property.html?id=${encodeURIComponent(prop.id)}" class="btn btn-outline btn-sm">View Details</a>
               <a href="contact.html?property=${encodeURIComponent(prop.propertyCode + ' - ' + prop.title)}" class="btn btn-accent btn-sm">Quick Inquire</a>
             </div>
           </div>
-        </div>
+        </article>
       `;
     }).join('');
   }
@@ -93,23 +109,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   function applyFilters() {
     let filtered = [...allProperties];
 
-    // Filter by Pill Category
     if (selectedCategory !== "all") {
       filtered = filtered.filter(p => p.propertyType === selectedCategory);
     }
 
-    // Filter by status
     if (statusFilter && statusFilter.value !== "all") {
       filtered = filtered.filter(p => p.status === statusFilter.value);
     }
 
-    // Filter by max price
     if (priceFilter && priceFilter.value !== "all") {
       const maxPrice = parseFloat(priceFilter.value);
       filtered = filtered.filter(p => p.totalPrice <= maxPrice);
     }
 
-    // Sort
     if (sortFilter) {
       if (sortFilter.value === "price-asc") {
         filtered.sort((a, b) => a.totalPrice - b.totalPrice);
@@ -123,20 +135,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderListings(filtered);
   }
 
+  function resetAllFilters() {
+    selectedCategory = "all";
+    pillBtns.forEach(btn => {
+      const isAll = btn.dataset.type === "all";
+      btn.classList.toggle("active", isAll);
+      btn.setAttribute("aria-pressed", isAll ? "true" : "false");
+    });
+    if (statusFilter) statusFilter.value = "available";
+    if (priceFilter) priceFilter.value = "all";
+    if (sortFilter) sortFilter.value = "price-asc";
+    applyFilters();
+  }
+
   // Pill click handlers
   pillBtns.forEach(btn => {
     btn.addEventListener("click", () => {
-      pillBtns.forEach(b => b.classList.remove("active"));
+      pillBtns.forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-pressed", "false");
+      });
       btn.classList.add("active");
+      btn.setAttribute("aria-pressed", "true");
       selectedCategory = btn.dataset.type;
       applyFilters();
     });
   });
 
-  // Dropdown Filter event listeners
   if (statusFilter) statusFilter.addEventListener("change", applyFilters);
   if (priceFilter) priceFilter.addEventListener("change", applyFilters);
   if (sortFilter) sortFilter.addEventListener("change", applyFilters);
+  if (clearBtn) clearBtn.addEventListener("click", resetAllFilters);
 
   // Initial Render
   applyFilters();

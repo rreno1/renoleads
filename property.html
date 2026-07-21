@@ -13,180 +13,32 @@
 </head>
 <body>
 
-  <!-- Site Header Navigation -->
+  <!-- Canonical Header -->
   <header class="site-header">
     <div class="container navbar">
-      <a href="index.html" class="brand-logo">
-        <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+      <a href="index.html" class="brand-logo" aria-label="RenoLeads Homepage">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
         <span>RenoLeads</span>
       </a>
 
-      <ul class="nav-links">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="properties.html" class="nav-link">Available Lots</a></li>
-        <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
-        <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
-        <li><a href="contact.html" class="nav-link">Contact Us</a></li>
-      </ul>
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="properties.html" class="nav-link">Available Lots</a></li>
+          <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
+          <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
+          <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+        </ul>
+      </nav>
 
       <div class="nav-cta">
-        <a id="open-in-app-btn" href="#" class="btn btn-app">Open in RenoLeads App</a>
         <a href="#inquiry-form-card" class="btn btn-accent">Schedule Site Visit</a>
       </div>
     </div>
   </header>
 
-  <main class="section-padding">
-    <div class="container">
-
-      <!-- Header & Metadata -->
-      <div class="property-details-header">
-        <div>
-          <span id="property-status-badge" class="badge badge-available">AVAILABLE</span>
-          <h1 id="property-title" style="font-size: 2.25rem; margin: 0.5rem 0 0.25rem 0;">Property Title</h1>
-          <div id="property-location" style="color: var(--text-muted); font-size: 1.05rem;">Brgy. Poblacion, Polomolok, South Cotabato</div>
-        </div>
-
-        <div style="text-align: right;">
-          <span style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block;">Total Price</span>
-          <h2 id="property-price" style="font-size: 2.25rem; color: var(--primary);">₱0</h2>
-          <span id="property-price-sqm" style="font-size: 0.95rem; font-weight: 600; color: var(--accent);">₱0 / sqm</span>
-        </div>
-      </div>
-
-      <!-- Image Gallery Grid -->
-      <div class="property-gallery-grid">
-        <div class="gallery-main">
-          <img id="gallery-main-img" src="assets/images/sample-res-1.jpg" alt="Property Image Main">
-        </div>
-        <div class="gallery-sub">
-          <div class="gallery-sub-item">
-            <img id="gallery-sub-img-1" src="assets/images/sample-res-2.jpg" alt="Property Detail Image 1">
-          </div>
-          <div class="gallery-sub-item">
-            <img id="gallery-sub-img-2" src="assets/images/polomolok-hero-bg.jpg" alt="Property Detail Image 2">
-          </div>
-        </div>
-      </div>
-
-      <!-- Details & Sidebar Layout -->
-      <div class="details-layout">
-
-        <!-- Left Column: Specs & Overview -->
-        <div>
-          <!-- Specs Grid -->
-          <div class="specs-grid">
-            <div class="spec-box">
-              <span>Property Code</span>
-              <strong id="property-code">POL-001</strong>
-            </div>
-
-            <div class="spec-box">
-              <span>Lot Area Size</span>
-              <strong id="property-area">300 sqm</strong>
-            </div>
-
-            <div class="spec-box">
-              <span>Document Status</span>
-              <strong id="property-doc-status">Clean Title (TCT)</strong>
-            </div>
-
-            <div class="spec-box">
-              <span>Payment Terms</span>
-              <strong>Cash / Installment</strong>
-            </div>
-          </div>
-
-          <!-- Description -->
-          <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); border: 1px solid #E2E8F0; margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1rem; font-size: 1.35rem;">Property Description</h3>
-            <p id="property-description" style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.7;">Loading property details...</p>
-          </div>
-
-          <!-- Nearby Landmarks -->
-          <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); border: 1px solid #E2E8F0; margin-bottom: 2rem;">
-            <h3 style="margin-bottom: 1rem; font-size: 1.35rem;">Nearby Landmarks & Accessibility</h3>
-            <ul id="landmarks-list" style="list-style: none; padding: 0; margin: 0;">
-              <!-- Rendered via JS -->
-            </ul>
-          </div>
-        </div>
-
-        <!-- Right Column: Calculator & Inquiry Card -->
-        <div>
-          <!-- Payment Estimator Calculator -->
-          <div class="calculator-card">
-            <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Sample Payment Calculator</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">Estimate your monthly installment based on down payment and term.</p>
-
-            <div class="calc-row">
-              <label for="calc-dp-percent">
-                <span>Down Payment (%)</span>
-                <strong id="calc-dp-val">20%</strong>
-              </label>
-              <input type="range" id="calc-dp-percent" min="10" max="50" step="5" value="20" style="width: 100%;">
-            </div>
-
-            <div class="calc-row">
-              <label for="calc-term-years">Payment Term</label>
-              <select id="calc-term-years" class="form-control">
-                <option value="1">12 Months (1 Year)</option>
-                <option value="2" selected>24 Months (2 Years)</option>
-                <option value="3">36 Months (3 Years)</option>
-                <option value="5">60 Months (5 Years)</option>
-              </select>
-            </div>
-
-            <div class="calc-result-box">
-              <span>Est. Monthly Amortization</span>
-              <h3 id="calc-monthly-result">₱0 / mo</h3>
-            </div>
-          </div>
-
-          <!-- Quick Inquiry Card -->
-          <div id="inquiry-form-card" style="background: #FFF; padding: 1.75rem; border-radius: var(--radius-md); border: 1px solid #E2E8F0; box-shadow: var(--shadow-sm);">
-            <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem;">Book a Free Site Visit</h3>
-            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">Submit your contact information to schedule an inspection of this lot.</p>
-
-            <div id="form-feedback" style="display: none; margin-bottom: 1rem; padding: 0.75rem; font-size: 0.85rem; border-radius: 6px;"></div>
-
-            <form id="lead-inquiry-form">
-              <input type="hidden" id="form-property-interest" name="propertyInterest" value="">
-              <input type="hidden" name="inquiryType" value="site_visit">
-
-              <div class="form-group" style="margin-bottom: 1rem;">
-                <label for="fullName">Full Name *</label>
-                <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Juan Dela Cruz" required>
-              </div>
-
-              <div class="form-group" style="margin-bottom: 1rem;">
-                <label for="mobileNumber">Mobile Number *</label>
-                <input type="tel" id="mobileNumber" name="mobileNumber" class="form-control" placeholder="09171234567" required>
-              </div>
-
-              <div class="form-group" style="margin-bottom: 1rem;">
-                <label for="preferredDate">Preferred Date</label>
-                <input type="date" id="preferredDate" name="preferredDate" class="form-control">
-              </div>
-
-              <div class="form-group" style="margin-bottom: 1.25rem;">
-                <label for="preferredContactMethod">Contact Method</label>
-                <select id="preferredContactMethod" name="preferredContactMethod" class="form-control">
-                  <option value="phone">Phone Call</option>
-                  <option value="viber">Viber</option>
-                  <option value="whatsapp">WhatsApp</option>
-                  <option value="messenger">Facebook Messenger</option>
-                </select>
-              </div>
-
-              <button type="submit" class="btn btn-accent" style="width: 100%;">Confirm Inspection Schedule</button>
-            </form>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
+  <main id="property-detail-main" class="section-padding section-shell container">
+    <!-- Dynamic Detail Content Rendered via js/property-details.js -->
   </main>
 
   <footer class="site-footer">
@@ -198,6 +50,7 @@
     </div>
   </footer>
 
+  <script src="js/config.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/app.js"></script>
   <script src="js/property-details.js"></script>
