@@ -61,49 +61,33 @@
     <div class="container">
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: clamp(2rem, 5vw, 3.5rem);">
         
-        <!-- Form Section First on Mobile per Section 18.1 -->
-        <div style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: var(--radius-lg); padding: clamp(1.5rem, 4vw, 3rem); box-shadow: var(--glass-shadow-lg); border: 1px solid var(--glass-border);">
-          <div class="section-header" style="margin-bottom: 2rem; text-align: left; max-width: 100%;">
-            <span class="tagline">Schedule Inspection</span>
-            <h1>Send Inquiry</h1>
-            <p>Complete the form below to book a free site tour or request sample payment computations.</p>
-          </div>
+        <!-- Form Section First on Mobile -->
+        <div id="inquiry-form-card" style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.5rem, 3vw, 2.25rem); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: var(--glass-shadow); scroll-margin-top: 110px;">
+          <h3 style="margin-bottom: 0.5rem;">Book a Site Visit</h3>
+          <p style="font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--color-text-muted);">Submit your details to schedule an on-site inspection with our accredited agent.</p>
 
           <div id="form-feedback" class="feedback-alert" role="status" aria-live="polite" style="display: none;"></div>
 
           <form id="lead-inquiry-form">
             <input type="hidden" id="form-property-interest" name="propertyInterest" value="General Inquiries">
+            <input type="hidden" name="inquiryType" value="site_visit">
 
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 1rem;">
               <label for="fullName">Full Name *</label>
               <input type="text" id="fullName" name="fullName" class="form-control" placeholder="e.g. Juan Dela Cruz" required>
             </div>
 
-            <div class="form-group">
-              <label for="mobileNumber">Mobile / Phone Number *</label>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label for="mobileNumber">Mobile Number *</label>
               <input type="tel" id="mobileNumber" name="mobileNumber" class="form-control" placeholder="e.g. 09171234567" required>
             </div>
 
-            <div class="form-group">
-              <label for="email">Email Address (Optional)</label>
-              <input type="email" id="email" name="email" class="form-control" placeholder="e.g. juan@example.com">
-            </div>
-
-            <div class="form-group">
-              <label for="inquiryType">Inquiry Purpose</label>
-              <select id="inquiryType" name="inquiryType" class="form-control">
-                <option value="site_visit">Schedule a Site Visit</option>
-                <option value="pricing">Request Sample Payment Computation</option>
-                <option value="general">General Inquiry</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="preferredDate">Preferred Site Visit Date</label>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label for="preferredDate">Preferred Date</label>
               <input type="date" id="preferredDate" name="preferredDate" class="form-control">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 1.5rem;">
               <label for="preferredContactMethod">Preferred Contact Channel</label>
               <select id="preferredContactMethod" name="preferredContactMethod" class="form-control">
                 <option value="phone">Phone Call / SMS</option>
@@ -113,21 +97,7 @@
               </select>
             </div>
 
-            <div class="form-group">
-              <label for="message">Your Message</label>
-              <textarea id="message" name="message" class="form-control" rows="4" placeholder="Mention preferred barangay or lot size..."></textarea>
-            </div>
-
-            <div class="form-checkbox-group">
-              <input type="checkbox" id="consent" required>
-              <label for="consent">
-                I agree to allow RenoLeads sales representatives to contact me regarding land lot availability in Polomolok. Read our <a href="privacy.html" style="text-decoration: underline; color: var(--color-primary);">Privacy Policy</a>.
-              </label>
-            </div>
-
-            <div>
-              <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">Submit Inquiry</button>
-            </div>
+            <button type="submit" class="btn btn-accent" style="width: 100%;">Confirm Site Inspection</button>
           </form>
         </div>
 
