@@ -1,50 +1,39 @@
-/* RenoLeads Responsive System & Mobile Touch Optimization */
+/* RenoLeads Multi-Breakpoint Responsive Engine & Touch Drawer */
 
-/* Fluid Typography & Root Scale */
-:root {
-  --fluid-h1: clamp(2.25rem, 5vw + 1rem, 3.5rem);
-  --fluid-h2: clamp(1.75rem, 3vw + 1rem, 2.5rem);
-  --fluid-body: clamp(0.95rem, 1vw + 0.5rem, 1.1rem);
-}
-
-h1 { font-size: var(--fluid-h1); }
-h2 { font-size: var(--fluid-h2); }
-
-/* Ensure 48px Touch Targets for Mobile Accessibility */
-button, .btn, .nav-link, input, select, .pill-btn, .quick-action-btn {
-  min-height: 48px;
-  touch-action: manipulation;
-}
-
-/* Mobile Slide-Over Drawer Navigation */
+/* Mobile Hamburger Toggle Button */
 .mobile-nav-toggle {
   display: none;
   background: transparent;
   border: none;
   font-size: 1.75rem;
-  color: var(--primary-dark);
+  color: var(--color-primary-dark);
   cursor: pointer;
   padding: 0.5rem;
-  z-index: 1100;
+  min-height: 48px;
+  min-width: 48px;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-sticky);
 }
 
+/* Off-Canvas Accessible Mobile Navigation Drawer */
 .mobile-drawer {
   position: fixed;
   top: 0;
   right: -100%;
-  width: 80%;
-  max-width: 320px;
-  height: 100vh;
+  width: min(80vw, 320px);
+  height: 100dvh;
+  background: #FFFFFF;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  z-index: 1050;
-  box-shadow: -10px 0 30px rgba(0,0,0,0.15);
-  padding: 5rem 2rem 2rem 2rem;
+  z-index: var(--z-drawer);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+  padding: 5rem 1.75rem 2rem 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 1rem;
+  transition: right var(--transition-slow);
 }
 
 .mobile-drawer.active {
@@ -57,12 +46,13 @@ button, .btn, .nav-link, input, select, .pill-btn, .quick-action-btn {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(10, 22, 18, 0.5);
+  background: rgba(6, 17, 13, 0.6);
   backdrop-filter: blur(4px);
-  z-index: 1040;
+  -webkit-backdrop-filter: blur(4px);
+  z-index: var(--z-overlay);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
 }
 
 .mobile-drawer-overlay.active {
@@ -70,7 +60,7 @@ button, .btn, .nav-link, input, select, .pill-btn, .quick-action-btn {
   pointer-events: auto;
 }
 
-/* Breakpoint 1024px (Tablets / Small Laptops) */
+/* Breakpoint 1024px (Laptops & Tablets in Landscape) */
 @media (max-width: 1024px) {
   .details-layout,
   .property-gallery-grid {
@@ -89,33 +79,31 @@ button, .btn, .nav-link, input, select, .pill-btn, .quick-action-btn {
   }
 
   .footer-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Breakpoint 768px (Mobile Devices) */
+/* Breakpoint 768px (Tablets in Portrait & Mobile Devices) */
 @media (max-width: 768px) {
   .navbar {
     height: 72px;
   }
 
-  .nav-links {
-    display: none; /* Handled via mobile drawer */
+  .nav-links, .nav-cta {
+    display: none;
   }
 
   .mobile-nav-toggle {
     display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   .hero {
-    padding: 4.5rem 0 3.5rem 0;
     text-align: center;
+    padding-block: 4rem 3.5rem;
   }
 
   .hero-content {
-    margin: 0 auto;
+    margin-inline: auto;
   }
 
   .hero-actions {
@@ -140,37 +128,35 @@ button, .btn, .nav-link, input, select, .pill-btn, .quick-action-btn {
     grid-template-columns: 1fr;
   }
 
-  .specs-grid {
-    grid-template-columns: 1fr;
-  }
-
   .timeline-step {
     grid-template-columns: 1fr;
     text-align: center;
   }
 
   .step-number {
-    margin: 0 auto;
+    margin-inline: auto;
   }
 
-  .comparison-table th, .comparison-table td {
-    padding: 0.85rem 1rem;
-    font-size: 0.88rem;
-  }
-
+  /* Safe Area Mobile Floating Contact Bar */
   .floating-quick-bar {
-    bottom: 1rem;
-    right: 50%;
-    transform: translateX(50%);
-    width: 90%;
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(calc(100% - 2rem), 480px);
     justify-content: center;
   }
 
   .quick-action-btn {
     flex: 1;
     justify-content: center;
-    padding: 0.75rem 0.5rem;
+    padding: 0.75rem 0.4rem;
     font-size: 0.82rem;
+  }
+
+  /* Add extra padding at the bottom of the body so floating bar does not cover footer content */
+  body {
+    padding-bottom: 5rem;
   }
 
   .footer-grid {
@@ -183,4 +169,27 @@ button, .btn, .nav-link, input, select, .pill-btn, .quick-action-btn {
     gap: 1rem;
     text-align: center;
   }
+}
+
+/* Ultra-Small Mobile Viewports (320px - 360px) */
+@media (max-width: 360px) {
+  .container {
+    padding-inline: 1rem;
+  }
+
+  .pill-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.82rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+}
+
+/* Diagnostic Layout Overflow Class */
+.debug-layout * {
+  outline: 1px solid rgba(255, 0, 0, 0.2) !important;
 }

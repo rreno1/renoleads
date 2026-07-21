@@ -15,19 +15,21 @@
 
   <!-- Site Header Navigation -->
   <header class="site-header">
-    <div class="container navbar">
-      <a href="index.html" class="brand-logo">
-        <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+    <div class="navbar">
+      <a href="index.html" class="brand-logo" aria-label="RenoLeads Homepage">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
         <span>RenoLeads</span>
       </a>
 
-      <ul class="nav-links">
-        <li><a href="index.html" class="nav-link">Home</a></li>
-        <li><a href="properties.html" class="nav-link">Available Lots</a></li>
-        <li><a href="why-invest.html" class="nav-link active">Why Invest</a></li>
-        <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
-        <li><a href="contact.html" class="nav-link">Contact Us</a></li>
-      </ul>
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="properties.html" class="nav-link">Available Lots</a></li>
+          <li><a href="why-invest.html" class="nav-link active">Why Invest</a></li>
+          <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
+          <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+        </ul>
+      </nav>
 
       <div class="nav-cta">
         <a href="properties.html" class="btn btn-accent">View Available Lots</a>
@@ -36,89 +38,91 @@
   </header>
 
   <!-- Hero Header -->
-  <section class="section-padding" style="background: linear-gradient(135deg, var(--bg-dark) 0%, var(--primary-dark) 100%); color: #FFF; padding: 5rem 0 4rem 0;">
+  <section class="section-padding section-shell" style="background: linear-gradient(135deg, var(--color-surface-dark) 0%, var(--color-primary-dark) 100%); color: #FFF; padding-block: 5rem 4rem;">
     <div class="container text-center">
-      <span class="badge badge-available" style="background: rgba(255,255,255,0.15); color: var(--accent); margin-bottom: 1rem;">SMART REAL ESTATE INVESTMENT</span>
-      <h1 style="font-size: 3rem; color: #FFF; margin-bottom: 1rem;">Why Invest in Polomolok, South Cotabato?</h1>
-      <p style="max-width: 700px; margin: 0 auto; color: rgba(255,255,255,0.85); font-size: 1.15rem;">Polomolok is the agricultural & commercial powerhouse of South Cotabato, offering high land value growth, cool mountain climate, and strategic access to General Santos City.</p>
+      <span class="badge badge-available" style="background: rgba(255,255,255,0.15); color: var(--color-accent); margin-bottom: 1rem;">SMART REAL ESTATE INVESTMENT</span>
+      <h1 style="color: #FFF; margin-bottom: 1rem;">Why Invest in Polomolok, South Cotabato?</h1>
+      <p style="max-width: 700px; margin-inline: auto; color: rgba(255,255,255,0.85); font-size: 1.15rem;">Polomolok is the agricultural & commercial powerhouse of South Cotabato, offering high land value growth, cool mountain climate, and strategic access to General Santos City.</p>
     </div>
   </section>
 
   <!-- Main Content -->
-  <main class="section-padding">
+  <main class="section-padding section-shell">
     <div class="container">
 
       <!-- 4 Pillars Grid -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 4rem;">
-        <div style="background: #FFF; padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid #E2E8F0; box-shadow: var(--shadow-sm);">
-          <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏔️</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 2rem; margin-bottom: 4rem;">
+        <div style="background: #FFF; padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;" aria-hidden="true">🏔️</div>
           <h3 style="font-size: 1.35rem; margin-bottom: 0.75rem;">Cool Climate & Scenic Views</h3>
-          <p style="color: var(--text-muted); font-size: 0.98rem; line-height: 1.7;">Situated right at the foot of Mount Matutum, Polomolok enjoys fresh mountain breezes and cooler temperatures than nearby coastal cities—making it the ideal location for retirement homesteads and vacation farm houses.</p>
+          <p style="color: var(--color-text-muted); font-size: 0.98rem; line-height: 1.7;">Situated right at the foot of Mount Matutum, Polomolok enjoys fresh mountain breezes and cooler temperatures than nearby coastal cities—making it the ideal location for retirement homesteads and vacation farm houses.</p>
         </div>
 
-        <div style="background: #FFF; padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid #E2E8F0; box-shadow: var(--shadow-sm);">
-          <div style="font-size: 2.5rem; margin-bottom: 1rem;">📈</div>
+        <div style="background: #FFF; padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;" aria-hidden="true">📈</div>
           <h3 style="font-size: 1.35rem; margin-bottom: 0.75rem;">15% - 20% Annual Appreciation</h3>
-          <p style="color: var(--text-muted); font-size: 0.98rem; line-height: 1.7;">Land values in Polomolok have consistently outpaced inflation over the past 5 years due to expanding residential subdivisions, industrial developments, and commercial bypass roads connecting to GenSan.</p>
+          <p style="color: var(--color-text-muted); font-size: 0.98rem; line-height: 1.7;">Land values in Polomolok have consistently outpaced inflation over the past 5 years due to expanding residential subdivisions, industrial developments, and commercial bypass roads connecting to GenSan.</p>
         </div>
 
-        <div style="background: #FFF; padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid #E2E8F0; box-shadow: var(--shadow-sm);">
-          <div style="font-size: 2.5rem; margin-bottom: 1rem;">🍍</div>
+        <div style="background: #FFF; padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;" aria-hidden="true">🍍</div>
           <h3 style="font-size: 1.35rem; margin-bottom: 0.75rem;">Fertile Volcanic Soil</h3>
-          <p style="color: var(--text-muted); font-size: 0.98rem; line-height: 1.7;">Home to Dole Philippines' world-renowned pineapple plantations. The volcanic soil of Polomolok is exceptionally rich, ideal for growing fruit trees, vegetables, and high-value crops on homestead lots.</p>
+          <p style="color: var(--color-text-muted); font-size: 0.98rem; line-height: 1.7;">Home to Dole Philippines' world-renowned pineapple plantations. The volcanic soil of Polomolok is exceptionally rich, ideal for growing fruit trees, vegetables, and high-value crops on homestead lots.</p>
         </div>
 
-        <div style="background: #FFF; padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid #E2E8F0; box-shadow: var(--shadow-sm);">
-          <div style="font-size: 2.5rem; margin-bottom: 1rem;">✈️</div>
+        <div style="background: #FFF; padding: 2.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;" aria-hidden="true">✈️</div>
           <h3 style="font-size: 1.35rem; margin-bottom: 0.75rem;">Strategic Connectivity</h3>
-          <p style="color: var(--text-muted); font-size: 0.98rem; line-height: 1.7;">Just 15-20 minutes away from General Santos City (GenSan), KCC/SM Malls, hospitals, and only 30 minutes from General Santos International Airport.</p>
+          <p style="color: var(--color-text-muted); font-size: 0.98rem; line-height: 1.7;">Just 15-20 minutes away from General Santos City (GenSan), KCC/SM Malls, hospitals, and only 30 minutes from General Santos International Airport.</p>
         </div>
       </div>
 
-      <!-- Growth Comparison Table -->
-      <div style="max-width: 900px; margin: 0 auto 4rem auto;">
+      <!-- Growth Comparison Table Wrapper -->
+      <div style="max-width: 900px; margin-inline: auto; margin-bottom: 4rem;">
         <div class="section-header">
           <span class="tagline">Market Growth Analysis</span>
           <h2>Polomolok vs Neighboring Real Estate Markets</h2>
         </div>
 
-        <table class="comparison-table">
-          <thead>
-            <tr>
-              <th>Feature / Metric</th>
-              <th>Polomolok Lots</th>
-              <th>City Subdivisions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Price per Square Meter</strong></td>
-              <td><span style="color: var(--status-available); font-weight: 700;">₱1,800 - ₱4,000 / sqm</span> (High Entry Value)</td>
-              <td>₱8,000 - ₱15,000 / sqm</td>
-            </tr>
-            <tr>
-              <td><strong>Lot Sizes Available</strong></td>
-              <td>Generous 300 - 1,200+ sqm</td>
-              <td>Compact 80 - 150 sqm</td>
-            </tr>
-            <tr>
-              <td><strong>Environment & Air Quality</strong></td>
-              <td>Clean mountain air under Mt. Matutum</td>
-              <td>Urban heat & traffic congestion</td>
-            </tr>
-            <tr>
-              <td><strong>Titling & Transfer</strong></td>
-              <td>Clean TCT Titles / Verified Tax Dec</td>
-              <td>Often tied to complex HOA fees</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th scope="col">Feature / Metric</th>
+                <th scope="col">Polomolok Lots</th>
+                <th scope="col">City Subdivisions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Price per Square Meter</strong></td>
+                <td><span style="color: var(--status-available); font-weight: 700;">₱1,800 - ₱4,000 / sqm</span> (High Entry Value)</td>
+                <td>₱8,000 - ₱15,000 / sqm</td>
+              </tr>
+              <tr>
+                <td><strong>Lot Sizes Available</strong></td>
+                <td>Generous 300 - 1,200+ sqm</td>
+                <td>Compact 80 - 150 sqm</td>
+              </tr>
+              <tr>
+                <td><strong>Environment & Air Quality</strong></td>
+                <td>Clean mountain air under Mt. Matutum</td>
+                <td>Urban heat & traffic congestion</td>
+              </tr>
+              <tr>
+                <td><strong>Titling & Transfer</strong></td>
+                <td>Clean TCT Titles / Verified Tax Dec</td>
+                <td>Often tied to complex HOA fees</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- CTA Box -->
-      <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: #FFF; padding: 3.5rem; border-radius: var(--radius-lg); text-align: center; box-shadow: var(--shadow-lg);">
-        <h2 style="color: #FFF; font-size: 2.25rem; margin-bottom: 1rem;">Ready to Secure Your Land in Polomolok?</h2>
-        <p style="max-width: 600px; margin: 0 auto 2rem auto; color: rgba(255,255,255,0.85); font-size: 1.1rem;">Browse available land parcels or book a free site visit with our accredited real estate team today.</p>
+      <div style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); color: #FFF; padding: clamp(2rem, 5vw, 3.5rem); border-radius: var(--radius-lg); text-align: center; box-shadow: var(--shadow-lg);">
+        <h2 style="color: #FFF; margin-bottom: 1rem;">Ready to Secure Your Land in Polomolok?</h2>
+        <p style="max-width: 600px; margin-inline: auto; margin-bottom: 2rem; color: rgba(255,255,255,0.85); font-size: 1.1rem;">Browse available land parcels or book a free site visit with our accredited real estate team today.</p>
         <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
           <a href="properties.html" class="btn btn-accent btn-lg">Browse Available Lots</a>
           <a href="contact.html" class="btn btn-outline btn-lg" style="color: #FFF; border-color: rgba(255,255,255,0.4);">Book Site Inspection</a>

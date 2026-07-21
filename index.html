@@ -16,19 +16,21 @@
 
   <!-- Site Header Navigation -->
   <header class="site-header">
-    <div class="container navbar">
-      <a href="index.html" class="brand-logo">
-        <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+    <div class="navbar">
+      <a href="index.html" class="brand-logo" aria-label="RenoLeads Homepage">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
         <span>RenoLeads</span>
       </a>
 
-      <ul class="nav-links">
-        <li><a href="index.html" class="nav-link active">Home</a></li>
-        <li><a href="properties.html" class="nav-link">Available Lots</a></li>
-        <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
-        <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
-        <li><a href="contact.html" class="nav-link">Contact Us</a></li>
-      </ul>
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="properties.html" class="nav-link">Available Lots</a></li>
+          <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
+          <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
+          <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+        </ul>
+      </nav>
 
       <div class="nav-cta">
         <a href="properties.html" class="btn btn-accent">View Available Lots</a>
@@ -36,206 +38,201 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-tag">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-          RenoLeads • Polomolok, South Cotabato
-        </div>
-        <h1>Own Your Dream Land Lot Under Mt. Matutum</h1>
-        <p>Accessible residential homesteads, farm lots, and highway commercial properties in Polomolok. Enjoy fresh air, fertile soil, clean titles, and flexible monthly installment options.</p>
-        
-        <div class="hero-actions">
-          <a href="properties.html" class="btn btn-accent btn-lg">Browse Properties</a>
-          <a href="contact.html" class="btn btn-outline btn-lg" style="color: #FFF; border-color: rgba(255,255,255,0.4);">Schedule Site Visit</a>
-        </div>
-
-        <div class="hero-stats">
-          <div class="stat-item">
-            <h3>Clean Titles</h3>
-            <p>Ready for TCT Transfer & Tax Dec Verified</p>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero section-shell">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-tag">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+            RenoLeads • Polomolok, South Cotabato
           </div>
-          <div class="stat-item">
-            <h3>Flexible Amort.</h3>
-            <p>0% Interest Installment Payment Plans</p>
-          </div>
-          <div class="stat-item">
-            <h3>30 Mins</h3>
-            <p>To GenSan Airport & Major Malls</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Featured Properties Section -->
-  <section class="section-padding" style="background: #FFF;">
-    <div class="container">
-      <div class="section-header">
-        <span class="tagline">Exclusive Inventory</span>
-        <h2>Featured Land Lot Listings</h2>
-        <p>Explore our handpicked properties currently open for reservation in Polomolok via RenoLeads.</p>
-      </div>
-
-      <div id="properties-grid-container" class="properties-grid">
-        <!-- Rendered via JS -->
-      </div>
-
-      <div class="text-center" style="margin-top: 3rem;">
-        <a href="properties.html" class="btn btn-primary btn-lg">Browse All Properties & Filters</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Why Polomolok Highlight Section -->
-  <section class="section-padding" style="background: var(--bg-light);">
-    <div class="container">
-      <div class="section-header">
-        <span class="tagline">Strategic Location</span>
-        <h2>Why Invest in Polomolok Land?</h2>
-        <p>Polomolok is one of the fastest-growing municipalities in Soccsksargen, combining lush nature with booming commercial potential.</p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
-        <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.06);">
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--status-available-bg); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">🏔️</div>
-          <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Cool Climate & Scenic Views</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Nestled at the base of Mt. Matutum, enjoy cooler year-round temperatures, clean mountain air, and picturesque backdrops for your home or vacation farm.</p>
-        </div>
-
-        <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.06);">
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--status-reserved-bg); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">📈</div>
-          <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">High Value Appreciation</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Land prices in South Cotabato are steadily appreciating due to continuous infrastructure projects, commercial developments, and agricultural expansion.</p>
-        </div>
-
-        <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.06);">
-          <div style="width: 48px; height: 48px; border-radius: 12px; background: #E0F2FE; color: #0284C7; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">🚗</div>
-          <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Accessible Highway Network</h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem;">Just 15-20 minutes away from General Santos City, near Dole Philippines headquarters, hospitals, schools, and local markets.</p>
-        </div>
-      </div>
-
-      <div class="text-center">
-        <a href="why-invest.html" class="btn btn-outline btn-lg">Read Full Investment Report & Comparisons</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Buying Process Highlight Section -->
-  <section class="section-padding" style="background: #FFF;">
-    <div class="container">
-      <div class="section-header">
-        <span class="tagline">Simple & Transparent</span>
-        <h2>How to Purchase Your Lot</h2>
-        <p>Four easy steps from site inspection to owning your land title.</p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
-        <div style="text-align: center; padding: 1.5rem; background: var(--bg-surface-elevated); border-radius: var(--radius-md);">
-          <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">1</span>
-          <h4>Select Property</h4>
-          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">Browse our online listings on RenoLeads and select your preferred lot size and location.</p>
-        </div>
-
-        <div style="text-align: center; padding: 1.5rem; background: var(--bg-surface-elevated); border-radius: var(--radius-md);">
-          <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">2</span>
-          <h4>Book Site Visit</h4>
-          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">Schedule a free guided site tour with our accredited land agent.</p>
-        </div>
-
-        <div style="text-align: center; padding: 1.5rem; background: var(--bg-surface-elevated); border-radius: var(--radius-md);">
-          <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">3</span>
-          <h4>Reserve Your Lot</h4>
-          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">Fill out the reservation form and choose cash or monthly installment plan.</p>
-        </div>
-
-        <div style="text-align: center; padding: 1.5rem; background: var(--bg-surface-elevated); border-radius: var(--radius-md);">
-          <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">4</span>
-          <h4>Title Transfer</h4>
-          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">Receive official deed of sale, tax declaration, and TCT land title under your name.</p>
-        </div>
-      </div>
-
-      <div class="text-center">
-        <a href="buying-process.html" class="btn btn-outline btn-lg">View Detailed Stepper & Titling FAQs</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Lead Capture Form Section -->
-  <section id="inquiry-section" class="section-padding" style="background: var(--bg-light);">
-    <div class="container">
-      <div style="max-width: 800px; margin: 0 auto; background: #FFF; border-radius: var(--radius-lg); padding: 3rem; box-shadow: var(--shadow-lg); border: 1px solid rgba(0,0,0,0.06);">
-        <div class="section-header" style="margin-bottom: 2rem;">
-          <span class="tagline">Get In Touch</span>
-          <h2>Inquire or Schedule a Free Site Tour</h2>
-          <p>Fill out the form below and our RenoLeads team will get back to you immediately.</p>
-        </div>
-
-        <div id="form-feedback" style="display: none; margin-bottom: 1.5rem; padding: 1rem; border-radius: 8px;"></div>
-
-        <form id="lead-inquiry-form" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;">
-          <div class="form-group" style="grid-column: span 1;">
-            <label for="fullName">Full Name *</label>
-            <input type="text" id="fullName" name="fullName" class="form-control" placeholder="e.g. Juan Dela Cruz" required>
+          <h1>Own Your Dream Land Lot Under Mt. Matutum</h1>
+          <p>Accessible residential homesteads, farm lots, and highway commercial properties in Polomolok. Enjoy fresh air, fertile soil, clean titles, and flexible monthly installment options.</p>
+          
+          <div class="hero-actions">
+            <a href="properties.html" class="btn btn-accent btn-lg">Browse Properties</a>
+            <a href="contact.html" class="btn btn-outline btn-lg" style="color: #FFF; border-color: rgba(255,255,255,0.4);">Schedule Site Visit</a>
           </div>
 
-          <div class="form-group" style="grid-column: span 1;">
-            <label for="mobileNumber">Mobile / Phone Number *</label>
-            <input type="tel" id="mobileNumber" name="mobileNumber" class="form-control" placeholder="e.g. 09171234567" required>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <h3>Clean Titles</h3>
+              <p>Ready for TCT Transfer & Tax Dec Verified</p>
+            </div>
+            <div class="stat-item">
+              <h3>Flexible Amort.</h3>
+              <p>0% Interest Installment Payment Plans</p>
+            </div>
+            <div class="stat-item">
+              <h3>30 Mins</h3>
+              <p>To GenSan Airport & Major Malls</p>
+            </div>
           </div>
-
-          <div class="form-group" style="grid-column: span 1;">
-            <label for="email">Email Address (Optional)</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="e.g. juan@example.com">
-          </div>
-
-          <div class="form-group" style="grid-column: span 1;">
-            <label for="inquiryType">I want to...</label>
-            <select id="inquiryType" name="inquiryType" class="form-control">
-              <option value="site_visit">Schedule a Site Visit</option>
-              <option value="pricing">Request Sample Payment Computation</option>
-              <option value="general">Ask General Questions</option>
-            </select>
-          </div>
-
-          <div class="form-group" style="grid-column: span 1;">
-            <label for="preferredDate">Preferred Site Visit Date</label>
-            <input type="date" id="preferredDate" name="preferredDate" class="form-control">
-          </div>
-
-          <div class="form-group" style="grid-column: span 1;">
-            <label for="preferredContactMethod">Preferred Contact Channel</label>
-            <select id="preferredContactMethod" name="preferredContactMethod" class="form-control">
-              <option value="phone">Phone Call / SMS</option>
-              <option value="viber">Viber</option>
-              <option value="whatsapp">WhatsApp</option>
-              <option value="messenger">Facebook Messenger</option>
-            </select>
-          </div>
-
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="message">Your Message or Specific Questions</label>
-            <textarea id="message" name="message" class="form-control" rows="4" placeholder="Tell us about your budget or preferred lot size..."></textarea>
-          </div>
-
-          <div style="grid-column: 1 / -1; margin-top: 0.5rem;">
-            <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">Submit Inquiry / Book Tour</button>
-          </div>
-        </form>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Floating Quick Bar for Frictionless Contact -->
-  <div class="floating-quick-bar">
-    <a href="contact.html" class="quick-action-btn quick-book">📅 Book Tour</a>
-    <a href="https://viber.com" target="_blank" class="quick-action-btn quick-viber">💬 Viber</a>
-    <a href="https://m.me" target="_blank" class="quick-action-btn quick-messenger">⚡ Messenger</a>
-  </div>
+    <!-- Featured Properties Section -->
+    <section class="section-padding section-shell" style="background: #FFF;">
+      <div class="container">
+        <div class="section-header">
+          <span class="tagline">Exclusive Inventory</span>
+          <h2>Featured Land Lot Listings</h2>
+          <p>Explore our handpicked properties currently open for reservation in Polomolok via RenoLeads.</p>
+        </div>
+
+        <div id="properties-grid-container" class="properties-grid">
+          <!-- Rendered via JS -->
+        </div>
+
+        <div class="text-center" style="margin-top: 3rem;">
+          <a href="properties.html" class="btn btn-primary btn-lg">Browse All Properties & Filters</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Polomolok Highlight Section -->
+    <section class="section-padding section-shell" style="background: var(--color-background);">
+      <div class="container">
+        <div class="section-header">
+          <span class="tagline">Strategic Location</span>
+          <h2>Why Invest in Polomolok Land?</h2>
+          <p>Polomolok is one of the fastest-growing municipalities in Soccsksargen, combining lush nature with booming commercial potential.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
+          <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--status-available-bg); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;" aria-hidden="true">🏔️</div>
+            <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Cool Climate & Scenic Views</h3>
+            <p style="color: var(--color-text-muted); font-size: 0.95rem;">Nestled at the base of Mt. Matutum, enjoy cooler year-round temperatures, clean mountain air, and picturesque backdrops for your home or vacation farm.</p>
+          </div>
+
+          <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--status-reserved-bg); color: var(--color-accent); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;" aria-hidden="true">📈</div>
+            <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">High Value Appreciation</h3>
+            <p style="color: var(--color-text-muted); font-size: 0.95rem;">Land prices in South Cotabato are steadily appreciating due to continuous infrastructure projects, commercial developments, and agricultural expansion.</p>
+          </div>
+
+          <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: #E0F2FE; color: #0284C7; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;" aria-hidden="true">🚗</div>
+            <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Accessible Highway Network</h3>
+            <p style="color: var(--color-text-muted); font-size: 0.95rem;">Just 15-20 minutes away from General Santos City, near Dole Philippines headquarters, hospitals, schools, and local markets.</p>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <a href="why-invest.html" class="btn btn-outline btn-lg">Read Full Investment Report & Comparisons</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Buying Process Highlight Section -->
+    <section class="section-padding section-shell" style="background: #FFF;">
+      <div class="container">
+        <div class="section-header">
+          <span class="tagline">Simple & Transparent</span>
+          <h2>How to Purchase Your Lot</h2>
+          <p>Four easy steps from site inspection to owning your land title.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+          <div style="text-align: center; padding: 1.5rem; background: var(--color-surface-elevated); border-radius: var(--radius-md);">
+            <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">1</span>
+            <h4>Select Property</h4>
+            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Browse our online listings on RenoLeads and select your preferred lot size and location.</p>
+          </div>
+
+          <div style="text-align: center; padding: 1.5rem; background: var(--color-surface-elevated); border-radius: var(--radius-md);">
+            <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">2</span>
+            <h4>Book Site Visit</h4>
+            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Schedule a free guided site tour with our accredited land agent.</p>
+          </div>
+
+          <div style="text-align: center; padding: 1.5rem; background: var(--color-surface-elevated); border-radius: var(--radius-md);">
+            <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">3</span>
+            <h4>Reserve Your Lot</h4>
+            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Fill out the reservation form and choose cash or monthly installment plan.</p>
+          </div>
+
+          <div style="text-align: center; padding: 1.5rem; background: var(--color-surface-elevated); border-radius: var(--radius-md);">
+            <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">4</span>
+            <h4>Title Transfer</h4>
+            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Receive official deed of sale, tax declaration, and TCT land title under your name.</p>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <a href="buying-process.html" class="btn btn-outline btn-lg">View Detailed Stepper & Titling FAQs</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lead Capture Form Section -->
+    <section id="inquiry-section" class="section-padding section-shell" style="background: var(--color-background);">
+      <div class="container">
+        <div style="max-width: 800px; margin-inline: auto; background: #FFF; border-radius: var(--radius-lg); padding: clamp(1.5rem, 4vw, 3rem); box-shadow: var(--shadow-lg); border: 1px solid var(--color-border);">
+          <div class="section-header" style="margin-bottom: 2rem;">
+            <span class="tagline">Get In Touch</span>
+            <h2>Inquire or Schedule a Free Site Tour</h2>
+            <p>Fill out the form below and our RenoLeads team will get back to you immediately.</p>
+          </div>
+
+          <div id="form-feedback" style="display: none; margin-bottom: 1.5rem; padding: 1rem; border-radius: 8px;"></div>
+
+          <form id="lead-inquiry-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1.25rem;">
+            <div class="form-group">
+              <label for="fullName">Full Name *</label>
+              <input type="text" id="fullName" name="fullName" class="form-control" placeholder="e.g. Juan Dela Cruz" required>
+            </div>
+
+            <div class="form-group">
+              <label for="mobileNumber">Mobile / Phone Number *</label>
+              <input type="tel" id="mobileNumber" name="mobileNumber" class="form-control" placeholder="e.g. 09171234567" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address (Optional)</label>
+              <input type="email" id="email" name="email" class="form-control" placeholder="e.g. juan@example.com">
+            </div>
+
+            <div class="form-group">
+              <label for="inquiryType">I want to...</label>
+              <select id="inquiryType" name="inquiryType" class="form-control">
+                <option value="site_visit">Schedule a Site Visit</option>
+                <option value="pricing">Request Sample Payment Computation</option>
+                <option value="general">Ask General Questions</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="preferredDate">Preferred Site Visit Date</label>
+              <input type="date" id="preferredDate" name="preferredDate" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label for="preferredContactMethod">Preferred Contact Channel</label>
+              <select id="preferredContactMethod" name="preferredContactMethod" class="form-control">
+                <option value="phone">Phone Call / SMS</option>
+                <option value="viber">Viber</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="messenger">Facebook Messenger</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="message">Your Message or Specific Questions</label>
+              <textarea id="message" name="message" class="form-control" rows="4" placeholder="Tell us about your budget or preferred lot size..."></textarea>
+            </div>
+
+            <div style="grid-column: 1 / -1; margin-top: 0.5rem;">
+              <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">Submit Inquiry / Book Tour</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <!-- Footer -->
   <footer class="site-footer">

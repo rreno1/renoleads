@@ -1,63 +1,77 @@
-/* RenoLeads Modern Luxury Real Estate Design Tokens */
+/* RenoLeads Production Design Tokens & Containment System */
 :root {
-  /* Color Palette - Deep Pine Emerald & Warm Gold Accent */
-  --primary-hsl: 158, 64%, 20%;
-  --primary: hsl(var(--primary-hsl));
-  --primary-light: hsl(158, 55%, 30%);
-  --primary-dark: hsl(158, 70%, 12%);
-  --primary-gradient: linear-gradient(135deg, hsl(158, 65%, 22%) 0%, hsl(158, 75%, 14%) 100%);
+  /* Z-Index Hierarchy Matrix */
+  --z-base: 0;
+  --z-sticky: 20;
+  --z-floating: 40;
+  --z-overlay: 60;
+  --z-drawer: 70;
+  --z-modal: 80;
+  --z-toast: 90;
 
-  --accent-hsl: 38, 92%, 50%;
-  --accent: hsl(var(--accent-hsl));
-  --accent-hover: hsl(38, 98%, 45%);
-  --accent-gradient: linear-gradient(135deg, #FFB800 0%, #F59E0B 100%);
-  --accent-glow: rgba(245, 158, 11, 0.4);
+  /* Three-Color System (WCAG 2.2 AA Compliant) */
+  --color-primary: #064E3B;
+  --color-primary-light: #059669;
+  --color-primary-dark: #022C22;
+  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #022C22 100%);
 
-  --secondary: hsl(215, 28%, 17%);
-  --secondary-light: #F8FAFC;
+  --color-surface-dark: #06110D;
+  --color-surface-dark-card: #0E1F18;
+  --color-surface-dark-border: rgba(255, 255, 255, 0.12);
 
-  /* Dark Luxury Accents */
-  --bg-dark: #0A1612;
-  --bg-dark-card: #12241E;
-  --bg-dark-border: rgba(255, 255, 255, 0.1);
+  --color-accent: #F59E0B;
+  --color-accent-hover: #D97706;
+  --color-accent-gradient: linear-gradient(135deg, #FFB800 0%, #F59E0B 100%);
+  --color-accent-glow: rgba(245, 158, 11, 0.35);
+
+  /* Neutrals & Surfaces */
+  --color-text: #0F172A;
+  --color-text-muted: #475569;
+  --color-text-inverse: #FFFFFF;
   
-  --bg-light: #F6F9F8;
-  --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #F0F4F2;
+  --color-background: #F6F9F8;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #EEF4F1;
+  --color-border: #E2E8F0;
 
-  --text-main: #1E293B;
-  --text-muted: #64748B;
-  --text-light: #F8FAFC;
-  --text-inverse: #FFFFFF;
-
-  /* Badges */
-  --status-available: #059669;
-  --status-available-bg: #D1FAE5;
-  --status-reserved: #D97706;
+  /* Status Tokens */
+  --status-available: #047857;
+  --status-available-bg: #ECFDF5;
+  --status-reserved: #B45309;
   --status-reserved-bg: #FEF3C7;
-  --status-sold: #DC2626;
+  --status-sold: #B91C1C;
   --status-sold-bg: #FEE2E2;
 
-  /* Typography */
-  --font-family-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-family-body: 'Inter', system-ui, sans-serif;
+  /* Typography System */
+  --font-family-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-family-body: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Layout, Radius & Glassmorphism */
-  --container-max: 1240px;
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 28px;
+  --fluid-h1: clamp(2.25rem, 5vw + 1rem, 3.5rem);
+  --fluid-h2: clamp(1.75rem, 3vw + 0.75rem, 2.75rem);
+  --fluid-h3: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
+  --fluid-body: clamp(1rem, 0.35vw + 0.9rem, 1.125rem);
+
+  /* Layout & Containment */
+  --container-width: 1240px;
+  --component-max-width: 100%;
+  --page-padding: clamp(1rem, 3vw, 1.5rem);
+  --section-spacing: clamp(3rem, 7vw, 6rem);
+
+  --radius-sm: 0.625rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
   --radius-full: 9999px;
 
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.12);
-  --shadow-glow: 0 0 25px var(--accent-glow);
+  --shadow-glow: 0 0 25px var(--color-accent-glow);
 
-  --glass-bg: rgba(255, 255, 255, 0.88);
-  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(255, 255, 255, 0.25);
   --glass-blur: blur(16px);
 
-  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 350ms cubic-bezier(0.16, 1, 0.3, 1);
 }
