@@ -843,7 +843,7 @@ textarea.form-control {
   transform: translateX(-50%) translateY(0);
 }
 
-/* 11. Glassmorphism Footer & High-Contrast Dark Section Text Enforcement */
+/* 11. Full Glassmorphism 3-Column Footer Architecture */
 .site-footer {
   background: rgba(11, 31, 24, 0.92);
   backdrop-filter: blur(24px) saturate(200%);
@@ -866,8 +866,15 @@ textarea.form-control {
 .site-footer h3,
 .site-footer h4,
 .site-footer h5,
-.site-footer h6 {
+.site-footer h6,
+.footer-grid h4,
+.footer-col h4 {
   color: #FFFFFF !important;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
 }
 
 .site-footer a {
@@ -890,14 +897,14 @@ textarea.form-control {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: 2.5rem;
   margin-bottom: 3rem;
 }
 
-.footer-col h4 {
-  color: #FFFFFF;
-  margin-bottom: 1.25rem;
+.footer-col {
+  display: flex;
+  flex-direction: column;
 }
 
 .footer-links {
@@ -906,10 +913,11 @@ textarea.form-control {
   flex-direction: column;
   gap: 0.75rem;
   padding: 0;
+  margin: 0;
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: 2rem;
   display: flex;
   justify-content: space-between;
