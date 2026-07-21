@@ -167,7 +167,6 @@
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-/* Customized Select Dropdown Engine */
 select.form-control {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -342,11 +341,11 @@ textarea.form-control {
   flex-wrap: wrap;
 }
 
-/* 6. Intrinsic Responsive Property Cards */
+/* 6. Compact Balanced Property Cards (Section 15.1 & 16.5) */
 .properties-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
-  gap: clamp(1.25rem, 2vw, 2rem);
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.25rem, 2vw, 1.75rem);
 }
 
 .property-card {
@@ -358,6 +357,7 @@ textarea.form-control {
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   display: flex;
   flex-direction: column;
+  max-width: 100%;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -371,7 +371,7 @@ textarea.form-control {
 .card-image-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  height: 220px;
   overflow: hidden;
   background: var(--border);
 }
@@ -425,7 +425,7 @@ textarea.form-control {
 }
 
 .card-body {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -440,7 +440,7 @@ textarea.form-control {
 
 .card-price {
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--color-primary);
 }
@@ -452,8 +452,9 @@ textarea.form-control {
 }
 
 .card-title {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin-bottom: 0.35rem;
+  line-height: 1.35;
 }
 
 .card-location {
@@ -462,14 +463,14 @@ textarea.form-control {
   gap: 0.35rem;
   color: var(--color-text-muted);
   font-size: 0.88rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .card-features {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 0.85rem;
+  padding-top: 0.75rem;
   border-top: 1px solid var(--border);
   margin-bottom: 1.25rem;
   font-size: 0.88rem;
@@ -479,7 +480,7 @@ textarea.form-control {
 .card-footer {
   margin-top: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
 }
 

@@ -2,6 +2,10 @@
 
 /* Breakpoint 1024px (Laptops & Tablets in Landscape) */
 @media (max-width: 1024px) {
+  .properties-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .details-layout,
   .property-gallery-grid {
     grid-template-columns: 1fr;
@@ -79,10 +83,6 @@
     gap: 1rem;
   }
 
-  .properties-grid {
-    grid-template-columns: 1fr;
-  }
-
   .card-footer {
     grid-template-columns: 1fr;
   }
@@ -96,6 +96,17 @@
     flex-direction: column;
     gap: 1rem;
     text-align: center;
+  }
+}
+
+/* Breakpoint 640px (Compact Mobile Devices) */
+@media (max-width: 640px) {
+  .properties-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-image-wrap {
+    height: 200px;
   }
 }
 
