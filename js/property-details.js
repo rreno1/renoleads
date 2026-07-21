@@ -64,8 +64,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         <span style="color: var(--color-text); font-weight: 600;">${DOMUtils.escapeHTML(property.propertyCode)}</span>
       </nav>
 
-      <!-- Retention SVG Actions (Share & Shortlist) -->
-      <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <!-- Status Badge & Retention Actions (Share & Shortlist) -->
+      <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <span class="badge ${statusBadgeClass}" style="height: 40px; padding: 0 1rem; border-radius: var(--radius-sm); font-size: 0.82rem; min-height: 40px; display: inline-flex; align-items: center;">${property.status.toUpperCase()}</span>
         <button class="btn btn-outline btn-sm btn-share-trigger" data-title="${DOMUtils.escapeHTML(property.title)}" data-text="Check out this prime land lot in Polomolok:" data-url="${window.location.href}">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
           Share Listing
@@ -79,12 +80,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     <!-- Editorial Property Header -->
     <div style="margin-bottom: 1.5rem;">
-      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
-        <span class="badge ${statusBadgeClass}">${property.status.toUpperCase()}</span>
-        <span style="color: var(--color-text-muted); font-size: 0.95rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Brgy. ${DOMUtils.escapeHTML(property.barangay)}, Polomolok, South Cotabato
-        </span>
+      <div style="color: var(--color-text-muted); font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Brgy. ${DOMUtils.escapeHTML(property.barangay)}, Polomolok, South Cotabato
       </div>
 
       <h1 style="margin: 0; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.18; font-family: var(--font-display);">${DOMUtils.escapeHTML(property.title)}</h1>
