@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const appIntentUrl = `intent://rreno1.github.io/renoleads/properties/${property.id}#Intent;scheme=https;package=${RENO_CONFIG.androidPackage};S.browser_fallback_url=${encodeURIComponent(appHandoffUrl)};end;`;
 
   mainContainer.innerHTML = `
-    <!-- Top Action & Breadcrumb Bar (Padded for Sticky Header Alignment) -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding-top: 1.75rem;">
+    <!-- Top Action & Breadcrumb Bar -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; padding-top: 1.25rem;">
       <nav class="property-breadcrumbs" aria-label="Breadcrumb navigation">
         <a href="index.html">Home</a> &nbsp;/&nbsp; 
         <a href="properties.html">Properties</a> &nbsp;/&nbsp; 
@@ -74,21 +74,37 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     </div>
 
-    <!-- Balanced Property Header Block -->
-    <div class="property-details-header">
-      <div style="flex: 1; min-width: 280px;">
+    <!-- Clear Editorial Property Header -->
+    <div style="margin-bottom: 1.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
         <span class="badge ${statusBadgeClass}">${property.status.toUpperCase()}</span>
-        <h1 style="margin-top: 0.75rem; margin-bottom: 0.35rem; font-size: clamp(1.8rem, 3.5vw, 2.75rem);">${DOMUtils.escapeHTML(property.title)}</h1>
-        <div style="color: var(--color-text-muted); font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span style="color: var(--color-text-muted); font-size: 0.95rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           Brgy. ${DOMUtils.escapeHTML(property.barangay)}, Polomolok, South Cotabato
-        </div>
+        </span>
       </div>
 
-      <div class="property-price-block">
-        <span style="font-size: 0.82rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; display: block; letter-spacing: 0.05em;">Total Contract Price</span>
-        <h2 style="color: var(--color-primary); font-family: var(--font-display); font-size: 2.35rem; margin: 0; line-height: 1.1;">${formattedPrice}</h2>
-        <span style="font-size: 0.95rem; font-weight: 700; color: var(--color-accent-text); font-family: var(--font-body); display: block; margin-top: 0.25rem;">${formattedPriceSqm} / sqm</span>
+      <h1 style="margin: 0; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.18; font-family: var(--font-display);">${DOMUtils.escapeHTML(property.title)}</h1>
+    </div>
+
+    <!-- Key Highlights Summary Strip -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; background: var(--color-surface); border: 1px solid var(--border); padding: 1.25rem 1.75rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 2rem;">
+      <div>
+        <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Total Contract Price</span>
+        <div style="font-family: var(--font-display); font-size: 2.25rem; font-weight: 700; color: var(--color-primary); line-height: 1.1;">${formattedPrice}</div>
+        <span style="font-size: 0.9rem; font-weight: 600; color: var(--color-accent-text); font-family: var(--font-body); display: block; margin-top: 0.15rem;">${formattedPriceSqm} / sqm</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap;">
+        <div style="border-left: 2px solid var(--border); padding-left: 1.5rem;">
+          <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Lot Area</span>
+          <div style="font-size: 1.35rem; font-weight: 700; color: var(--color-primary);">${formattedLotArea} sqm</div>
+        </div>
+
+        <div style="border-left: 2px solid var(--border); padding-left: 1.5rem;">
+          <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Land Document</span>
+          <div style="font-size: 1.1rem; font-weight: 700; color: var(--status-available);">${DOMUtils.escapeHTML(property.documentStatus || "Clean Title (TCT)")}</div>
+        </div>
       </div>
     </div>
 
