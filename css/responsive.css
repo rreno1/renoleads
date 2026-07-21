@@ -34,25 +34,12 @@
   }
 
   .desktop-nav, .nav-actions {
-    display: none;
-  }
-
-  /* Display Compact Mobile Bottom Navigation Bar (Section 7.2) */
-  .mobile-bottom-nav {
-    display: flex;
-  }
-
-  /* Property Detail Page Contextual Bar (Section 7.3) */
-  body.page-property-detail .mobile-bottom-nav {
     display: none !important;
   }
 
-  body.page-property-detail .property-bottom-bar {
+  /* Display 2-Layer Mobile Hamburger Button */
+  .mobile-menu-toggle {
     display: flex !important;
-  }
-
-  body {
-    padding-bottom: 5.5rem; /* Prevents content obstruction by fixed bottom bars */
   }
 
   .hero {

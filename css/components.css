@@ -91,49 +91,94 @@
   gap: 1rem;
 }
 
-/* 2. Mobile Bottom Navigation Glassmorphism System */
-.mobile-bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  height: 64px;
-  background: rgba(250, 247, 241, 0.82);
-  backdrop-filter: blur(20px) saturate(190%);
-  -webkit-backdrop-filter: blur(20px) saturate(190%);
-  border-top: 1px solid rgba(255, 255, 255, 0.8);
-  z-index: var(--z-floating);
+/* 2. 2-Layer Mobile Hamburger Toggle Button & Glass Drawer System */
+.mobile-menu-toggle {
   display: none;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-around;
-  padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: 0 -4px 24px rgba(16, 27, 22, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  gap: 6px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: rgba(16, 42, 32, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(16, 42, 32, 0.15);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
 }
 
-.mobile-nav-item {
+.mobile-menu-toggle .hamburger-bar {
+  display: block;
+  width: 22px;
+  height: 2.5px;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  transition: transform 250ms cubic-bezier(.2, .8, .2, 1), opacity 200ms ease;
+}
+
+/* 2-Layer Hamburger Active State Animation (X icon) */
+.mobile-menu-toggle.active .hamburger-bar:nth-child(1) {
+  transform: translateY(4.25px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active .hamburger-bar:nth-child(2) {
+  transform: translateY(-4.25px) rotate(-45deg);
+}
+
+.mobile-menu-drawer {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(250, 247, 241, 0.96);
+  backdrop-filter: blur(28px) saturate(220%);
+  -webkit-backdrop-filter: blur(28px) saturate(220%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 20px 40px rgba(16, 27, 22, 0.15);
+  padding: 1.25rem var(--page-gutter);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: transform 300ms cubic-bezier(.2, .8, .2, 1), opacity 300ms ease, visibility 300ms ease;
+  z-index: var(--z-sticky);
+}
+
+.mobile-menu-drawer.is-open {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mobile-nav-link {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.2rem;
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  min-height: 48px;
-  min-width: 64px;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.mobile-nav-item.active {
   color: var(--color-primary);
-  font-weight: 700;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
 }
 
-.mobile-nav-item svg {
-  width: 22px;
-  height: 22px;
-  stroke: currentColor;
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  background: rgba(16, 42, 32, 0.08);
+  color: var(--color-primary);
 }
 
 /* Property Detail Contextual Action Bar */

@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentPath = window.location.pathname.split("/").pop() || "index.html";
   const currentQuery = window.location.search;
 
-  document.querySelectorAll(".desktop-nav .nav-link, .mobile-bottom-nav .mobile-nav-item").forEach(link => {
+  document.querySelectorAll(".desktop-nav .nav-link, .mobile-nav-links .mobile-nav-link").forEach(link => {
     const href = link.getAttribute("href");
     if (!href) return;
 
@@ -140,6 +140,38 @@ document.addEventListener("DOMContentLoaded", () => {
       link.removeAttribute("aria-current");
     }
   });
+
+  // 2-Layer Mobile Hamburger Menu Controller
+  const toggleBtn = document.querySelector(".mobile-menu-toggle");
+  const mobileDrawer = document.getElementById("mobile-menu-drawer");
+
+  if (toggleBtn && mobileDrawer) {
+    toggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = toggleBtn.classList.toggle("active");
+      mobileDrawer.classList.toggle("is-open", isOpen);
+      toggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      mobileDrawer.setAttribute("aria-hidden", isOpen ? "false" : "true");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!mobileDrawer.contains(e.target) && !toggleBtn.contains(e.target)) {
+        toggleBtn.classList.remove("active");
+        mobileDrawer.classList.remove("is-open");
+        toggleBtn.setAttribute("aria-expanded", "false");
+        mobileDrawer.setAttribute("aria-hidden", "true");
+      }
+    });
+
+    mobileDrawer.querySelectorAll(".mobile-nav-link, .btn").forEach(link => {
+      link.addEventListener("click", () => {
+        toggleBtn.classList.remove("active");
+        mobileDrawer.classList.remove("is-open");
+        toggleBtn.setAttribute("aria-expanded", "false");
+        mobileDrawer.setAttribute("aria-hidden", "true");
+      });
+    });
+  }
 
   // 2. Apple-Style Dynamic Glass Scroll Transition Engine for Header & Navigation
   const siteHeader = document.querySelector(".site-header");
