@@ -68,9 +68,9 @@
             <p>Complete the form below to book a free site tour or request sample payment computations.</p>
           </div>
 
-          <div id="form-feedback" role="status" aria-live="polite" style="display: none; margin-bottom: 1.5rem; padding: 1rem; border-radius: 8px;"></div>
+          <div id="form-feedback" class="feedback-alert" role="status" aria-live="polite" style="display: none;"></div>
 
-          <form id="lead-inquiry-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <form id="lead-inquiry-form">
             <input type="hidden" id="form-property-interest" name="propertyInterest" value="General Inquiries">
 
             <div class="form-group">
@@ -117,14 +117,14 @@
               <textarea id="message" name="message" class="form-control" rows="4" placeholder="Mention preferred barangay or lot size..."></textarea>
             </div>
 
-            <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.25rem;">
-              <input type="checkbox" id="consent" required style="min-height: 20px; min-width: 20px; margin-top: 2px;">
-              <label for="consent" style="font-size: 0.85rem; color: var(--color-text-muted);">
+            <div class="form-checkbox-group">
+              <input type="checkbox" id="consent" required>
+              <label for="consent">
                 I agree to allow RenoLeads sales representatives to contact me regarding land lot availability in Polomolok. Read our <a href="privacy.html" style="text-decoration: underline; color: var(--color-primary);">Privacy Policy</a>.
               </label>
             </div>
 
-            <div style="margin-top: 0.75rem;">
+            <div>
               <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">Submit Inquiry</button>
             </div>
           </form>
