@@ -138,7 +138,7 @@
   min-height: 48px;
 }
 
-/* 3. Form Architecture & Input Controls */
+/* 3. Form Architecture & Select Dropdowns Engine */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -165,17 +165,26 @@
   font-size: 0.95rem;
   line-height: 1.5;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-  appearance: none;
-  -webkit-appearance: none;
 }
 
+/* Customized Select Dropdown Engine */
 select.form-control {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2024332c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23102a20' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
-  background-size: 16px 16px;
-  padding-right: 2.5rem;
+  background-size: 18px 18px;
+  padding-right: 2.75rem;
   cursor: pointer;
+}
+
+select.form-control option {
+  background-color: var(--paper);
+  color: var(--ink-950);
+  padding: 0.6rem;
+  font-size: 0.95rem;
 }
 
 textarea.form-control {
