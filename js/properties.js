@@ -1,19 +1,34 @@
 /**
  * Properties Catalog Page Controller
- * Handles filtering by lot type, status, price range, and dynamic rendering.
+ * Handles pill filters, dropdown filters, search inputs, and dynamic property rendering.
  */
 
 document.addEventListener("DOMContentLoaded", async () => {
   const gridContainer = document.getElementById("properties-grid-container");
-  const typeFilter = document.getElementById("filter-property-type");
   const statusFilter = document.getElementById("filter-status");
   const priceFilter = document.getElementById("filter-max-price");
   const sortFilter = document.getElementById("filter-sort");
   const resultsCount = document.getElementById("properties-count");
+  const pillBtns = document.querySelectorAll(".pill-btn");
+
+  let selectedCategory = "all";
+
+  // Check URL param for pre-selected type e.g. properties.html?type=residential
+  const urlParams = new URLSearchParams(window.location.search);
+  const typeParam = urlParams.get("type");
+  if (typeParam) {
+    selectedCategory = typeParam;
+    pillBtns.forEach(btn => {
+      if (btn.dataset.type === typeParam) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    });
+  }
 
   if (!gridContainer) return;
 
-  // Load properties
   gridContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem 0;"><p>Loading available land lots in Polomolok...</p></div>`;
   
   let allProperties = await fetchPublishedProperties();
@@ -25,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (propertiesToRender.length === 0) {
       gridContainer.innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; background: #FFF; border-radius: 12px;">
+        <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; background: #FFF; border-radius: 16px;">
           <h3>No properties match your selected criteria</h3>
           <p style="color: var(--text-muted); margin-top: 0.5rem;">Try adjusting your filters or contact us to inquire about upcoming land lot releases.</p>
         </div>
@@ -66,7 +81,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
 
             <div class="card-footer">
-              <a href="property.html?id=${prop.id}" class="btn btn-primary">View Details & Map</a>
+              <a href="property.html?id=${prop.id}" class="btn btn-outline btn-sm">Details & Map</a>
+              <a href="contact.html?property=${encodeURIComponent(prop.propertyCode + ' - ' + prop.title)}" class="btn btn-accent btn-sm">Quick Inquire</a>
             </div>
           </div>
         </div>
@@ -77,9 +93,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   function applyFilters() {
     let filtered = [...allProperties];
 
-    // Filter by type
-    if (typeFilter && typeFilter.value !== "all") {
-      filtered = filtered.filter(p => p.propertyType === typeFilter.value);
+    // Filter by Pill Category
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(p => p.propertyType === selectedCategory);
     }
 
     // Filter by status
@@ -107,8 +123,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderListings(filtered);
   }
 
-  // Event Listeners
-  if (typeFilter) typeFilter.addEventListener("change", applyFilters);
+  // Pill click handlers
+  pillBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      pillBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedCategory = btn.dataset.type;
+      applyFilters();
+    });
+  });
+
+  // Dropdown Filter event listeners
   if (statusFilter) statusFilter.addEventListener("change", applyFilters);
   if (priceFilter) priceFilter.addEventListener("change", applyFilters);
   if (sortFilter) sortFilter.addEventListener("change", applyFilters);

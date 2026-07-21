@@ -1,60 +1,62 @@
-/* Polomolok South Cotabato Real Estate Design System Tokens */
+/* RenoLeads Modern Luxury Real Estate Design Tokens */
 :root {
-  /* Color Palette - Emerald Earth & Warm Gold Accent */
-  --primary-hsl: 158, 64%, 22%;       /* Deep Pine Green */
+  /* Color Palette - Deep Pine Emerald & Warm Gold Accent */
+  --primary-hsl: 158, 64%, 20%;
   --primary: hsl(var(--primary-hsl));
-  --primary-light: hsl(158, 55%, 32%);
-  --primary-dark: hsl(158, 70%, 14%);
+  --primary-light: hsl(158, 55%, 30%);
+  --primary-dark: hsl(158, 70%, 12%);
+  --primary-gradient: linear-gradient(135deg, hsl(158, 65%, 22%) 0%, hsl(158, 75%, 14%) 100%);
 
-  --accent-hsl: 38, 92%, 50%;         /* Warm Sun Gold */
+  --accent-hsl: 38, 92%, 50%;
   --accent: hsl(var(--accent-hsl));
-  --accent-hover: hsl(38, 95%, 45%);
-  --accent-glow: hsla(38, 92%, 50%, 0.35);
+  --accent-hover: hsl(38, 98%, 45%);
+  --accent-gradient: linear-gradient(135deg, #FFB800 0%, #F59E0B 100%);
+  --accent-glow: rgba(245, 158, 11, 0.4);
 
-  --secondary: hsl(215, 25%, 27%);    /* Slate Blue */
-  --secondary-light: hsl(215, 20%, 95%);
+  --secondary: hsl(215, 28%, 17%);
+  --secondary-light: #F8FAFC;
 
-  /* Neutrals & Dark Mode Luxury Canvas */
-  --bg-dark: hsl(220, 30%, 8%);
-  --bg-dark-card: hsl(220, 25%, 12%);
-  --bg-dark-border: hsl(220, 20%, 20%);
+  /* Dark Luxury Accents */
+  --bg-dark: #0A1612;
+  --bg-dark-card: #12241E;
+  --bg-dark-border: rgba(255, 255, 255, 0.1);
   
-  --bg-light: #F8FAFC;
+  --bg-light: #F6F9F8;
   --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #F1F5F9;
+  --bg-surface-elevated: #F0F4F2;
 
-  --text-main: hsl(215, 28%, 17%);
-  --text-muted: hsl(215, 16%, 47%);
-  --text-light: hsl(210, 40%, 98%);
+  --text-main: #1E293B;
+  --text-muted: #64748B;
+  --text-light: #F8FAFC;
   --text-inverse: #FFFFFF;
 
-  /* Status Badges */
-  --status-available: #10B981;
-  --status-available-bg: #ECFDF5;
-  --status-reserved: #F59E0B;
+  /* Badges */
+  --status-available: #059669;
+  --status-available-bg: #D1FAE5;
+  --status-reserved: #D97706;
   --status-reserved-bg: #FEF3C7;
-  --status-sold: #EF4444;
+  --status-sold: #DC2626;
   --status-sold-bg: #FEE2E2;
 
   /* Typography */
-  --font-family-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-family-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-family-body: 'Inter', system-ui, sans-serif;
 
-  /* Layout & Glassmorphism */
+  /* Layout, Radius & Glassmorphism */
   --container-max: 1240px;
   --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.12);
   --shadow-glow: 0 0 25px var(--accent-glow);
 
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.25);
-  --glass-blur: blur(12px);
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-blur: blur(16px);
 
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Available Land Lots | RenoLeads Polomolok</title>
-  <meta name="description" content="Browse available residential, agricultural farm, and commercial land lots for sale in Polomolok, South Cotabato on RenoLeads.">
+  <meta name="description" content="Browse available residential, agricultural farm, and commercial land lots for sale in Polomolok, South Cotabato on RenoLeads. Instant filters by price, size, and type.">
   
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/global.css">
@@ -24,6 +24,8 @@
       <ul class="nav-links">
         <li><a href="index.html" class="nav-link">Home</a></li>
         <li><a href="properties.html" class="nav-link active">Available Lots</a></li>
+        <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
+        <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
         <li><a href="contact.html" class="nav-link">Contact Us</a></li>
       </ul>
 
@@ -36,25 +38,23 @@
   <main class="section-padding">
     <div class="container">
       <div class="section-header" style="margin-bottom: 2rem; text-align: left; max-width: 100%;">
-        <span class="tagline">Explore Our Inventory</span>
-        <h2>Land Lots for Sale in Polomolok</h2>
+        <span class="tagline">Exclusive Inventory</span>
+        <h2>Available Land Lots in Polomolok</h2>
         <p id="properties-count">Loading property listings...</p>
+      </div>
+
+      <!-- Quick Filter Pills -->
+      <div class="filter-pills">
+        <button class="pill-btn active" data-type="all">All Categories</button>
+        <button class="pill-btn" data-type="residential">Residential Lots</button>
+        <button class="pill-btn" data-type="agricultural">Homestead & Farm Lots</button>
+        <button class="pill-btn" data-type="commercial">Highway Commercial</button>
       </div>
 
       <!-- Filter Controls -->
       <div class="filter-bar">
         <div class="form-group">
-          <label for="filter-property-type">Property Category</label>
-          <select id="filter-property-type" class="form-control">
-            <option value="all">All Categories</option>
-            <option value="residential">Residential Lots</option>
-            <option value="agricultural">Homestead & Farm Lots</option>
-            <option value="commercial">Commercial Frontage</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="filter-status">Availability Status</label>
+          <label for="filter-status">Status</label>
           <select id="filter-status" class="form-control">
             <option value="all">All Statuses</option>
             <option value="available" selected>Available Only</option>
@@ -63,7 +63,7 @@
         </div>
 
         <div class="form-group">
-          <label for="filter-max-price">Max Budget (Total Price)</label>
+          <label for="filter-max-price">Max Budget</label>
           <select id="filter-max-price" class="form-control">
             <option value="all">Any Price</option>
             <option value="1200000">Under ₱1,200,000</option>

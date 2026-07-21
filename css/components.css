@@ -1,4 +1,4 @@
-/* Core UI Components & Modules */
+/* RenoLeads Enhanced UI Components & Page Styling */
 
 /* 1. Header Navigation Bar */
 .site-header {
@@ -8,7 +8,7 @@
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--glass-border);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: var(--shadow-sm);
   transition: var(--transition-fast);
 }
@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 76px;
+  height: 80px;
 }
 
 .brand-logo {
@@ -26,20 +26,21 @@
   gap: 0.75rem;
   font-family: var(--font-family-heading);
   font-weight: 800;
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   color: var(--primary-dark);
+  letter-spacing: -0.02em;
 }
 
 .brand-logo svg {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   fill: var(--primary);
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.75rem;
   list-style: none;
 }
 
@@ -47,11 +48,28 @@
   font-weight: 500;
   color: var(--text-main);
   font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  position: relative;
+  transition: var(--transition-fast);
 }
 
 .nav-link:hover, .nav-link.active {
   color: var(--primary);
   font-weight: 600;
+  background: rgba(5, 150, 105, 0.08);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 99px;
 }
 
 .nav-cta {
@@ -66,7 +84,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.6rem;
+  padding: 0.8rem 1.75rem;
   border-radius: var(--radius-sm);
   font-weight: 600;
   font-size: 0.95rem;
@@ -76,28 +94,27 @@
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: var(--primary-gradient);
   color: var(--text-inverse);
   box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
-  background: var(--primary-light);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+  filter: brightness(1.08);
 }
 
 .btn-accent {
-  background: var(--accent);
+  background: var(--accent-gradient);
   color: #1E1E1E;
   font-weight: 700;
   box-shadow: var(--shadow-glow);
 }
 
 .btn-accent:hover {
-  background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 0 30px var(--accent-glow);
 }
 
 .btn-outline {
@@ -123,10 +140,20 @@
   color: var(--accent);
 }
 
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.btn-lg {
+  padding: 1rem 2.25rem;
+  font-size: 1.05rem;
+}
+
 /* 3. Hero Section */
 .hero {
   position: relative;
-  background: linear-gradient(135deg, rgba(10, 37, 26, 0.88) 0%, rgba(15, 23, 42, 0.92) 100%),
+  background: linear-gradient(135deg, rgba(10, 22, 18, 0.85) 0%, rgba(15, 23, 42, 0.9) 100%),
               url('../assets/images/polomolok-hero-bg.jpg') center/cover no-repeat;
   color: var(--text-inverse);
   padding: 7rem 0 6rem 0;
@@ -134,7 +161,7 @@
 }
 
 .hero-content {
-  max-width: 760px;
+  max-width: 780px;
 }
 
 .hero-tag {
@@ -142,9 +169,9 @@
   align-items: center;
   gap: 0.5rem;
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 0.4rem 1rem;
+  padding: 0.4rem 1.1rem;
   border-radius: var(--radius-full);
   font-size: 0.85rem;
   font-weight: 600;
@@ -153,15 +180,16 @@
 }
 
 .hero h1 {
-  font-size: 3.25rem;
+  font-size: 3.5rem;
   color: #FFFFFF;
   margin-bottom: 1.25rem;
   letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .hero p {
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.88);
   margin-bottom: 2.25rem;
   line-height: 1.7;
 }
@@ -173,66 +201,61 @@
   flex-wrap: wrap;
 }
 
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 4rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.stat-item h3 {
-  font-size: 2rem;
-  color: var(--accent);
-  margin-bottom: 0.2rem;
-}
-
-.stat-item p {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0;
-}
-
-/* 4. Filter Component */
-.filter-bar {
-  background: var(--bg-surface);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+/* Instant Search Bar on Hero */
+.hero-search-bar {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
   border-radius: var(--radius-md);
-  padding: 1.5rem;
-  margin-bottom: 2.5rem;
-  box-shadow: var(--shadow-sm);
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.25rem;
-  align-items: end;
-}
-
-.form-group {
+  padding: 0.75rem 1rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  box-shadow: var(--shadow-lg);
+  max-width: 720px;
 }
 
-.form-group label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-main);
-}
-
-.form-control {
-  padding: 0.7rem 1rem;
-  border: 1px solid #CBD5E1;
-  border-radius: var(--radius-sm);
-  background: #FFFFFF;
-  color: var(--text-main);
+.hero-search-bar select, .hero-search-bar input {
+  border: none;
+  background: transparent;
+  padding: 0.5rem;
+  font-size: 0.95rem;
   outline: none;
+  color: var(--text-main);
+}
+
+.hero-search-bar .divider {
+  width: 1px;
+  height: 32px;
+  background: #CBD5E1;
+}
+
+/* 4. Filter Pills & Catalog Controls */
+.filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.pill-btn {
+  padding: 0.6rem 1.4rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  border: 1px solid #E2E8F0;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
   transition: var(--transition-fast);
 }
 
-.form-control:focus {
+.pill-btn:hover, .pill-btn.active {
+  background: var(--primary);
+  color: #FFFFFF;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  box-shadow: var(--shadow-sm);
 }
 
 /* 5. Property Cards Grid */
@@ -256,12 +279,12 @@
 .property-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-lg);
-  border-color: rgba(16, 185, 129, 0.2);
+  border-color: rgba(5, 150, 105, 0.3);
 }
 
 .card-image-wrap {
   position: relative;
-  height: 220px;
+  height: 230px;
   overflow: hidden;
   background: #E2E8F0;
 }
@@ -338,283 +361,163 @@
 
 .card-footer {
   margin-top: auto;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
 }
 
-.card-footer .btn {
-  width: 100%;
-}
-
-/* 6. Property Details Layout */
-.property-details-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.property-gallery-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1rem;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  margin-bottom: 2.5rem;
-  height: 440px;
-}
-
-.gallery-main {
-  height: 100%;
-  background: #CBD5E1;
-}
-
-.gallery-main img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.gallery-sub {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  gap: 1rem;
-  height: 100%;
-}
-
-.gallery-sub-item {
-  height: 100%;
-  background: #E2E8F0;
-  overflow: hidden;
-}
-
-.gallery-sub-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.details-layout {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2.5rem;
-}
-
-.specs-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
-  background: var(--bg-surface);
-  padding: 1.75rem;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  margin-bottom: 2rem;
-}
-
-.spec-box {
+/* 6. Timeline Stepper (Buying Process Page) */
+.timeline-stepper {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
 }
 
-.spec-box span {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  font-weight: 600;
+.timeline-step {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 1.5rem;
+  background: #FFFFFF;
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid #E2E8F0;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-smooth);
 }
 
-.spec-box strong {
-  font-size: 1.15rem;
-  color: var(--text-main);
+.timeline-step:hover {
+  transform: translateX(6px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
 }
 
-/* 7. Loan & Amortization Calculator */
-.calculator-card {
+.step-number {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  background: var(--primary-gradient);
+  color: #FFFFFF;
+  font-size: 1.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 7. Comparison Table (Why Invest Page) */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
   background: #FFFFFF;
   border-radius: var(--radius-md);
-  padding: 1.75rem;
-  border: 1px solid #E2E8F0;
-  margin-bottom: 2rem;
+  overflow: hidden;
   box-shadow: var(--shadow-sm);
+  margin: 2rem 0;
 }
 
-.calc-row {
-  margin-bottom: 1.25rem;
+.comparison-table th, .comparison-table td {
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #E2E8F0;
 }
 
-.calc-row label {
-  display: flex;
-  justify-content: space-between;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 0.4rem;
-}
-
-.calc-result-box {
+.comparison-table th {
   background: var(--primary-dark);
   color: #FFFFFF;
-  padding: 1.25rem;
-  border-radius: var(--radius-sm);
-  text-align: center;
-  margin-top: 1.5rem;
-}
-
-.calc-result-box span {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.calc-result-box h3 {
-  font-size: 1.85rem;
-  color: var(--accent);
-  margin-top: 0.2rem;
-}
-
-/* 8. App Handoff Banner */
-.app-handoff-banner {
-  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--primary-dark) 100%);
-  color: #FFFFFF;
-  padding: 2.5rem;
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  margin: 3.5rem 0;
-  box-shadow: var(--shadow-lg);
-}
-
-.app-handoff-text h3 {
-  color: #FFFFFF;
-  font-size: 1.6rem;
-  margin-bottom: 0.5rem;
-}
-
-.app-handoff-text p {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.95rem;
-}
-
-/* 9. FAQ Accordion */
-.faq-list {
-  max-width: 800px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.faq-item {
-  background: var(--bg-surface);
-  border: 1px solid #E2E8F0;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-
-.faq-question {
-  width: 100%;
-  padding: 1.25rem 1.5rem;
-  background: transparent;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 700;
+  font-family: var(--font-family-heading);
   font-size: 1.05rem;
-  color: var(--text-main);
-  cursor: pointer;
-  text-align: left;
 }
 
-.faq-answer {
-  padding: 0 1.5rem 1.25rem 1.5rem;
-  color: var(--text-muted);
-  font-size: 0.98rem;
-  display: none;
-  line-height: 1.6;
+.comparison-table tr:hover {
+  background: var(--bg-surface-elevated);
 }
 
-.faq-item.active .faq-answer {
-  display: block;
-}
-
-/* 10. Footer & Floating CTA Bar */
-.site-footer {
-  background: var(--bg-dark);
-  color: rgba(255, 255, 255, 0.7);
-  padding: 4rem 0 2rem 0;
-  margin-top: auto;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 3rem;
-  margin-bottom: 3rem;
-}
-
-.footer-col h4 {
-  color: #FFFFFF;
-  font-size: 1.1rem;
-  margin-bottom: 1.25rem;
-}
-
-.footer-links {
-  list-style: none;
+/* 8. 1-Click Quick Inquiry Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 22, 18, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 2000;
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.footer-links a:hover {
-  color: var(--accent);
-}
-
-.footer-bottom {
-  border-top: 1px solid var(--bg-dark-border);
-  padding-top: 2rem;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 0.85rem;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-.floating-cta-bar {
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background: #FFFFFF;
+  width: 90%;
+  max-width: 560px;
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: var(--bg-surface-elevated);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 9. Floating Quick Contact Bar */
+.floating-quick-bar {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
   z-index: 999;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 0.75rem;
 }
 
-.floating-btn {
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-full);
+.quick-action-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-full);
   color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.9rem;
   box-shadow: var(--shadow-lg);
   transition: transform 0.3s ease;
 }
 
-.floating-btn:hover {
-  transform: scale(1.1);
+.quick-action-btn:hover {
+  transform: scale(1.05);
 }
 
-.floating-messenger {
-  background: #0084FF;
-}
-
-.floating-viber {
-  background: #7360F2;
-}
-
-.floating-phone {
-  background: var(--primary);
-}
+.quick-viber { background: #7360F2; }
+.quick-messenger { background: #0084FF; }
+.quick-book { background: var(--accent-gradient); color: #1E1E1E; }
