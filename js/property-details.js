@@ -163,66 +163,66 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         </div>
 
-        <!-- State-of-the-Art Intuitive Land Payment Calculator -->
-        <div class="calculator-card" style="background: linear-gradient(135deg, var(--forest-900) 0%, var(--forest-950) 100%); color: #FFFFFF; padding: clamp(1.75rem, 4vw, 2.5rem); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); border: 1px solid rgba(255, 255, 255, 0.15);">
+        <!-- State-of-the-Art Intuitive Land Payment Calculator (Eye-Friendly Glass Design) -->
+        <div class="calculator-card" style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.75rem, 4vw, 2.5rem); border-radius: var(--radius-md); box-shadow: var(--glass-shadow); border: 1px solid rgba(255, 255, 255, 0.85);">
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
-            <h3 style="color: #FFFFFF; margin: 0; font-size: 1.4rem;">Interactive Payment Calculator</h3>
-            <span class="badge" style="background: rgba(217, 119, 6, 0.25); color: var(--bronze-300); border: 1px solid rgba(217, 119, 6, 0.4);">0% Interest Terms</span>
+            <h3 style="color: var(--color-primary); margin: 0; font-size: 1.4rem;">Interactive Payment Calculator</h3>
+            <span class="badge badge-available">0% Interest Terms</span>
           </div>
-          <p style="font-size: 0.88rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 1.75rem;">Adjust property price, down payment, or term length below to instantly estimate your custom monthly payment.</p>
+          <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-bottom: 1.75rem;">Adjust property price, down payment, or term length below to instantly estimate your custom monthly payment.</p>
 
           <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             
             <!-- Input 1: Total Property Price Input -->
             <div class="form-group" style="margin-bottom: 0;">
-              <label for="calc-total-price" style="color: #FFFFFF; font-weight: 600; margin-bottom: 0.4rem; display: block;">Total Property Price (₱)</label>
-              <input type="number" id="calc-total-price" class="form-control" value="${property.totalPrice}" min="100000" step="50000" style="background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); color: #FFFFFF; font-size: 1.1rem; font-weight: 700;">
+              <label for="calc-total-price" style="font-weight: 600; margin-bottom: 0.4rem; display: block; color: var(--color-text);">Total Property Price (₱)</label>
+              <input type="number" id="calc-total-price" class="form-control" value="${property.totalPrice}" min="100000" step="50000" style="font-size: 1.1rem; font-weight: 700;">
             </div>
 
             <!-- Input 2: Down Payment Percentage & Quick Chips -->
             <div>
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-                <label for="calc-dp-slider" style="color: #FFFFFF; font-weight: 600;">Down Payment: <span id="calc-dp-percent-text" style="color: var(--bronze-300); font-weight: 700;">20%</span></label>
-                <span id="calc-dp-amount-text" style="font-size: 0.95rem; font-weight: 700; color: #FFFFFF;">₱0</span>
+                <label for="calc-dp-slider" style="font-weight: 600; color: var(--color-text);">Down Payment: <span id="calc-dp-percent-text" style="color: var(--color-accent-text); font-weight: 700;">20%</span></label>
+                <span id="calc-dp-amount-text" style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary);">₱0</span>
               </div>
               
               <input type="range" id="calc-dp-slider" min="10" max="50" step="5" value="20" style="width: 100%; margin-bottom: 0.75rem; accent-color: var(--bronze-500);">
 
               <!-- Quick DP Chips -->
               <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <button type="button" class="btn btn-sm calc-dp-chip" data-dp="10" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: rgba(255,255,255,0.15); color: #FFF; border: 1px solid rgba(255,255,255,0.25);">10% DP</button>
+                <button type="button" class="btn btn-sm calc-dp-chip" data-dp="10" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: rgba(16,42,32,0.06); color: var(--color-primary); border: 1px solid rgba(16,42,32,0.12);">10% DP</button>
                 <button type="button" class="btn btn-sm calc-dp-chip active" data-dp="20" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: var(--bronze-500); color: #FFF; border: 1px solid var(--bronze-500);">20% DP</button>
-                <button type="button" class="btn btn-sm calc-dp-chip" data-dp="30" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: rgba(255,255,255,0.15); color: #FFF; border: 1px solid rgba(255,255,255,0.25);">30% DP</button>
-                <button type="button" class="btn btn-sm calc-dp-chip" data-dp="50" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: rgba(255,255,255,0.15); color: #FFF; border: 1px solid rgba(255,255,255,0.25);">50% DP</button>
+                <button type="button" class="btn btn-sm calc-dp-chip" data-dp="30" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: rgba(16,42,32,0.06); color: var(--color-primary); border: 1px solid rgba(16,42,32,0.12);">30% DP</button>
+                <button type="button" class="btn btn-sm calc-dp-chip" data-dp="50" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: rgba(16,42,32,0.06); color: var(--color-primary); border: 1px solid rgba(16,42,32,0.12);">50% DP</button>
               </div>
             </div>
 
             <!-- Input 3: Payment Term Select -->
             <div>
-              <label for="calc-term-select" style="color: #FFFFFF; font-weight: 600; margin-bottom: 0.5rem; display: block;">Payment Term Length</label>
-              <select id="calc-term-select" class="form-control" style="background-color: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); color: #FFFFFF; font-weight: 600;">
-                <option value="12" style="background: var(--forest-950); color: #FFF;">12 Months (1 Year)</option>
-                <option value="24" selected style="background: var(--forest-950); color: #FFF;">24 Months (2 Years)</option>
-                <option value="36" style="background: var(--forest-950); color: #FFF;">36 Months (3 Years)</option>
-                <option value="60" style="background: var(--forest-950); color: #FFF;">60 Months (5 Years)</option>
+              <label for="calc-term-select" style="font-weight: 600; margin-bottom: 0.5rem; display: block; color: var(--color-text);">Payment Term Length</label>
+              <select id="calc-term-select" class="form-control" style="font-weight: 600;">
+                <option value="12">12 Months (1 Year)</option>
+                <option value="24" selected>24 Months (2 Years)</option>
+                <option value="36">36 Months (3 Years)</option>
+                <option value="60">60 Months (5 Years)</option>
               </select>
             </div>
 
             <!-- Real-time Financial Breakdown Card -->
-            <div style="background: rgba(255, 255, 255, 0.08); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid rgba(255, 255, 255, 0.15); display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="background: rgba(16, 42, 32, 0.04); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid rgba(16, 42, 32, 0.1); display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
               <div>
-                <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7); text-transform: uppercase; font-weight: 700;">Required Down Payment</span>
-                <div id="calc-summary-dp" style="font-weight: 700; color: var(--bronze-300); font-size: 1.1rem; margin-top: 0.2rem;">₱0</div>
+                <span style="font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Required Down Payment</span>
+                <div id="calc-summary-dp" style="font-weight: 700; color: var(--color-accent-text); font-size: 1.1rem; margin-top: 0.2rem;">₱0</div>
               </div>
               <div>
-                <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7); text-transform: uppercase; font-weight: 700;">Balance to Finance</span>
-                <div id="calc-summary-balance" style="font-weight: 700; color: #FFFFFF; font-size: 1.1rem; margin-top: 0.2rem;">₱0</div>
+                <span style="font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Balance to Finance</span>
+                <div id="calc-summary-balance" style="font-weight: 700; color: var(--color-primary); font-size: 1.1rem; margin-top: 0.2rem;">₱0</div>
               </div>
             </div>
 
             <!-- Final Monthly Amortization Output -->
-            <div class="calc-result-box" style="background: rgba(193, 132, 67, 0.2); border: 1px solid rgba(193, 132, 67, 0.4); padding: 1.25rem; border-radius: var(--radius-sm); text-align: center;">
-              <span style="font-size: 0.85rem; color: rgba(255,255,255,0.85); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Estimated Monthly Amortization</span>
+            <div class="calc-result-box" style="background: linear-gradient(135deg, var(--forest-900) 0%, var(--forest-950) 100%); color: #FFFFFF; padding: 1.25rem; border-radius: var(--radius-sm); text-align: center; box-shadow: var(--shadow-sm);">
+              <span style="font-size: 0.85rem; color: rgba(255,255,255,0.8); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Estimated Monthly Amortization</span>
               <h3 id="calc-monthly-result" style="color: var(--bronze-300); font-family: var(--font-display); font-size: 2.25rem; margin-top: 0.25rem; font-weight: 700;">₱0 / mo</h3>
             </div>
 
@@ -345,8 +345,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     dpChips.forEach(chip => {
       const isSelected = parseFloat(chip.dataset.dp) === dpPercent;
       chip.classList.toggle("active", isSelected);
-      chip.style.background = isSelected ? "var(--bronze-500)" : "rgba(255,255,255,0.15)";
-      chip.style.borderColor = isSelected ? "var(--bronze-500)" : "rgba(255,255,255,0.25)";
+      chip.style.background = isSelected ? "var(--bronze-500)" : "rgba(16,42,32,0.06)";
+      chip.style.borderColor = isSelected ? "var(--bronze-500)" : "rgba(16,42,32,0.12)";
+      chip.style.color = isSelected ? "#FFFFFF" : "var(--color-primary)";
     });
   }
 
