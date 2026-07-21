@@ -34,7 +34,7 @@ body {
   flex-direction: column;
 }
 
-/* 1. Word & Character Wrapping Rules (Defect 5.1 Fix) */
+/* 1. Word & Character Wrapping Rules */
 .brand-logo,
 .nav-link,
 .btn,

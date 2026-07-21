@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mainContainer = document.getElementById("property-detail-main");
   if (!mainContainer) return;
 
-  // Add body class for mobile contextual bar display (Section 7.3)
+  // Add body class for mobile contextual bar display
   document.body.classList.add("page-property-detail");
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const property = await fetchPropertyById(propertyId);
 
-  // 1. Property Not Found Handling (Section 12.12)
+  // 1. Property Not Found Handling
   if (!property) {
     document.title = "Property Not Found | RenoLeads";
     mainContainer.innerHTML = `
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // 2. Log Property to Recently Viewed (Layer 4 Retention)
+  // 2. Log Property to Recently Viewed
   RetentionManager.addRecentlyViewed(property.id);
 
   document.title = `${property.title} | RenoLeads Polomolok`;
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       <h1 style="margin: 0; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.18; font-family: var(--font-display);">${DOMUtils.escapeHTML(property.title)}</h1>
     </div>
 
-    <!-- Interactive Gallery Preview (Section 17.3) -->
+    <!-- Interactive Gallery Preview -->
     <div class="property-gallery-grid" style="margin-bottom: 2rem;">
       <div class="gallery-main">
         <img id="gallery-main-view" src="${images[0]}" alt="${DOMUtils.escapeHTML(property.title)}" width="800" height="500" style="cursor: pointer;" title="Click image to swap preview">
@@ -282,14 +282,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     </div>
 
-    <!-- Mobile Contextual 2-Action Bottom Bar (Section 7.3) -->
+    <!-- Mobile Contextual 2-Action Bottom Bar -->
     <div class="property-bottom-bar">
       <a href="#inquiry-form-card" class="btn btn-accent">Book Visit</a>
       <a href="contact.html?property=${encodeURIComponent(property.propertyCode)}" class="btn btn-outline">Ask a Question</a>
     </div>
   `;
 
-  // Gallery Thumbnail Click Handler (Section 17.3)
+  // Gallery Thumbnail Click Handler
   const mainImg = document.getElementById("gallery-main-view");
   const thumbBtns = document.querySelectorAll(".gallery-sub-item");
 

@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 2. Apple-Style Dynamic Glass Scroll Transition Engine for Header & Navigation
+  
   const siteHeader = document.querySelector(".site-header");
   if (siteHeader) {
     const handleScroll = () => {
@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     handleScroll();
   }
 
-  // 3. Global Delegated Click Handler for Shortlist & Share Buttons
+  
   document.addEventListener("click", (e) => {
     const shortlistBtn = e.target.closest(".card-shortlist-btn");
     if (shortlistBtn) {
@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 4. Automated Layout Overflow Diagnostic Runner (Section 29)
+  
   window.checkLayoutOverflow = function() {
     const viewportWidth = document.documentElement.clientWidth;
     const leakingElements = [...document.querySelectorAll("*")].filter((el) => {
