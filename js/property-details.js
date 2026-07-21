@@ -52,6 +52,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const appHandoffUrl = `https://rreno1.github.io/renoleads/properties/${property.id}`;
   const appIntentUrl = `intent://rreno1.github.io/renoleads/properties/${property.id}#Intent;scheme=https;package=${RENO_CONFIG.androidPackage};S.browser_fallback_url=${encodeURIComponent(appHandoffUrl)};end;`;
 
+  // Gallery Thumbnails: Filter out main image (images[0]) to eliminate photo duplication
+  const thumbnailImages = images.length > 1 ? images.slice(1) : images;
+
   mainContainer.innerHTML = `
     <!-- Top Action & Breadcrumb Bar -->
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; padding-top: 1.25rem;">
@@ -74,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     </div>
 
-    <!-- Clear Editorial Property Header -->
+    <!-- Editorial Property Header -->
     <div style="margin-bottom: 1.5rem;">
       <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
         <span class="badge ${statusBadgeClass}">${property.status.toUpperCase()}</span>
@@ -87,7 +90,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       <h1 style="margin: 0; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.18; font-family: var(--font-display);">${DOMUtils.escapeHTML(property.title)}</h1>
     </div>
 
-    <!-- Key Highlights Summary Strip -->
+    <!-- Consolidated Key Specifications Summary Card (Zero Duplication) -->
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; background: var(--color-surface); border: 1px solid var(--border); padding: 1.25rem 1.75rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 2rem;">
       <div>
         <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Total Contract Price</span>
@@ -102,8 +105,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
         <div style="border-left: 2px solid var(--border); padding-left: 1.5rem;">
-          <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Land Document</span>
+          <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Land Title Status</span>
           <div style="font-size: 1.1rem; font-weight: 700; color: var(--status-available);">${DOMUtils.escapeHTML(property.documentStatus || "Clean Title (TCT)")}</div>
+        </div>
+
+        <div style="border-left: 2px solid var(--border); padding-left: 1.5rem;">
+          <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Payment Terms</span>
+          <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary);">Cash / Installment</div>
         </div>
       </div>
     </div>
@@ -114,33 +122,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         <img id="gallery-main-view" src="${images[0]}" alt="${DOMUtils.escapeHTML(property.title)}" width="800" height="500" style="cursor: pointer;" title="Click image to swap preview">
       </div>
       <div class="gallery-sub">
-        ${images.map((img, idx) => `
-          <button type="button" class="gallery-sub-item ${idx === 0 ? 'active' : ''}" data-src="${img}" aria-label="View photo ${idx + 1}">
-            <img src="${img}" alt="Property view ${idx + 1}" width="400" height="250" loading="lazy">
+        ${thumbnailImages.map((img, idx) => `
+          <button type="button" class="gallery-sub-item ${idx === 0 ? 'active' : ''}" data-src="${img}" aria-label="View photo ${idx + 2}">
+            <img src="${img}" alt="Property view ${idx + 2}" width="400" height="250" loading="lazy">
           </button>
         `).join('')}
       </div>
     </div>
-
-    <!-- Specification Definition List (Section 17.4) -->
-    <dl class="spec-list" style="margin-bottom: 2.5rem;">
-      <div class="spec-item">
-        <dt>Property Code</dt>
-        <dd>${DOMUtils.escapeHTML(property.propertyCode)}</dd>
-      </div>
-      <div class="spec-item">
-        <dt>Lot Area Size</dt>
-        <dd>${formattedLotArea} sqm</dd>
-      </div>
-      <div class="spec-item">
-        <dt>Document Status</dt>
-        <dd>${DOMUtils.escapeHTML(property.documentStatus || "Clean Title (TCT)")}</dd>
-      </div>
-      <div class="spec-item">
-        <dt>Payment Options</dt>
-        <dd>Cash / Installment</dd>
-      </div>
-    </dl>
 
     <!-- Main Two-Column Layout -->
     <div class="details-layout">
