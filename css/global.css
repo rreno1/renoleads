@@ -1,7 +1,5 @@
-/* RenoLeads Production Global Resets, Containment & Typography */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+/* RenoLeads V2 Global Resets, Typography & Containment Engine */
 
-/* 1. Predictable Global Box Model & Zero Overflow */
 *,
 *::before,
 *::after {
@@ -21,8 +19,8 @@ body {
 }
 
 body {
-  font-family: var(--font-family-body);
-  background-color: var(--color-background);
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.65;
   min-height: 100vh;
@@ -30,54 +28,52 @@ body {
   flex-direction: column;
 }
 
-/* 2. Flex & Grid Child Containment */
-.flex-child,
-.grid-child,
-.property-card,
-.card-body,
-.form-group,
-.details-layout > * {
-  min-width: 0;
-  max-width: 100%;
+/* 1. Word & Character Wrapping Rules (Defect 5.1 Fix) */
+.brand-logo,
+.nav-link,
+.btn,
+.badge,
+.pill-btn,
+.nav-action-label,
+.quick-action-btn {
+  white-space: nowrap;
 }
 
-/* 3. Text Containment & Wrapping */
-h1, h2, h3, h4, h5, h6, p, span, a, label, td, th {
-  overflow-wrap: anywhere;
-  word-break: normal;
-  hyphens: auto;
+.break-word {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-text);
+  margin-top: 0;
+  line-height: 1.2;
+  overflow-wrap: break-word;
 }
 
 h1 {
-  font-family: var(--font-family-heading);
-  font-size: var(--fluid-h1);
-  font-weight: 800;
-  line-height: 1.12;
+  font-size: var(--text-h1);
+  font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--color-text);
 }
 
 h2 {
-  font-family: var(--font-family-heading);
-  font-size: var(--fluid-h2);
+  font-size: var(--text-h2);
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  color: var(--color-text);
 }
 
 h3 {
-  font-family: var(--font-family-heading);
-  font-size: var(--fluid-h3);
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--color-text);
+  font-size: var(--text-h3);
+  font-weight: 600;
 }
 
 p {
-  font-size: var(--fluid-body);
+  font-size: var(--text-body);
   color: var(--color-text-muted);
-  max-width: 70ch;
+  max-width: 68ch;
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 a {
@@ -86,7 +82,6 @@ a {
   transition: var(--transition-fast);
 }
 
-/* 4. Media Containment */
 img,
 video,
 svg,
@@ -97,7 +92,34 @@ iframe {
   height: auto;
 }
 
-/* 5. Accessible Touch Targets & Focus States */
+/* 2. Canonical Container & Layout System */
+.container {
+  width: min(calc(100% - (var(--page-gutter) * 2)), var(--container-max));
+  margin-inline: auto;
+}
+
+.section-padding {
+  padding-block: var(--section-space);
+}
+
+.section-shell {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+}
+
+/* Flex & Grid Containment */
+.flex-child,
+.grid-child,
+.property-card,
+.card-body,
+.form-group,
+.details-layout > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* 3. Accessible Touch Targets & Focus States */
 button,
 .btn,
 .nav-link,
@@ -106,10 +128,10 @@ select,
 textarea,
 .pill-btn,
 .quick-action-btn,
-.faq-question {
+.mobile-nav-item {
   min-height: 48px;
   touch-action: manipulation;
-  font-family: inherit;
+  font-family: var(--font-body);
   font-size: inherit;
 }
 
@@ -119,55 +141,35 @@ textarea,
   border-radius: var(--radius-sm);
 }
 
-/* 6. Section & Container Layout */
-.container {
-  width: min(100% - (var(--page-padding) * 2), var(--container-width));
-  margin-inline: auto;
-}
-
-.section-padding {
-  padding-block: var(--section-spacing);
-}
-
-.section-shell {
-  position: relative;
-  overflow: clip;
-  isolation: isolate;
-}
-
-.text-center {
-  text-align: center;
-}
-
 /* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.95rem;
-  border-radius: var(--radius-full);
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
   font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
 .badge-available {
   background: var(--status-available-bg);
   color: var(--status-available);
-  border: 1px solid rgba(4, 120, 87, 0.3);
+  border: 1px solid rgba(36, 114, 79, 0.25);
 }
 
 .badge-reserved {
   background: var(--status-reserved-bg);
   color: var(--status-reserved);
-  border: 1px solid rgba(180, 83, 9, 0.3);
+  border: 1px solid rgba(153, 98, 30, 0.25);
 }
 
 .badge-sold {
   background: var(--status-sold-bg);
   color: var(--status-sold);
-  border: 1px solid rgba(185, 28, 28, 0.3);
+  border: 1px solid rgba(164, 63, 63, 0.25);
 }
 
 /* Section Header */
@@ -179,9 +181,9 @@ textarea,
 }
 
 .section-header .tagline {
-  color: var(--color-accent);
-  font-weight: 800;
-  font-size: 0.88rem;
+  color: var(--color-accent-text);
+  font-weight: 700;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   margin-bottom: 0.5rem;

@@ -1,4 +1,7 @@
-/* RenoLeads Production Design Tokens & Containment System */
+/* RenoLeads V2 — Editorial Tropical Land Discovery Design Tokens */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&display=swap');
+
 :root {
   /* Z-Index Hierarchy Matrix */
   --z-base: 0;
@@ -9,69 +12,78 @@
   --z-modal: 80;
   --z-toast: 90;
 
-  /* Three-Color System (WCAG 2.2 AA Compliant) */
-  --color-primary: #064E3B;
-  --color-primary-light: #059669;
-  --color-primary-dark: #022C22;
-  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #022C22 100%);
+  /* Color System (WCAG 2.2 AA Compliant) */
+  --forest-950: #0b1f18;
+  --forest-900: #102a20;
+  --forest-800: #173f30;
+  --forest-700: #245943;
+  --forest-100: #dbe8df;
+  --forest-050: #eef5f0;
 
-  --color-surface-dark: #06110D;
-  --color-surface-dark-card: #0E1F18;
-  --color-surface-dark-border: rgba(255, 255, 255, 0.12);
+  --linen-100: #f3eee4;
+  --linen-050: #faf7f1;
+  --paper: #fffdf9;
 
-  --color-accent: #F59E0B;
-  --color-accent-hover: #D97706;
-  --color-accent-gradient: linear-gradient(135deg, #FFB800 0%, #F59E0B 100%);
-  --color-accent-glow: rgba(245, 158, 11, 0.35);
+  --bronze-700: #8f5b27;
+  --bronze-600: #a96c31;
+  --bronze-500: #c18443;
+  --bronze-100: #f4e3ce;
 
-  /* Neutrals & Surfaces */
-  --color-text: #0F172A;
-  --color-text-muted: #475569;
-  --color-text-inverse: #FFFFFF;
-  
-  --color-background: #F6F9F8;
-  --color-surface: #FFFFFF;
-  --color-surface-elevated: #EEF4F1;
-  --color-border: #E2E8F0;
+  --ink-950: #101b16;
+  --ink-800: #24332c;
+  --ink-600: #5a6861;
+  --border: #d9e0da;
 
-  /* Status Tokens */
-  --status-available: #047857;
-  --status-available-bg: #ECFDF5;
-  --status-reserved: #B45309;
-  --status-reserved-bg: #FEF3C7;
-  --status-sold: #B91C1C;
-  --status-sold-bg: #FEE2E2;
+  --color-primary: var(--forest-900);
+  --color-primary-light: var(--forest-700);
+  --color-primary-dark: var(--forest-950);
+  --color-accent: var(--bronze-500);
+  --color-accent-hover: var(--bronze-600);
+  --color-accent-text: var(--bronze-700);
+  --color-accent-bg: var(--bronze-100);
+
+  --color-text: var(--ink-950);
+  --color-text-muted: var(--ink-600);
+  --color-text-inverse: #ffffff;
+
+  --color-bg: var(--linen-050);
+  --color-surface: var(--paper);
+  --color-surface-soft: var(--forest-050);
+
+  /* Status Colors */
+  --status-available: #24724f;
+  --status-available-bg: #eaf5f0;
+  --status-reserved: #99621e;
+  --status-reserved-bg: #fdf6ec;
+  --status-sold: #a43f3f;
+  --status-sold-bg: #fdf2f2;
 
   /* Typography System */
-  --font-family-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-family-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
-  --fluid-h1: clamp(2.25rem, 5vw + 1rem, 3.5rem);
-  --fluid-h2: clamp(1.75rem, 3vw + 0.75rem, 2.75rem);
-  --fluid-h3: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
-  --fluid-body: clamp(1rem, 0.35vw + 0.9rem, 1.125rem);
+  --text-display: clamp(2.5rem, 6vw, 4.5rem);
+  --text-h1: clamp(2rem, 4vw, 3.25rem);
+  --text-h2: clamp(1.6rem, 3vw, 2.4rem);
+  --text-h3: clamp(1.2rem, 2vw, 1.6rem);
+  --text-body-lg: clamp(1.05rem, 1vw, 1.2rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
 
-  /* Layout & Containment */
-  --container-width: 1240px;
-  --component-max-width: 100%;
-  --page-padding: clamp(1rem, 3vw, 1.5rem);
-  --section-spacing: clamp(3rem, 7vw, 6rem);
+  /* Canonical Layout & Spacing Tokens */
+  --container-max: 1240px;
+  --page-gutter: clamp(1rem, 3vw, 1.5rem);
+  --section-space: clamp(3.5rem, 7vw, 6rem);
 
   --radius-sm: 0.625rem;
   --radius-md: 1rem;
   --radius-lg: 1.5rem;
-  --radius-full: 9999px;
+  --radius-pill: 9999px;
 
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.12);
-  --shadow-glow: 0 0 25px var(--color-accent-glow);
+  --shadow-sm: 0 4px 14px rgba(16, 27, 22, 0.05);
+  --shadow-md: 0 12px 32px rgba(16, 27, 22, 0.08);
+  --shadow-lg: 0 24px 60px rgba(16, 27, 22, 0.12);
 
-  --glass-bg: rgba(255, 255, 255, 0.92);
-  --glass-border: rgba(255, 255, 255, 0.25);
-  --glass-blur: blur(16px);
-
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-slow: 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 150ms cubic-bezier(.2, .8, .2, 1);
+  --transition-normal: 240ms cubic-bezier(.2, .8, .2, 1);
 }

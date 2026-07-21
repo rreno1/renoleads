@@ -6,7 +6,6 @@
   <title>RenoLeads | Prime Land Lots for Sale in Polomolok South Cotabato</title>
   <meta name="description" content="Discover prime residential, farm, and commercial land lots for sale in Polomolok, South Cotabato on RenoLeads. Enjoy views of Mt. Matutum, clean titles, and flexible payment terms.">
   
-  <!-- CSS Design System -->
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/components.css">
@@ -14,7 +13,7 @@
 </head>
 <body>
 
-  <!-- Canonical Header Navigation -->
+  <!-- Canonical Desktop Header Navigation (Section 7.1) -->
   <header class="site-header">
     <div class="container navbar">
       <a href="index.html" class="brand-logo" aria-label="RenoLeads Homepage">
@@ -26,40 +25,36 @@
         <ul class="nav-links">
           <li><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
           <li><a href="properties.html" class="nav-link">Available Lots</a></li>
-          <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
-          <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
-          <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+          <li><a href="properties.html?filter=saved" class="nav-link">Saved</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
         </ul>
       </nav>
 
       <div class="nav-actions">
         <a href="properties.html" class="btn btn-accent">View Available Lots</a>
       </div>
-
-      <button class="mobile-nav-toggle" type="button" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="mobile-navigation-drawer">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
     </div>
-
-    <!-- Semantic Mobile Drawer Navigation -->
-    <nav id="mobile-navigation-drawer" class="mobile-drawer" aria-label="Mobile Navigation Drawer">
-      <div class="mobile-drawer-header">
-        <span class="brand-logo" style="font-size: 1.35rem;">RenoLeads</span>
-        <button id="close-drawer-btn" class="modal-close-btn" aria-label="Close Menu">✕</button>
-      </div>
-      <ul class="mobile-drawer-links">
-        <li><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
-        <li><a href="properties.html" class="nav-link">Available Lots</a></li>
-        <li><a href="why-invest.html" class="nav-link">Why Invest</a></li>
-        <li><a href="buying-process.html" class="nav-link">Buying Process</a></li>
-        <li><a href="contact.html" class="nav-link">Contact Us</a></li>
-      </ul>
-      <div class="mobile-drawer-footer">
-        <a href="properties.html" class="btn btn-accent" style="width: 100%;">View Available Lots</a>
-      </div>
-    </nav>
-    <div id="mobile-drawer-overlay" class="mobile-drawer-overlay"></div>
   </header>
+
+  <!-- Mobile Bottom Navigation System (Section 7.2) -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile Navigation">
+    <a href="index.html" class="mobile-nav-item active" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="properties.html" class="mobile-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Lots</span>
+    </a>
+    <a href="properties.html?filter=saved" class="mobile-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span>Saved</span>
+    </a>
+    <a href="contact.html" class="mobile-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>Contact</span>
+    </a>
+  </nav>
 
   <main>
     <!-- Hero Section -->
@@ -67,37 +62,22 @@
       <div class="container">
         <div class="hero-content">
           <div class="hero-tag">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             RenoLeads • Polomolok, South Cotabato
           </div>
           <h1>Own Your Dream Land Lot Under Mt. Matutum</h1>
           <p>Accessible residential homesteads, farm lots, and highway commercial properties in Polomolok. Enjoy fresh mountain air, fertile volcanic soil, clean titles, and flexible installment options.</p>
           
           <div class="hero-actions">
-            <a href="properties.html" class="btn btn-accent btn-lg">Browse Properties</a>
+            <a href="properties.html" class="btn btn-accent btn-lg">Browse Available Lots</a>
             <a href="contact.html" class="btn btn-outline btn-lg" style="color: #FFF; border-color: rgba(255,255,255,0.4);">Schedule Site Visit</a>
-          </div>
-
-          <div class="hero-stats">
-            <div class="stat-item">
-              <h3>Clean Titles</h3>
-              <p>Ready for TCT Transfer & Tax Dec Verified</p>
-            </div>
-            <div class="stat-item">
-              <h3>Flexible Amort.</h3>
-              <p>0% Interest Installment Payment Plans</p>
-            </div>
-            <div class="stat-item">
-              <h3>30 Mins</h3>
-              <p>To GenSan Airport & Major Malls</p>
-            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Featured Properties Section -->
-    <section class="section-padding section-shell" style="background: #FFF;">
+    <section class="section-padding section-shell" style="background: var(--paper);">
       <div class="container">
         <div class="section-header">
           <span class="tagline">Exclusive Inventory</span>
@@ -115,86 +95,93 @@
       </div>
     </section>
 
-    <!-- Why Polomolok Highlight Section -->
-    <section class="section-padding section-shell" style="background: var(--color-background);">
+    <!-- Seller Credibility Block (Section 14.5) -->
+    <section class="section-padding section-shell" style="background: var(--color-bg);">
       <div class="container">
-        <div class="section-header">
-          <span class="tagline">Strategic Location</span>
-          <h2>Why Invest in Polomolok Land?</h2>
-          <p>Polomolok is one of the fastest-growing municipalities in Soccsksargen, combining lush nature with booming commercial potential.</p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 2rem; margin-bottom: 2.5rem;">
-          <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-            <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--status-available-bg); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;" aria-hidden="true">🏔️</div>
-            <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Cool Climate & Scenic Views</h3>
-            <p style="color: var(--color-text-muted); font-size: 0.95rem;">Nestled at the base of Mt. Matutum, enjoy cooler year-round temperatures, clean mountain air, and picturesque backdrops for your home or vacation farm.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 3rem; align-items: center;">
+          <div style="background: var(--color-surface); padding: 2.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+            <span class="tagline" style="color: var(--color-accent-text); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.12em; display: block; margin-bottom: 0.5rem;">LOCAL ADVISER</span>
+            <h2 style="margin-bottom: 1rem;">Direct Local Guidance in Polomolok</h2>
+            <p style="margin-bottom: 1.5rem; line-height: 1.7;">Work directly with accredited local sales representatives in South Cotabato. We assist you with document due diligence, site tours, lot boundary verification, and title transfer coordination.</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <a href="contact.html" class="btn btn-primary">Book Site Tour</a>
+              <a href="tel:+639171234567" class="btn btn-outline">Call Sales Line</a>
+            </div>
           </div>
 
-          <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-            <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--status-reserved-bg); color: var(--color-accent-hover); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;" aria-hidden="true">📈</div>
-            <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">High Value Appreciation</h3>
-            <p style="color: var(--color-text-muted); font-size: 0.95rem;">Land prices in South Cotabato are steadily appreciating due to continuous infrastructure projects, commercial developments, and agricultural expansion.</p>
-          </div>
+          <div>
+            <div class="section-header" style="text-align: left; margin-bottom: 1.5rem;">
+              <span class="tagline">Strategic Location</span>
+              <h2>Why Invest in Polomolok Land?</h2>
+            </div>
 
-          <div style="background: #FFF; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border);">
-            <div style="width: 48px; height: 48px; border-radius: 12px; background: #E0F2FE; color: #0284C7; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;" aria-hidden="true">🚗</div>
-            <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Accessible Highway Network</h3>
-            <p style="color: var(--color-text-muted); font-size: 0.95rem;">Just 15-20 minutes away from General Santos City, near Dole Philippines headquarters, hospitals, schools, and local markets.</p>
-          </div>
-        </div>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.25rem;">
+              <li style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--forest-050); color: var(--color-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                </div>
+                <div>
+                  <strong style="display: block; font-size: 1.1rem; color: var(--color-primary);">Cool Mountain Climate</strong>
+                  <p style="font-size: 0.95rem; margin-top: 0.25rem;">Nestled at the foot of Mt. Matutum, enjoy cooler year-round temperatures and clean mountain air.</p>
+                </div>
+              </li>
 
-        <div class="text-center">
-          <a href="why-invest.html" class="btn btn-outline btn-lg">Read Full Investment Report & Comparisons</a>
+              <li style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--bronze-100); color: var(--bronze-700); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                </div>
+                <div>
+                  <strong style="display: block; font-size: 1.1rem; color: var(--color-primary);">Fertile Volcanic Land</strong>
+                  <p style="font-size: 0.95rem; margin-top: 0.25rem;">Home of Dole Philippines pineapple plantations—rich soil ideal for homestead farming and fruit trees.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Buying Process Highlight Section -->
-    <section class="section-padding section-shell" style="background: #FFF;">
+    <!-- Four Step Buying Process Section (Section 14.7) -->
+    <section class="section-padding section-shell" style="background: var(--paper);">
       <div class="container">
         <div class="section-header">
           <span class="tagline">Simple & Transparent</span>
-          <h2>How to Purchase Your Lot</h2>
-          <p>Four easy steps from site inspection to owning your land title.</p>
+          <h2>How Purchasing Works</h2>
+          <p>Four simple steps from property browsing to title transfer.</p>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
-          <div style="text-align: center; padding: 1.5rem; background: var(--color-surface-elevated); border-radius: var(--radius-md);">
-            <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">1</span>
-            <h4>Select Property</h4>
-            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Browse our online listings on RenoLeads and select your preferred lot size and location.</p>
+          <div style="padding: 1.5rem; background: var(--color-surface-soft); border-radius: var(--radius-md);">
+            <span style="display: inline-block; width: 36px; height: 36px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; text-align: center; line-height: 36px; margin-bottom: 0.75rem;">1</span>
+            <h4>Browse Lots</h4>
+            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Select your preferred lot size, barangay location, and budget.</p>
           </div>
 
-          <div style="text-align: center; padding: 1.5rem; background: var(--color-surface-elevated); border-radius: var(--radius-md);">
-            <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">2</span>
-            <h4>Book Site Visit</h4>
-            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Schedule a free guided site tour with our accredited land agent.</p>
+          <div style="padding: 1.5rem; background: var(--color-surface-soft); border-radius: var(--radius-md);">
+            <span style="display: inline-block; width: 36px; height: 36px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; text-align: center; line-height: 36px; margin-bottom: 0.75rem;">2</span>
+            <h4>Inspect Site</h4>
+            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Book a free guided tour to inspect lot boundaries and road access.</p>
           </div>
 
-          <div style="text-align: center; padding: 1.5rem; background: var(--color-surface-elevated); border-radius: var(--radius-md);">
-            <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">3</span>
-            <h4>Reserve Your Lot</h4>
-            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Fill out the reservation form and choose cash or monthly installment plan.</p>
+          <div style="padding: 1.5rem; background: var(--color-surface-soft); border-radius: var(--radius-md);">
+            <span style="display: inline-block; width: 36px; height: 36px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; text-align: center; line-height: 36px; margin-bottom: 0.75rem;">3</span>
+            <h4>Reserve Lot</h4>
+            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Choose cash or flexible monthly 0% interest installment options.</p>
           </div>
 
-          <div style="text-align: center; padding: 1.5rem; background: var(--color-surface-elevated); border-radius: var(--radius-md);">
-            <span style="display: inline-block; width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; line-height: 40px; margin-bottom: 1rem;">4</span>
+          <div style="padding: 1.5rem; background: var(--color-surface-soft); border-radius: var(--radius-md);">
+            <span style="display: inline-block; width: 36px; height: 36px; border-radius: 50%; background: var(--color-primary); color: #FFF; font-weight: 700; text-align: center; line-height: 36px; margin-bottom: 0.75rem;">4</span>
             <h4>Title Transfer</h4>
-            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Receive official deed of sale, tax declaration, and TCT land title under your name.</p>
+            <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-top: 0.4rem;">Receive your Deed of Sale and official TCT land title under your name.</p>
           </div>
-        </div>
-
-        <div class="text-center">
-          <a href="buying-process.html" class="btn btn-outline btn-lg">View Detailed Stepper & Titling FAQs</a>
         </div>
       </div>
     </section>
 
     <!-- Lead Capture Form Section -->
-    <section id="inquiry-section" class="section-padding section-shell" style="background: var(--color-background);">
+    <section id="inquiry-section" class="section-padding section-shell" style="background: var(--color-bg);">
       <div class="container">
-        <div style="max-width: 800px; margin-inline: auto; background: #FFF; border-radius: var(--radius-lg); padding: clamp(1.5rem, 4vw, 3rem); box-shadow: var(--shadow-lg); border: 1px solid var(--color-border);">
+        <div style="max-width: 760px; margin-inline: auto; background: var(--paper); border-radius: var(--radius-lg); padding: clamp(1.5rem, 4vw, 3rem); box-shadow: var(--shadow-lg); border: 1px solid var(--border);">
           <div class="section-header" style="margin-bottom: 2rem;">
             <span class="tagline">Get In Touch</span>
             <h2>Inquire or Schedule a Free Site Tour</h2>

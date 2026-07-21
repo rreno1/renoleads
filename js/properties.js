@@ -1,6 +1,6 @@
 /**
- * RenoLeads Properties Catalog Page Controller
- * Handles intrinsic grids, shortlist retention, aria-pressed pill filters, dropdown filters, aria-live results, and clean empty states
+ * RenoLeads Properties Catalog Page Controller (V2 Overhaul)
+ * Handles intrinsic grids, SVG shortlist buttons, aria-pressed pill filters, dropdown filters, aria-live results, and clean empty states
  */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -53,8 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (propertiesToRender.length === 0) {
       const isSavedFilter = selectedCategory === "saved";
       gridContainer.innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; background: #FFF; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
-          <div style="font-size: 2.5rem; margin-bottom: 0.75rem;" aria-hidden="true">${isSavedFilter ? '❤️' : '🍃'}</div>
+        <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; background: var(--color-surface); border-radius: var(--radius-md); border: 1px solid var(--border);">
           <h3>${isSavedFilter ? 'No Saved Lots Yet' : 'No properties match your filter selection'}</h3>
           <p style="color: var(--color-text-muted); margin: 0.5rem auto 1.5rem auto;">${isSavedFilter ? 'Click the heart icon on any land listing to save it to your device shortlist.' : 'Try resetting your filters or contacting our sales team for upcoming land lot releases in Polomolok.'}</p>
           <button id="reset-filters-action" class="btn btn-outline">Reset All Filters</button>
@@ -68,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Render Cards
+    // Render V2 Property Cards (Price in body, SVG heart icon)
     gridContainer.innerHTML = propertiesToRender.map(prop => {
       const statusClass = prop.status === 'available' ? 'badge-available' : (prop.status === 'reserved' ? 'badge-reserved' : 'badge-sold');
       const formattedPrice = DOMUtils.formatCurrency(prop.totalPrice);
@@ -81,29 +80,35 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="card-image-wrap">
             <span class="badge ${statusClass} card-status-badge">${DOMUtils.escapeHTML(prop.status.toUpperCase())}</span>
             <button class="card-shortlist-btn ${isSaved ? 'active' : ''}" data-id="${DOMUtils.escapeHTML(prop.id)}" aria-label="${isSaved ? 'Remove from saved lots' : 'Save lot to shortlist'}">
-              ${isSaved ? '❤️' : '🤍'}
+              <svg viewBox="0 0 24 24" fill="${isSaved ? 'var(--danger)' : 'none'}" stroke="${isSaved ? 'var(--danger)' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
             </button>
-            <img src="${thumbnail}" alt="${DOMUtils.escapeHTML(prop.title)}" width="400" height="250" loading="lazy" onerror="this.src='assets/images/sample-res-1.jpg'">
-            <div class="card-price-tag">${formattedPrice}</div>
+            <a href="property.html?id=${encodeURIComponent(prop.id)}">
+              <img src="${thumbnail}" alt="${DOMUtils.escapeHTML(prop.title)}" width="400" height="250" loading="lazy" onerror="this.src='assets/images/sample-res-1.jpg'">
+            </a>
           </div>
           <div class="card-body">
-            <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-accent-hover); text-transform: uppercase; margin-bottom: 0.25rem;">
-              ${DOMUtils.escapeHTML(prop.propertyType.toUpperCase())} LOT
-            </span>
-            <h3 class="card-title">${DOMUtils.escapeHTML(prop.title)}</h3>
+            <div class="card-price-row">
+              <div class="card-price">${formattedPrice}</div>
+              <div class="card-price-sqm">${formattedPriceSqm}/sqm</div>
+            </div>
+            
+            <a href="property.html?id=${encodeURIComponent(prop.id)}" style="text-decoration: none;">
+              <h3 class="card-title">${DOMUtils.escapeHTML(prop.title)}</h3>
+            </a>
+
             <div class="card-location">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               Brgy. ${DOMUtils.escapeHTML(prop.barangay)}, Polomolok
             </div>
 
             <div class="card-features">
-              <div class="feature-item">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <div style="display: flex; align-items: center; gap: 0.35rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
                 <span>${DOMUtils.formatNumber(prop.lotAreaSqm)} sqm</span>
               </div>
-              <div class="feature-item">
-                <span>${formattedPriceSqm}/sqm</span>
-              </div>
+              <span style="color: var(--color-accent-text); uppercase;">${DOMUtils.escapeHTML(prop.propertyType.toUpperCase())}</span>
             </div>
 
             <div class="card-footer">
