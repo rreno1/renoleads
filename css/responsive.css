@@ -16,11 +16,11 @@
   z-index: var(--z-sticky);
 }
 
-/* Off-Canvas Accessible Mobile Navigation Drawer */
+/* Off-Canvas Accessible Mobile Navigation Drawer (Transform-Based Animation - Section 9.3) */
 .mobile-drawer {
   position: fixed;
   top: 0;
-  right: -100%;
+  right: 0;
   width: min(80vw, 320px);
   height: 100dvh;
   background: #FFFFFF;
@@ -29,15 +29,41 @@
   -webkit-backdrop-filter: blur(20px);
   z-index: var(--z-drawer);
   box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
-  padding: 5rem 1.75rem 2rem 1.75rem;
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  transition: right var(--transition-slow);
+  gap: 1.5rem;
+  transform: translateX(100%);
+  transition: transform var(--transition-normal);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
-.mobile-drawer.active {
-  right: 0;
+.mobile-drawer.is-open {
+  transform: translateX(0);
+}
+
+.mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mobile-drawer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mobile-drawer-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
 }
 
 .mobile-drawer-overlay {
@@ -55,7 +81,7 @@
   transition: opacity var(--transition-normal);
 }
 
-.mobile-drawer-overlay.active {
+.mobile-drawer-overlay.is-open {
   opacity: 1;
   pointer-events: auto;
 }
@@ -89,7 +115,7 @@
     height: 72px;
   }
 
-  .nav-links, .nav-cta {
+  .desktop-nav, .nav-actions {
     display: none;
   }
 
