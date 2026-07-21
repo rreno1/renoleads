@@ -112,13 +112,27 @@ DOMUtils.showToast = function(message) {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Highlight Active Mobile Bottom Nav Link
+  // 1. Highlight Active Mobile Bottom Nav Link (Bug Fix: query param aware)
   const currentPath = window.location.pathname.split("/").pop() || "index.html";
+  const currentQuery = window.location.search;
+  const currentFull = currentPath + currentQuery;
+
   document.querySelectorAll(".mobile-bottom-nav .mobile-nav-item").forEach(link => {
     const href = link.getAttribute("href");
-    if (href === currentPath || (currentPath === "" && href === "index.html")) {
+    let isActive = false;
+
+    if (href.includes("?")) {
+      isActive = (currentFull === href);
+    } else {
+      isActive = (currentPath === href && !currentQuery.includes("filter=saved"));
+    }
+
+    if (isActive) {
       link.classList.add("active");
       link.setAttribute("aria-current", "page");
+    } else {
+      link.classList.remove("active");
+      link.removeAttribute("aria-current");
     }
   });
 

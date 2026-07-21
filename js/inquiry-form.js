@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (formFeedback) {
       formFeedback.style.display = "none";
-      formFeedback.className = "";
+      formFeedback.className = "feedback-alert";
       formFeedback.innerHTML = "";
     }
 
@@ -51,10 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!leadPayload.fullName || !leadPayload.mobileNumber) {
       if (formFeedback) {
         formFeedback.style.display = "block";
-        formFeedback.className = "badge-reserved";
+        formFeedback.className = "feedback-alert feedback-warning";
         formFeedback.setAttribute("role", "alert");
-        formFeedback.style.padding = "1rem";
-        formFeedback.style.borderRadius = "8px";
         formFeedback.textContent = "Please provide your Full Name and Mobile Number.";
       }
       if (submitBtn) {
@@ -73,10 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
           inquiryForm.reset();
           if (formFeedback) {
             formFeedback.style.display = "block";
-            formFeedback.className = "badge-available";
+            formFeedback.className = "feedback-alert feedback-success";
             formFeedback.setAttribute("role", "status");
-            formFeedback.style.padding = "1rem";
-            formFeedback.style.borderRadius = "8px";
             formFeedback.innerHTML = `
               <strong>Inquiry Received!</strong><br>
               Thank you, ${DOMUtils.escapeHTML(leadPayload.fullName)}. Your site visit request for ${DOMUtils.escapeHTML(leadPayload.propertyCode)} has been logged. Our land agent will contact you via ${DOMUtils.escapeHTML(leadPayload.preferredContactMethod.toUpperCase())} shortly.
@@ -86,11 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
           // Offline / Local Buffer Notice (Truthful Messaging - Phase 10)
           if (formFeedback) {
             formFeedback.style.display = "block";
-            formFeedback.style.background = "#FEF3C7";
-            formFeedback.style.color = "#B45309";
-            formFeedback.style.border = "1px solid #F59E0B";
-            formFeedback.style.padding = "1rem";
-            formFeedback.style.borderRadius = "8px";
+            formFeedback.className = "feedback-alert feedback-warning";
             formFeedback.setAttribute("role", "status");
             formFeedback.innerHTML = `
               <strong>Inquiry Saved Locally!</strong><br>
@@ -108,10 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("[RenoLeads] Lead Form Error:", err);
       if (formFeedback) {
         formFeedback.style.display = "block";
-        formFeedback.className = "badge-sold";
+        formFeedback.className = "feedback-alert feedback-error";
         formFeedback.setAttribute("role", "alert");
-        formFeedback.style.padding = "1rem";
-        formFeedback.style.borderRadius = "8px";
         formFeedback.innerHTML = `
           <strong>Submission Error</strong><br>
           We could not reach the server at this moment. Please call or SMS us directly at <strong>${RENO_CONFIG.contact.phoneDisplay}</strong>.

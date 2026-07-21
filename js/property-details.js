@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     mainContainer.innerHTML = `
       <div class="container section-padding text-center">
         <h2>Property Not Found</h2>
-        <p style="margin-inline: auto; margin-bottom: 2rem;">The property listing you requested could not be located or may have been reserved.</p>
+        <p class="mx-auto mb-2">The property listing you requested could not be located or may have been reserved.</p>
         <a href="properties.html" class="btn btn-accent btn-lg">Browse Available Land Lots</a>
       </div>
     `;
@@ -151,11 +151,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         <!-- Location Map Preview -->
         <div style="background: var(--color-surface); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 2rem;">
           <h3 style="margin-bottom: 1rem;">Location Map Reference</h3>
-          <div style="width: 100%; height: 300px; border-radius: var(--radius-sm); overflow: hidden; background: var(--border); position: relative;">
+          <div class="map-container">
             <iframe 
-              width="100%" 
-              height="100%" 
-              style="border:0;" 
               loading="lazy" 
               allowfullscreen
               src="https://maps.google.com/maps?q=${property.latitude || 6.2192},${property.longitude || 125.0658}&hl=en&z=14&output=embed"
@@ -187,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               </select>
             </div>
 
-            <div class="calc-result-box" style="background: var(--forest-950); color: #FFF; padding: 1.5rem; border-radius: var(--radius-md); text-align: center;">
+            <div class="calc-result-box">
               <span style="font-size: 0.88rem; color: rgba(255,255,255,0.75);">Est. Monthly Amortization (0% Interest Terms)</span>
               <h3 id="calc-monthly-result" style="color: var(--bronze-300); font-family: var(--font-display); font-size: 2rem; margin-top: 0.25rem;">₱0 / mo</h3>
             </div>
@@ -202,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <h3 style="margin-bottom: 0.5rem;">Book a Site Visit</h3>
           <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">Submit your details to schedule an on-site inspection with our accredited agent.</p>
 
-          <div id="form-feedback" role="status" aria-live="polite" style="display: none; margin-bottom: 1.25rem; padding: 1rem; border-radius: 8px;"></div>
+          <div id="form-feedback" class="feedback-alert" role="status" aria-live="polite" style="display: none;"></div>
 
           <form id="lead-inquiry-form">
             <input type="hidden" name="propertyInterest" value="${DOMUtils.escapeHTML(property.propertyCode + ' - ' + property.title)}">
@@ -254,7 +251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     </div>
   `;
 
-  // Calculator Logic
+  // Calculator Logic with Number Safeguards (Bug 6 Fix)
   const dpSlider = document.getElementById("calc-dp-slider");
   const dpText = document.getElementById("calc-dp-percent-text");
   const termSelect = document.getElementById("calc-term-select");
@@ -262,15 +259,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function updateAmortization() {
     if (!dpSlider || !termSelect || !monthlyResult) return;
-    const dpPercent = parseFloat(dpSlider.value);
+    const dpPercent = parseFloat(dpSlider.value) || 20;
     if (dpText) dpText.textContent = `${dpPercent}%`;
 
-    const totalPrice = property.totalPrice;
+    const totalPrice = Number(property.totalPrice) || 0;
     const downPayment = totalPrice * (dpPercent / 100);
-    const remainingBalance = totalPrice - downPayment;
+    const remainingBalance = Math.max(0, totalPrice - downPayment);
     const months = parseInt(termSelect.value) || 24;
 
-    const monthlyPayment = remainingBalance / months;
+    const monthlyPayment = months > 0 ? remainingBalance / months : 0;
     monthlyResult.textContent = `${DOMUtils.formatCurrency(monthlyPayment)} / mo`;
   }
 
