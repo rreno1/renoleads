@@ -88,8 +88,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       <h1 style="margin: 0; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.18; font-family: var(--font-display);">${DOMUtils.escapeHTML(property.title)}</h1>
     </div>
 
+    <!-- Interactive Gallery Preview (Section 17.3) -->
+    <div class="property-gallery-grid" style="margin-bottom: 2rem;">
+      <div class="gallery-main">
+        <img id="gallery-main-view" src="${images[0]}" alt="${DOMUtils.escapeHTML(property.title)}" width="800" height="500" style="cursor: pointer;" title="Click image to swap preview">
+      </div>
+      <div class="gallery-sub">
+        ${thumbnailImages.map((img, idx) => `
+          <button type="button" class="gallery-sub-item ${idx === 0 ? 'active' : ''}" data-src="${img}" aria-label="View photo ${idx + 2}">
+            <img src="${img}" alt="Property view ${idx + 2}" width="400" height="250" loading="lazy">
+          </button>
+        `).join('')}
+      </div>
+    </div>
+
     <!-- Consolidated Key Specifications Summary Card (Zero Duplication) -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.85); padding: 1.25rem 1.75rem; border-radius: var(--radius-md); box-shadow: var(--glass-shadow); margin-bottom: 2rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.85); padding: 1.25rem 1.75rem; border-radius: var(--radius-md); box-shadow: var(--glass-shadow); margin-bottom: 2.5rem;">
       <div>
         <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Total Contract Price</span>
         <div style="font-family: var(--font-display); font-size: 2.25rem; font-weight: 700; color: var(--color-primary); line-height: 1.1;">${formattedPrice}</div>
@@ -111,20 +125,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Payment Terms</span>
           <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary);">Cash / Installment</div>
         </div>
-      </div>
-    </div>
-
-    <!-- Interactive Gallery Preview (Section 17.3) -->
-    <div class="property-gallery-grid" style="margin-bottom: 2.5rem;">
-      <div class="gallery-main">
-        <img id="gallery-main-view" src="${images[0]}" alt="${DOMUtils.escapeHTML(property.title)}" width="800" height="500" style="cursor: pointer;" title="Click image to swap preview">
-      </div>
-      <div class="gallery-sub">
-        ${thumbnailImages.map((img, idx) => `
-          <button type="button" class="gallery-sub-item ${idx === 0 ? 'active' : ''}" data-src="${img}" aria-label="View photo ${idx + 2}">
-            <img src="${img}" alt="Property view ${idx + 2}" width="400" height="250" loading="lazy">
-          </button>
-        `).join('')}
       </div>
     </div>
 
