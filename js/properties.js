@@ -130,11 +130,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   function applyFilters() {
     let filtered = [...allProperties];
 
+    const sectionTagline = document.querySelector(".section-header .tagline");
+    const sectionTitle = document.querySelector(".section-header h1");
+    const sectionDesc = document.querySelector(".section-header p");
+
     if (selectedCategory === "saved") {
       const savedIds = RetentionManager.getShortlist();
       filtered = filtered.filter(p => savedIds.includes(p.id));
-    } else if (selectedCategory !== "all") {
-      filtered = filtered.filter(p => p.propertyType === selectedCategory);
+      if (sectionTagline) sectionTagline.textContent = "Saved Shortlist";
+      if (sectionTitle) sectionTitle.textContent = "Your Shortlisted Land Lots";
+      if (sectionDesc) sectionDesc.textContent = "Review land parcels you have saved to your local device shortlist.";
+    } else {
+      if (sectionTagline) sectionTagline.textContent = "Exclusive Inventory";
+      if (sectionTitle) sectionTitle.textContent = "Available Land Lots in Polomolok";
+      if (sectionDesc) sectionDesc.textContent = "Filter clean-title residential homesteads, farm lots, and commercial land parcels in South Cotabato.";
+      if (selectedCategory !== "all") {
+        filtered = filtered.filter(p => p.propertyType === selectedCategory);
+      }
     }
 
     if (statusFilter && statusFilter.value !== "all") {
