@@ -1,6 +1,6 @@
 /**
  * RenoLeads Properties Catalog Page Controller
- * Handles intrinsic grids, pill filters (aria-pressed), dropdown filters, results count live region, and clean empty states
+ * Handles intrinsic grids, shortlist retention, aria-pressed pill filters, dropdown filters, aria-live results, and clean empty states
  */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -16,17 +16,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let selectedCategory = "all";
 
-  // Check URL query parameters e.g. properties.html?type=residential
+  // Check URL query parameters e.g. properties.html?type=residential or ?filter=saved
   const urlParams = new URLSearchParams(window.location.search);
   const typeParam = urlParams.get("type");
+  const filterParam = urlParams.get("filter");
+
   if (typeParam) {
     selectedCategory = typeParam;
-    pillBtns.forEach(btn => {
-      const isSelected = btn.dataset.type === typeParam;
-      btn.classList.toggle("active", isSelected);
-      btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
-    });
+  } else if (filterParam === "saved") {
+    selectedCategory = "saved";
   }
+
+  pillBtns.forEach(btn => {
+    const isSelected = btn.dataset.type === selectedCategory;
+    btn.classList.toggle("active", isSelected);
+    btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+  });
 
   // Loading Skeleton State
   gridContainer.innerHTML = `
@@ -46,11 +51,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Empty State
     if (propertiesToRender.length === 0) {
+      const isSavedFilter = selectedCategory === "saved";
       gridContainer.innerHTML = `
         <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; background: #FFF; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
-          <div style="font-size: 2.5rem; margin-bottom: 0.75rem;" aria-hidden="true">🍃</div>
-          <h3>No properties match your filter selection</h3>
-          <p style="color: var(--color-text-muted); margin: 0.5rem auto 1.5rem auto;">Try resetting your filters or contacting our sales team for upcoming land lot releases in Polomolok.</p>
+          <div style="font-size: 2.5rem; margin-bottom: 0.75rem;" aria-hidden="true">${isSavedFilter ? '❤️' : '🍃'}</div>
+          <h3>${isSavedFilter ? 'No Saved Lots Yet' : 'No properties match your filter selection'}</h3>
+          <p style="color: var(--color-text-muted); margin: 0.5rem auto 1.5rem auto;">${isSavedFilter ? 'Click the heart icon on any land listing to save it to your device shortlist.' : 'Try resetting your filters or contacting our sales team for upcoming land lot releases in Polomolok.'}</p>
           <button id="reset-filters-action" class="btn btn-outline">Reset All Filters</button>
         </div>
       `;
@@ -68,11 +74,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       const formattedPrice = DOMUtils.formatCurrency(prop.totalPrice);
       const formattedPriceSqm = DOMUtils.formatCurrency(prop.pricePerSqm);
       const thumbnail = prop.thumbnailUrl || 'assets/images/sample-res-1.jpg';
+      const isSaved = RetentionManager.isShortlisted(prop.id);
 
       return `
         <article class="property-card">
           <div class="card-image-wrap">
             <span class="badge ${statusClass} card-status-badge">${DOMUtils.escapeHTML(prop.status.toUpperCase())}</span>
+            <button class="card-shortlist-btn ${isSaved ? 'active' : ''}" data-id="${DOMUtils.escapeHTML(prop.id)}" aria-label="${isSaved ? 'Remove from saved lots' : 'Save lot to shortlist'}">
+              ${isSaved ? '❤️' : '🤍'}
+            </button>
             <img src="${thumbnail}" alt="${DOMUtils.escapeHTML(prop.title)}" width="400" height="250" loading="lazy" onerror="this.src='assets/images/sample-res-1.jpg'">
             <div class="card-price-tag">${formattedPrice}</div>
           </div>
@@ -109,7 +119,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   function applyFilters() {
     let filtered = [...allProperties];
 
-    if (selectedCategory !== "all") {
+    if (selectedCategory === "saved") {
+      const savedIds = RetentionManager.getShortlist();
+      filtered = filtered.filter(p => savedIds.includes(p.id));
+    } else if (selectedCategory !== "all") {
       filtered = filtered.filter(p => p.propertyType === selectedCategory);
     }
 

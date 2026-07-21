@@ -1,8 +1,111 @@
 /**
- * RenoLeads Production Interactive Engine
- * Handles Mobile Off-Canvas Navigation Drawer (A11y, Focus Trapping, Transform Animation),
- * Floating Quick Action Bar, and Automated Layout Overflow Diagnostics
+ * RenoLeads Production Interactive Engine & Layer 4 Retention Manager
+ * Handles Mobile Off-Canvas Drawer (A11y, Focus Trapping, Transform Animation),
+ * Shortlist Favorites, Recently Viewed History, Web Share API, and Toast System
  */
+
+const RetentionManager = {
+  getShortlist() {
+    try {
+      return JSON.parse(localStorage.getItem("renoleads_shortlist") || "[]");
+    } catch (e) {
+      return [];
+    }
+  },
+
+  isShortlisted(id) {
+    return this.getShortlist().includes(id);
+  },
+
+  toggleShortlist(id) {
+    let list = this.getShortlist();
+    const index = list.indexOf(id);
+    let added = false;
+
+    if (index > -1) {
+      list.splice(index, 1);
+    } else {
+      list.push(id);
+      added = true;
+    }
+
+    try {
+      localStorage.setItem("renoleads_shortlist", JSON.stringify(list));
+    } catch (e) {}
+
+    // Update heart icons across DOM
+    document.querySelectorAll(`.card-shortlist-btn[data-id="${id}"]`).forEach(btn => {
+      btn.classList.toggle("active", added);
+      btn.setAttribute("aria-label", added ? "Remove from saved lots" : "Save lot to shortlist");
+      btn.textContent = added ? "❤️" : "🤍";
+    });
+
+    DOMUtils.showToast(added ? "Saved to device shortlist ❤️" : "Removed from shortlist");
+    return added;
+  },
+
+  getRecentlyViewed() {
+    try {
+      return JSON.parse(localStorage.getItem("renoleads_recently_viewed") || "[]");
+    } catch (e) {
+      return [];
+    }
+  },
+
+  addRecentlyViewed(id) {
+    if (!id) return;
+    let list = this.getRecentlyViewed().filter(item => item !== id);
+    list.unshift(id);
+    if (list.length > 8) list.pop(); // keep top 8
+    try {
+      localStorage.setItem("renoleads_recently_viewed", JSON.stringify(list));
+    } catch (e) {}
+  },
+
+  async shareProperty(title, text, url) {
+    const shareData = {
+      title: title || "RenoLeads Property",
+      text: text || "Check out this prime land lot in Polomolok, South Cotabato:",
+      url: url || window.location.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if (err.name !== 'AbortError') console.warn("Share API error:", err);
+      }
+    }
+
+    // Fallback: Copy link to clipboard
+    try {
+      await navigator.clipboard.writeText(shareData.url);
+      DOMUtils.showToast("Property link copied to clipboard! 📋");
+    } catch (err) {
+      DOMUtils.showToast("Sharing link: " + shareData.url);
+    }
+  }
+};
+
+// Toast Notification Helper
+DOMUtils.showToast = function(message) {
+  let toast = document.querySelector(".toast-notification");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.className = "toast-notification";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add("active");
+
+  setTimeout(() => {
+    toast.classList.remove("active");
+  }, 3000);
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Mobile Navigation Off-Canvas Drawer Setup
@@ -82,11 +185,31 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(quickBar);
   }
 
-  // 3. Automated Layout Overflow Diagnostic Runner (Section 25)
+  // 3. Global Delegated Click Handler for Shortlist Buttons & Share Buttons
+  document.addEventListener("click", (e) => {
+    const shortlistBtn = e.target.closest(".card-shortlist-btn");
+    if (shortlistBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const propId = shortlistBtn.dataset.id;
+      if (propId) RetentionManager.toggleShortlist(propId);
+      return;
+    }
+
+    const shareBtn = e.target.closest(".btn-share-trigger");
+    if (shareBtn) {
+      e.preventDefault();
+      const title = shareBtn.dataset.title;
+      const text = shareBtn.dataset.text;
+      const url = shareBtn.dataset.url;
+      RetentionManager.shareProperty(title, text, url);
+    }
+  });
+
+  // 4. Automated Layout Overflow Diagnostic Runner (Section 28)
   window.checkLayoutOverflow = function() {
     const viewportWidth = document.documentElement.clientWidth;
     const leakingElements = [...document.querySelectorAll("*")].filter((el) => {
-      // Exclude closed off-canvas drawer
       if (el.id === "mobile-navigation-drawer" && !el.classList.contains("is-open")) return false;
       const rect = el.getBoundingClientRect();
       return rect.left < -1 || rect.right > viewportWidth + 1;

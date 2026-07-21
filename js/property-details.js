@@ -1,6 +1,6 @@
 /**
  * RenoLeads Property Details Page Architecture Controller
- * Handles dynamic property rendering, leafet/map integration, amortization calculator, and app handoff
+ * Handles dynamic property rendering, recently viewed history logging, Web Share API, leaflet/map integration, amortization calculator, and app handoff
  */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const property = await fetchPropertyById(propertyId);
 
-  // 1. Property Not Found Handling (Phase 7)
+  // 1. Property Not Found Handling (Section 12.12)
   if (!property) {
     document.title = "Property Not Found | RenoLeads";
     mainContainer.innerHTML = `
@@ -34,7 +34,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // 2. Set Page Metadata
+  // 2. Log Property to Recently Viewed (Layer 4 Retention)
+  RetentionManager.addRecentlyViewed(property.id);
+
+  // Set Page Metadata
   document.title = `${property.title} | RenoLeads Polomolok`;
   
   // Formatters
@@ -44,22 +47,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Status Badge Class
   const statusBadgeClass = property.status === 'available' ? 'badge-available' : (property.status === 'reserved' ? 'badge-reserved' : 'badge-sold');
+  const isSaved = RetentionManager.isShortlisted(property.id);
 
   // Images Gallery Arrays
   const images = (property.imageUrls && property.imageUrls.length > 0) ? property.imageUrls : [property.thumbnailUrl];
 
-  // Android App Handoff Link (Verified HTTPS format & Intent scheme fallback)
+  // Android App Handoff Link
   const appHandoffUrl = `https://rreno1.github.io/renoleads/properties/${property.id}`;
   const appIntentUrl = `intent://rreno1.github.io/renoleads/properties/${property.id}#Intent;scheme=https;package=${RENO_CONFIG.androidPackage};S.browser_fallback_url=${encodeURIComponent(appHandoffUrl)};end;`;
 
   // Render Full Detail Component Structure
   mainContainer.innerHTML = `
     <!-- Breadcrumbs -->
-    <nav class="property-breadcrumbs" aria-label="Breadcrumb navigation" style="margin-bottom: 1.5rem;">
-      <a href="index.html">Home</a> &nbsp;/&nbsp; 
-      <a href="properties.html">Properties</a> &nbsp;/&nbsp; 
-      <span style="color: var(--color-text); font-weight: 600;">${DOMUtils.escapeHTML(property.propertyCode)}</span>
-    </nav>
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+      <nav class="property-breadcrumbs" aria-label="Breadcrumb navigation">
+        <a href="index.html">Home</a> &nbsp;/&nbsp; 
+        <a href="properties.html">Properties</a> &nbsp;/&nbsp; 
+        <span style="color: var(--color-text); font-weight: 600;">${DOMUtils.escapeHTML(property.propertyCode)}</span>
+      </nav>
+
+      <!-- Retention Actions (Share & Shortlist) -->
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <button class="btn btn-outline btn-sm btn-share-trigger" data-title="${DOMUtils.escapeHTML(property.title)}" data-text="Check out this prime land lot in Polomolok:" data-url="${window.location.href}">
+          🔗 Share Listing
+        </button>
+        <button class="btn btn-outline btn-sm card-shortlist-btn ${isSaved ? 'active' : ''}" data-id="${DOMUtils.escapeHTML(property.id)}" style="position: static; width: auto; height: 40px; padding: 0 1rem; border-radius: var(--radius-sm);">
+          ${isSaved ? '❤️ Saved to Shortlist' : '🤍 Save to Shortlist'}
+        </button>
+      </div>
+    </div>
 
     <!-- Header Block -->
     <div class="property-details-header">
@@ -251,7 +267,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const remainingBalance = totalPrice - downPayment;
     const months = parseInt(termSelect.value) || 24;
 
-    // Simple 0% Interest amortization division
     const monthlyPayment = remainingBalance / months;
     monthlyResult.textContent = `${DOMUtils.formatCurrency(monthlyPayment)} / mo`;
   }
