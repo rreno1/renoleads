@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Available Land Lots | RenoLeads Polomolok</title>
+  <meta name="description" content="Browse available residential, agricultural farm, and commercial land lots for sale in Polomolok, South Cotabato on RenoLeads.">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container navbar">
+      <a href="index.html" class="brand-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+        <span>RenoLeads</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="properties.html" class="nav-link active">Available Lots</a></li>
+        <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="contact.html" class="btn btn-accent">Schedule Site Visit</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="section-padding">
+    <div class="container">
+      <div class="section-header" style="margin-bottom: 2rem; text-align: left; max-width: 100%;">
+        <span class="tagline">Explore Our Inventory</span>
+        <h2>Land Lots for Sale in Polomolok</h2>
+        <p id="properties-count">Loading property listings...</p>
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="filter-bar">
+        <div class="form-group">
+          <label for="filter-property-type">Property Category</label>
+          <select id="filter-property-type" class="form-control">
+            <option value="all">All Categories</option>
+            <option value="residential">Residential Lots</option>
+            <option value="agricultural">Homestead & Farm Lots</option>
+            <option value="commercial">Commercial Frontage</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="filter-status">Availability Status</label>
+          <select id="filter-status" class="form-control">
+            <option value="all">All Statuses</option>
+            <option value="available" selected>Available Only</option>
+            <option value="reserved">Reserved</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="filter-max-price">Max Budget (Total Price)</label>
+          <select id="filter-max-price" class="form-control">
+            <option value="all">Any Price</option>
+            <option value="1200000">Under ₱1,200,000</option>
+            <option value="2500000">Under ₱2,500,000</option>
+            <option value="4000000">Under ₱4,000,000</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="filter-sort">Sort By</label>
+          <select id="filter-sort" class="form-control">
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="area-desc">Lot Size: Largest First</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Grid Container -->
+      <div id="properties-grid-container" class="properties-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 RenoLeads. All rights reserved.</p>
+        <p><a href="privacy.html">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/properties.js"></script>
+  <script src="js/analytics.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+/* Polomolok South Cotabato Real Estate Design System Tokens */
+:root {
+  /* Color Palette - Emerald Earth & Warm Gold Accent */
+  --primary-hsl: 158, 64%, 22%;       /* Deep Pine Green */
+  --primary: hsl(var(--primary-hsl));
+  --primary-light: hsl(158, 55%, 32%);
+  --primary-dark: hsl(158, 70%, 14%);
+
+  --accent-hsl: 38, 92%, 50%;         /* Warm Sun Gold */
+  --accent: hsl(var(--accent-hsl));
+  --accent-hover: hsl(38, 95%, 45%);
+  --accent-glow: hsla(38, 92%, 50%, 0.35);
+
+  --secondary: hsl(215, 25%, 27%);    /* Slate Blue */
+  --secondary-light: hsl(215, 20%, 95%);
+
+  /* Neutrals & Dark Mode Luxury Canvas */
+  --bg-dark: hsl(220, 30%, 8%);
+  --bg-dark-card: hsl(220, 25%, 12%);
+  --bg-dark-border: hsl(220, 20%, 20%);
+  
+  --bg-light: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F1F5F9;
+
+  --text-main: hsl(215, 28%, 17%);
+  --text-muted: hsl(215, 16%, 47%);
+  --text-light: hsl(210, 40%, 98%);
+  --text-inverse: #FFFFFF;
+
+  /* Status Badges */
+  --status-available: #10B981;
+  --status-available-bg: #ECFDF5;
+  --status-reserved: #F59E0B;
+  --status-reserved-bg: #FEF3C7;
+  --status-sold: #EF4444;
+  --status-sold-bg: #FEE2E2;
+
+  /* Typography */
+  --font-family-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-family-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Layout & Glassmorphism */
+  --container-max: 1240px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 25px var(--accent-glow);
+
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-blur: blur(12px);
+
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}

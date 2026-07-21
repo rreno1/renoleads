@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us & Schedule Site Visit | RenoLeads Polomolok</title>
+  <meta name="description" content="Get in touch with our land sales agents on RenoLeads. Book a free site visit or request sample payment computations for land lots in Polomolok, South Cotabato.">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Site Header Navigation -->
+  <header class="site-header">
+    <div class="container navbar">
+      <a href="index.html" class="brand-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+        <span>RenoLeads</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="properties.html" class="nav-link">Available Lots</a></li>
+        <li><a href="contact.html" class="nav-link active">Contact Us</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="properties.html" class="btn btn-accent">View Available Lots</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="section-padding">
+    <div class="container">
+      <div style="max-width: 800px; margin: 0 auto; background: #FFF; border-radius: var(--radius-lg); padding: 3rem; box-shadow: var(--shadow-lg); border: 1px solid rgba(0,0,0,0.06);">
+        <div class="section-header" style="margin-bottom: 2rem;">
+          <span class="tagline">Contact Sales Team</span>
+          <h2>Inquire or Schedule a Site Tour</h2>
+          <p>Have questions about land titles, location maps, or payment terms in Polomolok? Send us a message directly.</p>
+        </div>
+
+        <div id="form-feedback" style="display: none; margin-bottom: 1.5rem; padding: 1rem; border-radius: 8px;"></div>
+
+        <form id="lead-inquiry-form" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;">
+          <div class="form-group" style="grid-column: span 1;">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" name="fullName" class="form-control" placeholder="e.g. Juan Dela Cruz" required>
+          </div>
+
+          <div class="form-group" style="grid-column: span 1;">
+            <label for="mobileNumber">Mobile / Phone Number *</label>
+            <input type="tel" id="mobileNumber" name="mobileNumber" class="form-control" placeholder="e.g. 09171234567" required>
+          </div>
+
+          <div class="form-group" style="grid-column: span 1;">
+            <label for="email">Email Address (Optional)</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="e.g. juan@example.com">
+          </div>
+
+          <div class="form-group" style="grid-column: span 1;">
+            <label for="inquiryType">Inquiry Purpose</label>
+            <select id="inquiryType" name="inquiryType" class="form-control">
+              <option value="site_visit">Schedule a Site Visit</option>
+              <option value="pricing">Request Sample Payment Computation</option>
+              <option value="general">General Inquiry</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="grid-column: span 1;">
+            <label for="preferredDate">Preferred Site Visit Date</label>
+            <input type="date" id="preferredDate" name="preferredDate" class="form-control">
+          </div>
+
+          <div class="form-group" style="grid-column: span 1;">
+            <label for="preferredContactMethod">Preferred Contact Channel</label>
+            <select id="preferredContactMethod" name="preferredContactMethod" class="form-control">
+              <option value="phone">Phone Call / SMS</option>
+              <option value="viber">Viber</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="messenger">Facebook Messenger</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" class="form-control" rows="4" placeholder="Mention preferred barangay or lot size..."></textarea>
+          </div>
+
+          <div style="grid-column: 1 / -1; margin-top: 0.5rem;">
+            <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">Submit Inquiry</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 RenoLeads. All rights reserved.</p>
+        <p><a href="privacy.html">Privacy Policy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/inquiry-form.js"></script>
+  <script src="js/analytics.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+/* Responsive Layouts & Mobile Adjustments */
+
+@media (max-width: 1024px) {
+  .hero h1 {
+    font-size: 2.6rem;
+  }
+  
+  .details-layout,
+  .property-gallery-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .property-gallery-grid {
+    height: auto;
+  }
+
+  .gallery-main {
+    height: 320px;
+  }
+
+  .gallery-sub {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    height: 160px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    height: 68px;
+  }
+
+  .nav-links {
+    display: none; /* Can be toggled via mobile menu */
+  }
+
+  .hero {
+    padding: 4rem 0 3.5rem 0;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1.05rem;
+  }
+
+  .hero-stats {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .filter-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .specs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-handoff-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.75rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
