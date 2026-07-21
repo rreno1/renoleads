@@ -644,12 +644,21 @@ textarea.form-control {
   align-items: end;
 }
 
-/* 8. Glassmorphism Property Details Layout & Interactive Preview Gallery */
+/* 8. Glassmorphism Property Details Layout & Sidebar Form Offset */
 .details-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.75fr);
   gap: clamp(1.5rem, 3vw, 2.5rem);
   align-items: start;
+}
+
+.property-sidebar {
+  position: sticky;
+  top: 96px;
+}
+
+#inquiry-form-card {
+  scroll-margin-top: 110px;
 }
 
 .property-details-header {

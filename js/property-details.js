@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     </div>
 
     <!-- Consolidated Key Specifications Summary Card (Zero Duplication) -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; background: var(--color-surface); border: 1px solid var(--border); padding: 1.25rem 1.75rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 2rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.85); padding: 1.25rem 1.75rem; border-radius: var(--radius-md); box-shadow: var(--glass-shadow); margin-bottom: 2rem;">
       <div>
         <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Total Contract Price</span>
         <div style="font-family: var(--font-display); font-size: 2.25rem; font-weight: 700; color: var(--color-primary); line-height: 1.1;">${formattedPrice}</div>
@@ -135,12 +135,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       <!-- Left Column: Main Information -->
       <div>
-        <div style="background: var(--color-surface); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 2rem;">
+        <div style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: var(--glass-shadow); margin-bottom: 2rem;">
           <h3 style="margin-bottom: 1rem;">Property Description</h3>
           <p style="line-height: 1.7; font-size: 1.05rem;">${DOMUtils.escapeHTML(property.description)}</p>
         </div>
 
-        <div style="background: var(--color-surface); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 2rem;">
+        <div style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: var(--glass-shadow); margin-bottom: 2rem;">
           <h3 style="margin-bottom: 1rem;">Nearby Landmarks & Accessibility</h3>
           <ul style="list-style: none; padding: 0; margin: 0;">
             ${(property.nearbyLandmarks || []).map(lm => `
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
         <!-- Location Map Preview -->
-        <div style="background: var(--color-surface); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 2rem;">
+        <div style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: var(--glass-shadow); margin-bottom: 2rem;">
           <h3 style="margin-bottom: 1rem;">Location Map Reference</h3>
           <div class="map-container">
             <iframe 
@@ -198,8 +198,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       <!-- Right Column: Sticky Sidebar -->
       <div class="property-sidebar">
-        <!-- Site Visit Booking Form Card -->
-        <div id="inquiry-form-card" style="background: var(--color-surface); padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+        <!-- Site Visit Booking Form Card (Padded for Header Offset & Zero Cutoff) -->
+        <div id="inquiry-form-card" style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.5rem, 3vw, 2.25rem); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: var(--glass-shadow); margin-bottom: 2rem; scroll-margin-top: 110px;">
           <h3 style="margin-bottom: 0.5rem;">Book a Site Visit</h3>
           <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">Submit your details to schedule an on-site inspection with our accredited agent.</p>
 
@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
         <!-- Android APK Handoff Card -->
-        <div style="background: var(--forest-950); color: #FFF; padding: 1.75rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.12);">
+        <div style="background: rgba(11, 31, 24, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: #FFF; padding: 1.75rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.18);">
           <h4 style="color: #FFF; margin-bottom: 0.5rem;">RenoLeads App Handoff</h4>
           <p style="font-size: 0.88rem; color: rgba(255,255,255,0.75); margin-bottom: 1.25rem;">Open this listing directly inside the RenoLeads Android app.</p>
           <a href="${appIntentUrl}" class="btn btn-app btn-sm" style="width: 100%;">Open in RenoLeads App</a>
