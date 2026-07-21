@@ -1,13 +1,15 @@
-/* RenoLeads V2 Reusable Component Architecture & Editorial Layouts */
+/* RenoLeads V2 Full Glassmorphism Component Architecture & Editorial Layouts */
 
-/* 1. Header Navigation Bar (Desktop) */
+/* 1. Header Navigation Bar (Desktop Glassmorphism) */
 .site-header {
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
-  background: var(--paper);
-  border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  background: rgba(250, 247, 241, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: var(--glass-shadow);
   transition: var(--transition-fast);
 }
 
@@ -65,7 +67,8 @@
 .nav-link.active {
   color: var(--color-primary);
   font-weight: 600;
-  background: var(--forest-050);
+  background: rgba(16, 42, 32, 0.08);
+  backdrop-filter: blur(8px);
 }
 
 .nav-actions {
@@ -74,15 +77,17 @@
   gap: 1rem;
 }
 
-/* 2. Mobile Bottom Navigation System (Section 7.2) */
+/* 2. Mobile Bottom Navigation Glassmorphism System */
 .mobile-bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100vw;
   height: 64px;
-  background: var(--paper);
-  border-top: 1px solid var(--border);
+  background: rgba(250, 247, 241, 0.82);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
   z-index: var(--z-floating);
   display: none;
   align-items: center;
@@ -117,20 +122,22 @@
   stroke: currentColor;
 }
 
-/* Property Detail Contextual Action Bar (Section 7.3) */
+/* Property Detail Contextual Action Bar */
 .property-bottom-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100vw;
-  background: var(--paper);
-  border-top: 1px solid var(--border);
+  background: rgba(250, 247, 241, 0.88);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
   z-index: var(--z-floating);
   display: none;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem max(0.75rem, env(safe-area-inset-bottom)) 1rem;
-  box-shadow: 0 -4px 20px rgba(16, 27, 22, 0.1);
+  box-shadow: 0 -4px 20px rgba(16, 27, 22, 0.12);
 }
 
 .property-bottom-bar .btn {
@@ -138,7 +145,7 @@
   min-height: 48px;
 }
 
-/* 3. Form Architecture, Select Dropdowns & Calendar Date Controls */
+/* 3. Form Architecture & Glassmorphism Input Controls */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -158,13 +165,16 @@
   min-height: 48px;
   padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background-color: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: 0.95rem;
   line-height: 1.5;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: inset 0 1px 3px rgba(16, 42, 32, 0.04);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 /* Customized Select Dropdown Engine */
@@ -215,6 +225,7 @@ textarea.form-control {
 
 .form-control:focus {
   outline: none;
+  background-color: rgba(255, 255, 255, 0.9);
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(16, 42, 32, 0.12);
 }
@@ -296,7 +307,9 @@ textarea.form-control {
 }
 
 .btn-outline {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
@@ -342,8 +355,9 @@ textarea.form-control {
   align-items: center;
   gap: 0.5rem;
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 0.4rem 1.1rem;
   border-radius: var(--radius-pill);
   font-size: 0.85rem;
@@ -382,8 +396,10 @@ textarea.form-control {
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: var(--forest-900);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(11, 31, 24, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .hero-card-frame img {
@@ -398,7 +414,8 @@ textarea.form-control {
   bottom: 1.25rem;
   left: 1.25rem;
   background: rgba(10, 26, 18, 0.85);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 0.5rem 1.1rem;
   border-radius: var(--radius-pill);
@@ -433,7 +450,7 @@ textarea.form-control {
   }
 }
 
-/* 6. Compact Balanced Property Cards */
+/* 6. Glassmorphism Property Cards */
 .properties-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -441,12 +458,14 @@ textarea.form-control {
 }
 
 .property-card {
-  background: var(--color-surface);
+  background: rgba(255, 253, 249, 0.68);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-radius: var(--radius-md);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  box-shadow: var(--glass-shadow);
+  transition: transform var(--transition-normal), background-color var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
   display: flex;
   flex-direction: column;
   max-width: 100%;
@@ -455,8 +474,9 @@ textarea.form-control {
 @media (hover: hover) and (pointer: fine) {
   .property-card:hover {
     transform: translate3d(0, -6px, 0);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--forest-700);
+    background: rgba(255, 253, 249, 0.88);
+    box-shadow: var(--glass-shadow-lg);
+    border-color: rgba(36, 85, 67, 0.35);
   }
 }
 
@@ -495,8 +515,10 @@ textarea.form-control {
   height: 44px;
   min-height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -563,7 +585,7 @@ textarea.form-control {
   align-items: center;
   justify-content: space-between;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(16, 42, 32, 0.08);
   margin-bottom: 1.25rem;
   font-size: 0.88rem;
   font-weight: 600;
@@ -576,7 +598,7 @@ textarea.form-control {
   gap: 0.75rem;
 }
 
-/* 7. Filter Toolbar & Sheet */
+/* 7. Glassmorphism Filter Toolbar & Sheet */
 .filter-pills {
   display: flex;
   align-items: center;
@@ -588,8 +610,10 @@ textarea.form-control {
 .pill-btn {
   padding: 0.5rem 1.25rem;
   border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  border: 1px solid var(--border);
+  background: rgba(255, 253, 249, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   color: var(--color-text);
   font-weight: 600;
   font-size: 0.9rem;
@@ -606,19 +630,21 @@ textarea.form-control {
 }
 
 .filter-bar {
-  background: var(--color-surface);
-  border: 1px solid var(--border);
+  background: rgba(255, 253, 249, 0.68);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: var(--radius-md);
   padding: 1.5rem;
   margin-bottom: 2.5rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--glass-shadow);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: 1.25rem;
   align-items: end;
 }
 
-/* 8. Property Details Layout & Interactive Preview Gallery (Section 17.3) */
+/* 8. Glassmorphism Property Details Layout & Interactive Preview Gallery */
 .details-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.75fr);
@@ -645,10 +671,12 @@ textarea.form-control {
   gap: 1rem;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--color-surface);
-  border: 1px solid var(--border);
+  background: rgba(255, 253, 249, 0.68);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   padding: 0.75rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--glass-shadow);
 }
 
 .gallery-main {
@@ -694,42 +722,14 @@ textarea.form-control {
   object-fit: cover;
 }
 
-.spec-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-  gap: 1.25rem;
-  padding: 1.5rem;
-  background: var(--color-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-}
-
-.spec-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.spec-item dt {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-.spec-item dd {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--color-primary);
-}
-
 .calculator-card {
-  background: var(--color-surface);
-  border: 1px solid var(--border);
+  background: rgba(255, 253, 249, 0.68);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: var(--radius-md);
   padding: 2rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--glass-shadow);
 }
 
 /* 9. Form Feedback Alert Classes (No Inline Styles) */
@@ -739,6 +739,8 @@ textarea.form-control {
   margin-bottom: 1.5rem;
   font-size: 0.95rem;
   line-height: 1.6;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .feedback-success {
@@ -748,7 +750,7 @@ textarea.form-control {
 }
 
 .feedback-warning {
-  background: #FEF3C7;
+  background: rgba(254, 243, 199, 0.85);
   color: #B45309;
   border: 1px solid #F59E0B;
 }
@@ -776,11 +778,14 @@ textarea.form-control {
 }
 
 .calc-result-box {
-  background: var(--forest-950);
+  background: rgba(11, 31, 24, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #FFFFFF;
   padding: 1.5rem;
   border-radius: var(--radius-md);
   text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* Toast Notifications */
@@ -789,12 +794,15 @@ textarea.form-control {
   bottom: 5rem;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background: var(--forest-950);
+  background: rgba(11, 31, 24, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: #FFFFFF;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-pill);
   font-size: 0.9rem;
   font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: var(--shadow-lg);
   z-index: var(--z-toast);
   opacity: 0;
@@ -807,9 +815,12 @@ textarea.form-control {
   transform: translateX(-50%) translateY(0);
 }
 
-/* 11. Footer & High-Contrast Dark Section Text Enforcement */
+/* 11. Glassmorphism Footer & High-Contrast Dark Section Text Enforcement */
 .site-footer {
-  background: var(--forest-950);
+  background: rgba(11, 31, 24, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.85);
   padding-block: clamp(3.5rem, 6vw, 5rem);
   margin-top: auto;
@@ -885,6 +896,8 @@ textarea.form-control {
 [style*="background: var(--forest-950)"],
 [style*="background: var(--forest-900)"] {
   color: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 [style*="background: var(--forest-950)"] h1,

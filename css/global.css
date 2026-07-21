@@ -1,4 +1,4 @@
-/* RenoLeads V2 Global Resets, Typography & Containment Engine */
+/* RenoLeads V2 Global Resets, Trend-Forward Background Gradient & Containment Engine */
 
 *,
 *::before,
@@ -20,7 +20,11 @@ body {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-bg);
+  background: radial-gradient(circle at 10% 0%, rgba(36, 85, 67, 0.08) 0%, transparent 40%),
+              radial-gradient(circle at 90% 50%, rgba(193, 132, 67, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 50% 100%, rgba(16, 42, 32, 0.06) 0%, transparent 45%),
+              linear-gradient(165deg, #FAF7F1 0%, #F3EEE4 45%, #EBE4D8 100%);
+  background-attachment: fixed;
   color: var(--color-text);
   line-height: 1.65;
   min-height: 100vh;
@@ -141,7 +145,7 @@ textarea,
   border-radius: var(--radius-sm);
 }
 
-/* Badges */
+/* Badges with Glassmorphism */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -152,24 +156,26 @@ textarea,
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .badge-available {
   background: var(--status-available-bg);
   color: var(--status-available);
-  border: 1px solid rgba(36, 114, 79, 0.25);
+  border: 1px solid rgba(36, 114, 79, 0.3);
 }
 
 .badge-reserved {
   background: var(--status-reserved-bg);
   color: var(--status-reserved);
-  border: 1px solid rgba(153, 98, 30, 0.25);
+  border: 1px solid rgba(153, 98, 30, 0.3);
 }
 
 .badge-sold {
   background: var(--status-sold-bg);
   color: var(--status-sold);
-  border: 1px solid rgba(164, 63, 63, 0.25);
+  border: 1px solid rgba(164, 63, 63, 0.3);
 }
 
 /* Section Header */

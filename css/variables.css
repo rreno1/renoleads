@@ -1,4 +1,4 @@
-/* RenoLeads V2 — Editorial Tropical Land Discovery Design Tokens */
+/* RenoLeads V2 — Editorial Tropical Glassmorphism Design Tokens */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&display=swap');
 
@@ -32,7 +32,7 @@
   --ink-950: #101b16;
   --ink-800: #24332c;
   --ink-600: #5a6861;
-  --border: #d9e0da;
+  --border: rgba(16, 42, 32, 0.12);
 
   --color-primary: var(--forest-900);
   --color-primary-light: var(--forest-700);
@@ -47,16 +47,27 @@
   --color-text-inverse: #ffffff;
 
   --color-bg: var(--linen-050);
-  --color-surface: var(--paper);
-  --color-surface-soft: var(--forest-050);
+  --color-surface: rgba(255, 253, 249, 0.68);
+  --color-surface-soft: rgba(238, 245, 240, 0.75);
+
+  /* Modern Glassmorphism System Tokens */
+  --glass-surface: rgba(255, 253, 249, 0.68);
+  --glass-surface-hover: rgba(255, 253, 249, 0.85);
+  --glass-surface-dark: rgba(11, 31, 24, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-border-dark: rgba(255, 255, 255, 0.18);
+  --glass-blur: blur(16px);
+  --glass-blur-sm: blur(10px);
+  --glass-shadow: 0 12px 36px rgba(16, 42, 32, 0.07);
+  --glass-shadow-lg: 0 20px 48px rgba(16, 42, 32, 0.14);
 
   /* Status Colors */
   --status-available: #24724f;
-  --status-available-bg: #eaf5f0;
+  --status-available-bg: rgba(234, 245, 240, 0.85);
   --status-reserved: #99621e;
-  --status-reserved-bg: #fdf6ec;
+  --status-reserved-bg: rgba(253, 246, 236, 0.85);
   --status-sold: #a43f3f;
-  --status-sold-bg: #fdf2f2;
+  --status-sold-bg: rgba(253, 242, 242, 0.85);
 
   /* Typography System */
   --font-display: 'Newsreader', Georgia, serif;
@@ -70,7 +81,7 @@
   --text-body: 1rem;
   --text-small: 0.875rem;
 
-  /* Canonical Layout & Spacing Tokens */
+  /* Layout & Spacing Tokens */
   --container-max: 1240px;
   --page-gutter: clamp(1rem, 3vw, 1.5rem);
   --section-space: clamp(3.5rem, 7vw, 6rem);
