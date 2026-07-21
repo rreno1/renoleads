@@ -1,7 +1,7 @@
 /**
  * RenoLeads V2 Production Interactive Engine & Layer 4 Retention Manager
- * Handles Mobile Bottom Navigation System, Desktop Header Active Links, Shortlist Favorites,
- * Recently Viewed History, Web Share API, and Toast Notifications
+ * Handles Mobile Bottom Navigation System, Desktop Header Active Links, Apple Scroll Glass Transition,
+ * Shortlist Favorites, Recently Viewed History, Web Share API, and Toast Notifications
  */
 
 const RetentionManager = {
@@ -141,7 +141,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 2. Global Delegated Click Handler for Shortlist & Share Buttons
+  // 2. Apple-Style Dynamic Glass Scroll Transition Engine for Header & Navigation
+  const siteHeader = document.querySelector(".site-header");
+  if (siteHeader) {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        siteHeader.classList.add("scrolled");
+      } else {
+        siteHeader.classList.remove("scrolled");
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+  }
+
+  // 3. Global Delegated Click Handler for Shortlist & Share Buttons
   document.addEventListener("click", (e) => {
     const shortlistBtn = e.target.closest(".card-shortlist-btn");
     if (shortlistBtn) {
@@ -162,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 3. Automated Layout Overflow Diagnostic Runner (Section 29)
+  // 4. Automated Layout Overflow Diagnostic Runner (Section 29)
   window.checkLayoutOverflow = function() {
     const viewportWidth = document.documentElement.clientWidth;
     const leakingElements = [...document.querySelectorAll("*")].filter((el) => {
