@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const appIntentUrl = `intent://rreno1.github.io/renoleads/properties/${property.id}#Intent;scheme=https;package=${RENO_CONFIG.androidPackage};S.browser_fallback_url=${encodeURIComponent(appHandoffUrl)};end;`;
 
   mainContainer.innerHTML = `
-    <!-- Breadcrumbs -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding-top: 0.5rem;">
+    <!-- Top Action & Breadcrumb Bar (Padded for Sticky Header Alignment) -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding-top: 1.75rem;">
       <nav class="property-breadcrumbs" aria-label="Breadcrumb navigation">
         <a href="index.html">Home</a> &nbsp;/&nbsp; 
         <a href="properties.html">Properties</a> &nbsp;/&nbsp; 
@@ -74,11 +74,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     </div>
 
-    <!-- Header Block -->
+    <!-- Balanced Property Header Block -->
     <div class="property-details-header">
-      <div>
+      <div style="flex: 1; min-width: 280px;">
         <span class="badge ${statusBadgeClass}">${property.status.toUpperCase()}</span>
-        <h1 style="margin-top: 0.5rem; margin-bottom: 0.25rem;">${DOMUtils.escapeHTML(property.title)}</h1>
+        <h1 style="margin-top: 0.75rem; margin-bottom: 0.35rem; font-size: clamp(1.8rem, 3.5vw, 2.75rem);">${DOMUtils.escapeHTML(property.title)}</h1>
         <div style="color: var(--color-text-muted); font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           Brgy. ${DOMUtils.escapeHTML(property.barangay)}, Polomolok, South Cotabato
@@ -86,9 +86,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
 
       <div class="property-price-block">
-        <span style="font-size: 0.85rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; display: block;">Total Contract Price</span>
-        <h2 style="color: var(--color-primary); font-family: var(--font-display); font-size: 2.25rem; margin: 0;">${formattedPrice}</h2>
-        <span style="font-size: 0.95rem; font-weight: 700; color: var(--color-accent-text);">${formattedPriceSqm} / sqm</span>
+        <span style="font-size: 0.82rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; display: block; letter-spacing: 0.05em;">Total Contract Price</span>
+        <h2 style="color: var(--color-primary); font-family: var(--font-display); font-size: 2.35rem; margin: 0; line-height: 1.1;">${formattedPrice}</h2>
+        <span style="font-size: 0.95rem; font-weight: 700; color: var(--color-accent-text); font-family: var(--font-body); display: block; margin-top: 0.25rem;">${formattedPriceSqm} / sqm</span>
       </div>
     </div>
 
