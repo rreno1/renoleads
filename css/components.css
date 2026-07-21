@@ -341,7 +341,7 @@ textarea.form-control {
   flex-wrap: wrap;
 }
 
-/* 6. Compact Balanced Property Cards (Section 15.1 & 16.5) */
+/* 6. Compact Balanced Property Cards */
 .properties-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -526,7 +526,7 @@ textarea.form-control {
   align-items: end;
 }
 
-/* 8. Property Details Layout & Specification List */
+/* 8. Property Details Layout & Interactive Preview Gallery (Section 17.3) */
 .details-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.75fr);
@@ -553,22 +553,47 @@ textarea.form-control {
   gap: 1rem;
   border-radius: var(--radius-lg);
   overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .gallery-main {
-  height: 420px;
+  height: 380px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--border);
 }
 
 .gallery-main img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 200ms ease;
 }
 
 .gallery-sub {
   display: grid;
-  grid-template-rows: 1fr 1fr;
-  gap: 1rem;
+  grid-template-rows: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.75rem;
+  height: 380px;
+}
+
+.gallery-sub-item {
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  padding: 0;
+  background: var(--border);
+  cursor: pointer;
+  min-height: 100px;
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.gallery-sub-item:hover,
+.gallery-sub-item.active {
+  border-color: var(--color-primary);
 }
 
 .gallery-sub-item img {

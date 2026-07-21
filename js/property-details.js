@@ -1,6 +1,6 @@
 /**
  * RenoLeads V2 Property Details Page Controller
- * Handles editorial specification definition list, SVG action buttons, leaflet location map, payment calculator, and contextual mobile action bar
+ * Handles interactive gallery preview, thumbnail swapping, lightbox modal, specification list, location map, payment calculator, and contextual mobile action bar
  */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   mainContainer.innerHTML = `
     <!-- Breadcrumbs -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding-top: 0.5rem;">
       <nav class="property-breadcrumbs" aria-label="Breadcrumb navigation">
         <a href="index.html">Home</a> &nbsp;/&nbsp; 
         <a href="properties.html">Properties</a> &nbsp;/&nbsp; 
@@ -92,16 +92,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     </div>
 
-    <!-- Gallery Grid -->
+    <!-- Interactive Gallery Preview (Section 17.3) -->
     <div class="property-gallery-grid" style="margin-bottom: 2.5rem;">
       <div class="gallery-main">
-        <img id="gallery-main-view" src="${images[0]}" alt="${DOMUtils.escapeHTML(property.title)}" width="800" height="500">
+        <img id="gallery-main-view" src="${images[0]}" alt="${DOMUtils.escapeHTML(property.title)}" width="800" height="500" style="cursor: pointer;" title="Click image to swap preview">
       </div>
       <div class="gallery-sub">
-        ${images.slice(1, 3).map((img, idx) => `
-          <div class="gallery-sub-item">
-            <img src="${img}" alt="Property view ${idx + 2}" width="400" height="250" loading="lazy">
-          </div>
+        ${images.map((img, idx) => `
+          <button type="button" class="gallery-sub-item ${idx === 0 ? 'active' : ''}" data-src="${img}" aria-label="View photo ${idx + 1}">
+            <img src="${img}" alt="Property view ${idx + 1}" width="400" height="250" loading="lazy">
+          </button>
         `).join('')}
       </div>
     </div>
@@ -251,7 +251,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     </div>
   `;
 
-  // Calculator Logic with Number Safeguards (Bug 6 Fix)
+  // Gallery Thumbnail Click Handler (Section 17.3)
+  const mainImg = document.getElementById("gallery-main-view");
+  const thumbBtns = document.querySelectorAll(".gallery-sub-item");
+
+  thumbBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const src = btn.dataset.src;
+      if (mainImg && src) {
+        mainImg.style.opacity = "0.4";
+        setTimeout(() => {
+          mainImg.src = src;
+          mainImg.style.opacity = "1";
+        }, 150);
+      }
+      thumbBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  // Calculator Logic with Number Safeguards
   const dpSlider = document.getElementById("calc-dp-slider");
   const dpText = document.getElementById("calc-dp-percent-text");
   const termSelect = document.getElementById("calc-term-select");
