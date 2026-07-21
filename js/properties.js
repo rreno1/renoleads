@@ -1,10 +1,10 @@
 /**
- * RenoLeads Properties Catalog Page Controller (V2 Overhaul)
+ * RenoLeads Properties Catalog & Featured Listings Controller (V2 Overhaul)
  * Handles intrinsic grids, SVG shortlist buttons, aria-pressed pill filters, dropdown filters, aria-live results, and clean empty states
  */
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const gridContainer = document.getElementById("properties-grid-container");
+  const gridContainer = document.getElementById("properties-grid-container") || document.getElementById("featured-properties-container");
   const statusFilter = document.getElementById("filter-status");
   const priceFilter = document.getElementById("filter-max-price");
   const sortFilter = document.getElementById("filter-sort");
@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!gridContainer) return;
 
+  const isHomepageFeatured = gridContainer.id === "featured-properties-container";
   let selectedCategory = "all";
 
   // Check URL query parameters e.g. properties.html?type=residential or ?filter=saved
@@ -27,15 +28,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     selectedCategory = "saved";
   }
 
-  pillBtns.forEach(btn => {
-    const isSelected = btn.dataset.type === selectedCategory;
-    btn.classList.toggle("active", isSelected);
-    btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
-  });
+  if (pillBtns.length > 0) {
+    pillBtns.forEach(btn => {
+      const isSelected = btn.dataset.type === selectedCategory;
+      btn.classList.toggle("active", isSelected);
+      btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    });
+  }
 
   // Loading Skeleton State
   gridContainer.innerHTML = `
-    <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem;">
+    <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem;">
       <p style="font-size: 1.1rem; color: var(--color-text-muted);">Loading available land lots in Polomolok...</p>
     </div>
   `;
@@ -43,14 +46,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   let allProperties = await fetchPublishedProperties();
 
   function renderListings(propertiesToRender) {
+    // If on homepage featured section, limit display to 3 featured listings
+    const displayProperties = isHomepageFeatured ? propertiesToRender.slice(0, 3) : propertiesToRender;
+
     // Update ARIA live results count
     if (resultsCount) {
-      const count = propertiesToRender.length;
+      const count = displayProperties.length;
       resultsCount.textContent = `${count} Land Parcel${count === 1 ? '' : 's'} Found`;
     }
 
     // Empty State
-    if (propertiesToRender.length === 0) {
+    if (displayProperties.length === 0) {
       const isSavedFilter = selectedCategory === "saved";
       gridContainer.innerHTML = `
         <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1.5rem; background: var(--color-surface); border-radius: var(--radius-md); border: 1px solid var(--border);">
@@ -67,8 +73,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Render V2 Property Cards (Price in body, SVG heart icon)
-    gridContainer.innerHTML = propertiesToRender.map(prop => {
+    // Render Property Cards (Price in body, SVG heart icon)
+    gridContainer.innerHTML = displayProperties.map(prop => {
       const statusClass = prop.status === 'available' ? 'badge-available' : (prop.status === 'reserved' ? 'badge-reserved' : 'badge-sold');
       const formattedPrice = DOMUtils.formatCurrency(prop.totalPrice);
       const formattedPriceSqm = DOMUtils.formatCurrency(prop.pricePerSqm);
@@ -108,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
                 <span>${DOMUtils.formatNumber(prop.lotAreaSqm)} sqm</span>
               </div>
-              <span style="color: var(--color-accent-text); uppercase;">${DOMUtils.escapeHTML(prop.propertyType.toUpperCase())}</span>
+              <span style="color: var(--color-accent-text); font-weight: 700;">${DOMUtils.escapeHTML(prop.propertyType.toUpperCase())}</span>
             </div>
 
             <div class="card-footer">
@@ -155,11 +161,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function resetAllFilters() {
     selectedCategory = "all";
-    pillBtns.forEach(btn => {
-      const isAll = btn.dataset.type === "all";
-      btn.classList.toggle("active", isAll);
-      btn.setAttribute("aria-pressed", isAll ? "true" : "false");
-    });
+    if (pillBtns.length > 0) {
+      pillBtns.forEach(btn => {
+        const isAll = btn.dataset.type === "all";
+        btn.classList.toggle("active", isAll);
+        btn.setAttribute("aria-pressed", isAll ? "true" : "false");
+      });
+    }
     if (statusFilter) statusFilter.value = "available";
     if (priceFilter) priceFilter.value = "all";
     if (sortFilter) sortFilter.value = "price-asc";
@@ -167,18 +175,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Pill click handlers
-  pillBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      pillBtns.forEach(b => {
-        b.classList.remove("active");
-        b.setAttribute("aria-pressed", "false");
+  if (pillBtns.length > 0) {
+    pillBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        pillBtns.forEach(b => {
+          b.classList.remove("active");
+          b.setAttribute("aria-pressed", "false");
+        });
+        btn.classList.add("active");
+        btn.setAttribute("aria-pressed", "true");
+        selectedCategory = btn.dataset.type;
+        applyFilters();
       });
-      btn.classList.add("active");
-      btn.setAttribute("aria-pressed", "true");
-      selectedCategory = btn.dataset.type;
-      applyFilters();
     });
-  });
+  }
 
   if (statusFilter) statusFilter.addEventListener("change", applyFilters);
   if (priceFilter) priceFilter.addEventListener("change", applyFilters);
