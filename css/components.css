@@ -807,12 +807,46 @@ textarea.form-control {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Footer */
+/* 11. Footer & High-Contrast Dark Section Text Enforcement */
 .site-footer {
   background: var(--forest-950);
-  color: rgba(255, 255, 255, 0.75);
-  padding-block: clamp(3rem, 6vw, 5rem);
+  color: rgba(255, 255, 255, 0.85);
+  padding-block: clamp(3.5rem, 6vw, 5rem);
   margin-top: auto;
+}
+
+.site-footer p,
+.site-footer span,
+.site-footer div,
+.site-footer li {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.site-footer h1,
+.site-footer h2,
+.site-footer h3,
+.site-footer h4,
+.site-footer h5,
+.site-footer h6 {
+  color: #FFFFFF !important;
+}
+
+.site-footer a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.site-footer a:hover {
+  color: var(--bronze-300) !important;
+}
+
+.site-footer .brand-logo {
+  color: #FFFFFF !important;
+}
+
+.site-footer .brand-logo svg {
+  fill: #FFFFFF !important;
 }
 
 .footer-grid {
@@ -835,10 +869,6 @@ textarea.form-control {
   padding: 0;
 }
 
-.footer-links a:hover {
-  color: var(--bronze-300);
-}
-
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding-top: 2rem;
@@ -848,4 +878,27 @@ textarea.form-control {
   flex-wrap: wrap;
   gap: 1rem;
   font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Universal High-Contrast Dark Container Rule */
+[style*="background: var(--forest-950)"],
+[style*="background: var(--forest-900)"] {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+[style*="background: var(--forest-950)"] h1,
+[style*="background: var(--forest-950)"] h2,
+[style*="background: var(--forest-950)"] h3,
+[style*="background: var(--forest-950)"] h4,
+[style*="background: var(--forest-900)"] h1,
+[style*="background: var(--forest-900)"] h2,
+[style*="background: var(--forest-900)"] h3,
+[style*="background: var(--forest-900)"] h4 {
+  color: #FFFFFF !important;
+}
+
+[style*="background: var(--forest-950)"] p,
+[style*="background: var(--forest-900)"] p {
+  color: rgba(255, 255, 255, 0.82) !important;
 }

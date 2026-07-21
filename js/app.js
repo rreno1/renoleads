@@ -1,7 +1,7 @@
 /**
  * RenoLeads V2 Production Interactive Engine & Layer 4 Retention Manager
- * Handles Mobile Bottom Navigation System, Shortlist Favorites, Recently Viewed History,
- * Web Share API, and Toast Notifications
+ * Handles Mobile Bottom Navigation System, Desktop Header Active Links, Shortlist Favorites,
+ * Recently Viewed History, Web Share API, and Toast Notifications
  */
 
 const RetentionManager = {
@@ -112,19 +112,24 @@ DOMUtils.showToast = function(message) {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Highlight Active Mobile Bottom Nav Link (Bug Fix: query param aware)
+  // 1. Highlight Active Desktop & Mobile Navigation Links (Query-param aware)
   const currentPath = window.location.pathname.split("/").pop() || "index.html";
   const currentQuery = window.location.search;
-  const currentFull = currentPath + currentQuery;
 
-  document.querySelectorAll(".mobile-bottom-nav .mobile-nav-item").forEach(link => {
+  document.querySelectorAll(".desktop-nav .nav-link, .mobile-bottom-nav .mobile-nav-item").forEach(link => {
     const href = link.getAttribute("href");
+    if (!href) return;
+
     let isActive = false;
 
-    if (href.includes("?")) {
-      isActive = (currentFull === href);
+    if (href.includes("filter=saved")) {
+      isActive = currentQuery.includes("filter=saved");
+    } else if (href.includes("properties.html")) {
+      isActive = (currentPath === "properties.html" && !currentQuery.includes("filter=saved"));
+    } else if (href.includes("index.html")) {
+      isActive = (currentPath === "index.html" || currentPath === "");
     } else {
-      isActive = (currentPath === href && !currentQuery.includes("filter=saved"));
+      isActive = (currentPath === href);
     }
 
     if (isActive) {
