@@ -276,7 +276,7 @@
 }
 
 /* Homepage scroll reveals. The html.js guard keeps content visible if scripts fail. */
-html.js [data-scroll-reveal] {
+html.js body.page-home [data-scroll-reveal] {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity var(--transition-reveal), transform var(--transition-reveal);
@@ -284,21 +284,21 @@ html.js [data-scroll-reveal] {
   will-change: opacity, transform;
 }
 
-html.js [data-scroll-reveal="left"] {
+html.js body.page-home [data-scroll-reveal="left"] {
   transform: translateX(-24px);
 }
 
-html.js [data-scroll-reveal="right"] {
+html.js body.page-home [data-scroll-reveal="right"] {
   transform: translateX(24px);
 }
 
-html.js [data-scroll-reveal].is-visible {
+html.js body.page-home [data-scroll-reveal].is-visible {
   opacity: 1;
   transform: none;
   will-change: auto;
 }
 
-html.no-scroll-reveal [data-scroll-reveal] {
+html.no-scroll-reveal body.page-home [data-scroll-reveal] {
   opacity: 1;
   transform: none;
   transition: none;
