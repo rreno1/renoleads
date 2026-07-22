@@ -120,6 +120,10 @@
     text-align: center;
   }
 
+  .calc-result-main {
+    text-align: center;
+  }
+
   .calc-result-summary {
     padding: var(--space-3) 0 0;
     margin-top: var(--space-3);
@@ -129,6 +133,7 @@
 
   .calc-summary-item {
     align-items: center;
+    text-align: center;
   }
 
   .detail-header {

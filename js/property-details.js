@@ -466,13 +466,15 @@ function renderCalculator(container, property) {
 
   const result = document.createElement("div");
   result.className = "calc-result";
+  const resultMain = document.createElement("div");
+  resultMain.className = "calc-result-main";
   const resultLabel = document.createElement("div");
   resultLabel.className = "calc-result-label";
   resultLabel.textContent = "Estimated monthly payment";
-  result.appendChild(resultLabel);
   const resultValue = document.createElement("div");
   resultValue.className = "calc-result-value";
-  result.appendChild(resultValue);
+  resultMain.append(resultLabel, resultValue);
+  result.appendChild(resultMain);
   const summary = document.createElement("div");
   summary.className = "calc-result-summary";
   const downSummary = createCalcSummary("Down payment");
