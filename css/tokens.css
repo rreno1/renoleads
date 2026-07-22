@@ -17,6 +17,7 @@
   --linen-050: #faf7f1;
   --paper: #fffdf9;
 
+  --bronze-800: #70431e;
   --bronze-700: #8f5b27;
   --bronze-600: #a96c31;
   --bronze-500: #c18443;
@@ -32,8 +33,8 @@
   /* ── Semantic Colors ── */
   --color-primary: var(--forest-900);
   --color-primary-hover: var(--forest-800);
-  --color-accent: var(--bronze-600);
-  --color-accent-hover: var(--bronze-700);
+  --color-accent: var(--bronze-700);
+  --color-accent-hover: var(--bronze-800);
   --color-text: var(--ink-950);
   --color-text-secondary: var(--ink-800);
   --color-text-muted: var(--ink-600);

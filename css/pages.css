@@ -27,7 +27,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--bronze-600);
+  color: var(--bronze-700);
 }
 
 .hero-title {
@@ -215,7 +215,7 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: var(--bronze-600);
+  background: var(--bronze-700);
   color: white;
   font-weight: 700;
   border-radius: 50%;
@@ -223,6 +223,7 @@
   flex-shrink: 0;
 }
 
+.process-step h3,
 .process-step h4 {
   font-family: var(--font-body);
   font-size: var(--text-body);
@@ -537,6 +538,10 @@
   max-width: 600px;
 }
 
+.support-hero .hero-eyebrow {
+  color: var(--bronze-300);
+}
+
 .support-content {
   padding: var(--space-12) 0 var(--space-16);
 }
@@ -713,7 +718,7 @@
 }
 
 .support-reason-number {
-  color: var(--bronze-600);
+  color: var(--bronze-700);
   font-family: var(--font-display);
   font-size: var(--text-h2);
   line-height: 1;

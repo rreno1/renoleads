@@ -212,14 +212,14 @@
 }
 
 .btn-accent {
-  background: var(--bronze-600);
+  background: var(--color-accent);
   color: white;
-  border-color: var(--bronze-600);
+  border-color: var(--color-accent);
 }
 
 .btn-accent:hover {
-  background: var(--bronze-700);
-  border-color: var(--bronze-700);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
 }
 
 .btn-outline {
@@ -1126,6 +1126,10 @@ select.form-control {
   margin-bottom: var(--space-2);
 }
 
+.calculator-card h2 {
+  font-size: var(--text-h3);
+}
+
 .calculator-card p {
   color: rgba(255, 255, 255, 0.65);
   margin-bottom: var(--space-5);
@@ -1182,8 +1186,8 @@ select.form-control {
 
 .calc-chip:hover,
 .calc-chip.active {
-  background: var(--bronze-600);
-  border-color: var(--bronze-600);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
   color: white;
 }
 
@@ -1402,7 +1406,7 @@ select.form-control {
   align-items: center;
   padding-top: var(--space-6);
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .footer-bottom a {
@@ -1463,7 +1467,7 @@ select.form-control {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--bronze-600);
+  color: var(--bronze-700);
   margin-bottom: var(--space-3);
 }
 
@@ -1542,6 +1546,10 @@ select.form-control {
   color: white;
 }
 
+.section-header-on-dark .section-eyebrow {
+  color: var(--bronze-300);
+}
+
 .catalog-count-wrap {
   display: flex;
   align-items: center;
@@ -1615,7 +1623,7 @@ select.form-control {
 .property-media-placeholder svg {
   width: 34px;
   height: 34px;
-  color: var(--bronze-600);
+  color: var(--bronze-700);
 }
 
 .property-media-placeholder .property-media-copy {
@@ -1671,7 +1679,7 @@ select.form-control {
 .gallery-placeholder svg {
   width: 52px;
   height: 52px;
-  color: var(--bronze-600);
+  color: var(--bronze-700);
 }
 
 .gallery-placeholder strong {
