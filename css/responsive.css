@@ -1,121 +1,303 @@
-/* RenoLeads V2 Multi-Breakpoint Responsive Engine & Touch Navigation */
+/* RenoLeads V2 — responsive layout rules. */
 
-/* Breakpoint 1024px (Laptops & Tablets in Landscape) */
 @media (max-width: 1024px) {
   .properties-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .details-layout,
-  .property-gallery-grid {
-    grid-template-columns: 1fr;
-    height: auto;
+  .detail-layout {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--space-8);
   }
 
-  .gallery-main {
-    height: 340px;
-  }
-
-  .gallery-sub {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    height: 170px;
+  .hero-grid,
+  .why-grid,
+  .contact-layout,
+  .support-grid,
+  .checklist-grid {
+    gap: var(--space-8);
   }
 
   .footer-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
   }
 }
 
-/* Breakpoint 768px (Tablets in Portrait & Mobile Devices) */
 @media (max-width: 768px) {
-  .navbar {
-    height: 68px;
+  body {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0));
+    scroll-padding-bottom: calc(72px + env(safe-area-inset-bottom, 0));
   }
 
-  .desktop-nav, .nav-actions {
+  .site-header {
+    position: sticky;
+  }
+
+  .navbar {
+    height: 60px;
+  }
+
+  .desktop-nav,
+  .nav-actions {
     display: none !important;
   }
 
-  /* Display 2-Layer Mobile Hamburger Button */
-  .mobile-menu-toggle {
-    display: flex !important;
+  .bottom-nav {
+    display: block;
+  }
+
+  body.page-property-detail {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0));
+  }
+
+  body.page-property-detail .bottom-nav {
+    display: none;
+  }
+
+  body.page-property-detail .property-action-bar {
+    display: block;
+  }
+
+  .property-action-bar {
+    padding: var(--space-3) var(--page-gutter);
+    padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0));
+  }
+
+  .property-action-bar .action-bar-inner {
+    width: 100%;
+    max-width: none;
+    margin: 0;
   }
 
   .hero {
-    text-align: center;
-    padding-block: 3.5rem 3rem;
+    padding: var(--space-8) 0 var(--space-10);
   }
 
-  .hero-content {
-    margin-inline: auto;
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .hero-visual {
+    order: -1;
+  }
+
+  .hero-title {
+    font-size: clamp(2.25rem, 11vw, 3.4rem);
+  }
+
+  .hero-description {
+    max-width: none;
+  }
+
+  .hero-actions,
+  .hero-actions .btn {
+    width: 100%;
   }
 
   .hero-actions {
-    justify-content: center;
-  }
-
-  .property-details-header {
     flex-direction: column;
+  }
+
+  .properties-grid,
+  .detail-layout,
+  .contact-layout,
+  .why-grid,
+  .support-grid,
+  .checklist-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-layout {
+    gap: var(--space-6);
+  }
+
+  .detail-sidebar {
+    position: static;
+  }
+
+  .detail-header {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .detail-title {
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+
+  .detail-actions {
+    align-self: flex-end;
+    margin-top: calc(var(--space-4) * -1);
+  }
+
+  .catalog-title-row,
+  .section-header-inline {
     align-items: flex-start;
-    gap: 0.75rem;
+    flex-direction: column;
   }
 
-  .property-price-block {
-    text-align: left;
+  .catalog-count-wrap {
+    width: 100%;
+    justify-content: space-between;
   }
 
-  .filter-bar {
+  .catalog-count-wrap #open-filter-sheet {
+    display: inline-flex;
+  }
+
+  .catalog-controls .filter-bar {
+    display: none;
+  }
+
+  .active-filters {
+    padding-top: var(--space-3);
+  }
+
+  .contact-form-card {
+    order: -1;
+  }
+
+  .process-steps,
+  .process-steps-light {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--space-5);
   }
 
-  .card-footer {
+  .process-step {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .credibility-grid {
     grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .credibility-grid .seller-profile {
+    justify-content: center;
   }
 
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+  }
+
+  .footer-brand {
+    grid-column: auto;
   }
 
   .footer-bottom {
+    align-items: flex-start;
     flex-direction: column;
-    gap: 1rem;
-    text-align: center;
   }
-}
 
-/* Breakpoint 640px (Compact Mobile Devices) */
-@media (max-width: 640px) {
-  .properties-grid {
+  .similar-section .properties-grid {
     grid-template-columns: 1fr;
   }
 
-  .card-image-wrap {
-    height: 200px;
+  .section-padding {
+    padding-block: var(--space-10);
   }
 }
 
-/* Ultra-Small Mobile Viewports (320px - 360px) */
-@media (max-width: 360px) {
+@media (max-width: 640px) {
   .container {
-    padding-inline: 1rem;
+    width: min(calc(100% - 2rem), var(--container-max));
   }
 
-  .pill-btn {
-    padding: 0.5rem 0.85rem;
-    font-size: 0.82rem;
+  .strip-card {
     width: 100%;
-    text-align: center;
+    min-width: 0;
+    max-width: none;
   }
 
-  .hero-actions .btn {
+  .brand-logo {
+    font-size: 1.2rem;
+  }
+
+  .brand-logo svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .card-actions .btn {
+    width: 100%;
+  }
+
+  .discovery-chips {
+    justify-content: flex-start;
+  }
+
+  .discovery-chip {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+  }
+
+  .support-reason {
+    grid-template-columns: 44px 1fr;
+    gap: var(--space-3);
+  }
+
+  .support-reason-number {
+    font-size: var(--text-h3);
+  }
+
+  .gallery-main {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-md);
+  }
+
+  .gallery-thumb {
+    width: 56px;
+    height: 42px;
+  }
+
+  .sheet-actions {
+    flex-direction: column-reverse;
+  }
+
+  .sheet-actions .btn {
     width: 100%;
   }
 }
 
-/* Diagnostic Layout Overflow Class */
-.debug-layout * {
-  outline: 1px solid rgba(255, 0, 0, 0.2) !important;
+@media (max-width: 360px) {
+  :root {
+    --page-gutter: 1rem;
+  }
+
+  .navbar {
+    height: 56px;
+  }
+
+  .bottom-nav-list {
+    height: 60px;
+  }
+
+  .bottom-nav-label {
+    font-size: 0.62rem;
+  }
+
+  .hero-title {
+    font-size: 2.1rem;
+  }
+
+  .btn {
+    padding-inline: var(--space-4);
+  }
+
+  .card-body {
+    padding: var(--space-4);
+  }
 }

@@ -1,369 +1,626 @@
-/**
- * RenoLeads V2 Property Details Page Controller
- * Handles interactive gallery preview, thumbnail swapping, lightbox modal, specification list, location map, payment calculator, and contextual mobile action bar
- */
+/* RenoLeads V2 — property detail renderer. */
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const mainContainer = document.getElementById("property-detail-main");
-  if (!mainContainer) return;
+  const container = document.getElementById("property-detail-main");
+  if (!container) return;
 
-  // Add body class for mobile contextual bar display
   document.body.classList.add("page-property-detail");
-
-  const urlParams = new URLSearchParams(window.location.search);
-  let propertyId = urlParams.get("id");
-
-  if (!propertyId && window.location.pathname.includes("/properties/")) {
-    const parts = window.location.pathname.split("/").filter(Boolean);
-    propertyId = parts[parts.length - 1];
-  }
-
-  if (!propertyId) propertyId = "POL-RES-001";
-
-  const property = await fetchPropertyById(propertyId);
-
-  // 1. Property Not Found Handling
-  if (!property) {
-    document.title = "Property Not Found | RenoLeads";
-    mainContainer.innerHTML = `
-      <div class="container section-padding text-center">
-        <h2>Property Not Found</h2>
-        <p class="mx-auto mb-2">The property listing you requested could not be located or may have been reserved.</p>
-        <a href="properties.html" class="btn btn-accent btn-lg">Browse Available Land Lots</a>
-      </div>
-    `;
+  const propertyId = new URLSearchParams(window.location.search).get("id");
+  if (!propertyId) {
+    renderNotFound(container);
     return;
   }
 
-  // 2. Log Property to Recently Viewed
-  RetentionManager.addRecentlyViewed(property.id);
+  renderLoadingSkeleton(container);
 
-  document.title = `${property.title} | RenoLeads Polomolok`;
-  
-  const formattedPrice = DOMUtils.formatCurrency(property.totalPrice);
-  const formattedPriceSqm = DOMUtils.formatCurrency(property.pricePerSqm);
-  const formattedLotArea = DOMUtils.formatNumber(property.lotAreaSqm);
-
-  const statusBadgeClass = property.status === 'available' ? 'badge-available' : (property.status === 'reserved' ? 'badge-reserved' : 'badge-sold');
-  const isSaved = RetentionManager.isShortlisted(property.id);
-
-  const images = (property.imageUrls && property.imageUrls.length > 0) ? property.imageUrls : [property.thumbnailUrl];
-
-  const appHandoffUrl = `https://rreno1.github.io/renoleads/properties/${property.id}`;
-  const appIntentUrl = `intent://rreno1.github.io/renoleads/properties/${property.id}#Intent;scheme=https;package=${RENO_CONFIG.androidPackage};S.browser_fallback_url=${encodeURIComponent(appHandoffUrl)};end;`;
-
-  // Gallery Thumbnails: Filter out main image (images[0]) to eliminate photo duplication
-  const thumbnailImages = images.length > 1 ? images.slice(1) : images;
-
-  mainContainer.innerHTML = `
-    <!-- Top Action & Breadcrumb Bar -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; padding-top: 1.25rem;">
-      <nav class="property-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="index.html">Home</a> &nbsp;/&nbsp; 
-        <a href="properties.html">Properties</a> &nbsp;/&nbsp; 
-        <span style="color: var(--color-text); font-weight: 600;">${DOMUtils.escapeHTML(property.propertyCode)}</span>
-      </nav>
-
-      <!-- Status Badge & Retention Actions (Share & Shortlist) -->
-      <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-        <span class="badge ${statusBadgeClass}" style="height: 40px; padding: 0 1rem; border-radius: var(--radius-sm); font-size: 0.82rem; min-height: 40px; display: inline-flex; align-items: center;">${property.status.toUpperCase()}</span>
-        <button class="btn btn-outline btn-sm btn-share-trigger" data-title="${DOMUtils.escapeHTML(property.title)}" data-text="Check out this prime land lot in Polomolok:" data-url="${window.location.href}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          Share Listing
-        </button>
-        <button class="btn btn-outline btn-sm card-shortlist-btn ${isSaved ? 'active' : ''}" data-id="${DOMUtils.escapeHTML(property.id)}" style="position: static; width: auto; height: 40px; padding: 0 1rem; border-radius: var(--radius-sm);">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="${isSaved ? 'var(--danger)' : 'none'}" stroke="${isSaved ? 'var(--danger)' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-right: 0.35rem;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span>${isSaved ? 'Saved to Shortlist' : 'Save to Shortlist'}</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Editorial Property Header -->
-    <div style="margin-bottom: 1.5rem;">
-      <div style="color: var(--color-text-muted); font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Brgy. ${DOMUtils.escapeHTML(property.barangay)}, Polomolok, South Cotabato
-      </div>
-
-      <h1 style="margin: 0; font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.18; font-family: var(--font-display);">${DOMUtils.escapeHTML(property.title)}</h1>
-    </div>
-
-    <!-- Interactive Gallery Preview -->
-    <div class="property-gallery-grid" style="margin-bottom: 2rem;">
-      <div class="gallery-main">
-        <img id="gallery-main-view" src="${images[0]}" alt="${DOMUtils.escapeHTML(property.title)}" width="800" height="500" style="cursor: pointer;" title="Click image to swap preview">
-      </div>
-      <div class="gallery-sub">
-        ${thumbnailImages.map((img, idx) => `
-          <button type="button" class="gallery-sub-item ${idx === 0 ? 'active' : ''}" data-src="${img}" aria-label="View photo ${idx + 2}">
-            <img src="${img}" alt="Property view ${idx + 2}" width="400" height="250" loading="lazy">
-          </button>
-        `).join('')}
-      </div>
-    </div>
-
-    <!-- Consolidated Key Specifications Summary Card (Zero Duplication) -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.85); padding: 1.25rem 1.75rem; border-radius: var(--radius-md); box-shadow: var(--glass-shadow); margin-bottom: 2.5rem;">
-      <div>
-        <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Total Contract Price</span>
-        <div style="font-family: var(--font-display); font-size: 2.25rem; font-weight: 700; color: var(--color-primary); line-height: 1.1;">${formattedPrice}</div>
-        <span style="font-size: 0.9rem; font-weight: 600; color: var(--color-accent-text); font-family: var(--font-body); display: block; margin-top: 0.15rem;">${formattedPriceSqm} / sqm</span>
-      </div>
-
-      <div style="display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap;">
-        <div style="border-left: 2px solid var(--border); padding-left: 1.5rem;">
-          <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Lot Area</span>
-          <div style="font-size: 1.35rem; font-weight: 700; color: var(--color-primary);">${formattedLotArea} sqm</div>
-        </div>
-
-        <div style="border-left: 2px solid var(--border); padding-left: 1.5rem;">
-          <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Land Title Status</span>
-          <div style="font-size: 1.1rem; font-weight: 700; color: var(--status-available);">${DOMUtils.escapeHTML(property.documentStatus || "Clean Title (TCT)")}</div>
-        </div>
-
-        <div style="border-left: 2px solid var(--border); padding-left: 1.5rem;">
-          <span style="font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; display: block;">Payment Terms</span>
-          <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary);">Cash / Installment</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Two-Column Layout -->
-    <div class="details-layout">
-      
-      <!-- Left Column: Main Information -->
-      <div>
-        <div style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: var(--glass-shadow); margin-bottom: 2rem;">
-          <h3 style="margin-bottom: 1rem;">Property Description</h3>
-          <p style="line-height: 1.7; font-size: 1.05rem;">${DOMUtils.escapeHTML(property.description)}</p>
-        </div>
-
-        <div style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: var(--glass-shadow); margin-bottom: 2rem;">
-          <h3 style="margin-bottom: 1rem;">Nearby Landmarks & Accessibility</h3>
-          <ul style="list-style: none; padding: 0; margin: 0;">
-            ${(property.nearbyLandmarks || []).map(lm => `
-              <li style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; font-weight: 500;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                ${DOMUtils.escapeHTML(lm)}
-              </li>
-            `).join('')}
-          </ul>
-        </div>
-
-        <!-- Location Map Preview -->
-        <div style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.5rem, 4vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: var(--glass-shadow); margin-bottom: 2rem;">
-          <h3 style="margin-bottom: 1rem;">Location Map Reference</h3>
-          <div class="map-container">
-            <iframe 
-              loading="lazy" 
-              allowfullscreen
-              src="https://maps.google.com/maps?q=${property.latitude || 6.2192},${property.longitude || 125.0658}&hl=en&z=14&output=embed"
-              title="Polomolok Property Location Map">
-            </iframe>
-          </div>
-        </div>
-
-        <!-- State-of-the-Art Intuitive Land Payment Calculator (Eye-Friendly Glass Design) -->
-        <div class="calculator-card" style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.75rem, 4vw, 2.5rem); border-radius: var(--radius-md); box-shadow: var(--glass-shadow); border: 1px solid rgba(255, 255, 255, 0.85);">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
-            <h3 style="color: var(--color-primary); margin: 0; font-size: 1.4rem;">Interactive Payment Calculator</h3>
-            <span class="badge badge-available">0% Interest Terms</span>
-          </div>
-          <p style="font-size: 0.88rem; color: var(--color-text-muted); margin-bottom: 1.75rem;">Adjust property price, down payment, or term length below to instantly estimate your custom monthly payment.</p>
-
-          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-            
-            <!-- Input 1: Total Property Price Input -->
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="calc-total-price" style="font-weight: 600; margin-bottom: 0.4rem; display: block; color: var(--color-text);">Total Property Price (₱)</label>
-              <input type="number" id="calc-total-price" class="form-control" value="${property.totalPrice}" min="100000" step="50000" style="font-size: 1.1rem; font-weight: 700;">
-            </div>
-
-            <!-- Input 2: Down Payment Percentage & Quick Chips -->
-            <div>
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-                <label for="calc-dp-slider" style="font-weight: 600; color: var(--color-text);">Down Payment: <span id="calc-dp-percent-text" style="color: var(--color-accent-text); font-weight: 700;">20%</span></label>
-                <span id="calc-dp-amount-text" style="font-size: 0.95rem; font-weight: 700; color: var(--color-primary);">₱0</span>
-              </div>
-              
-              <input type="range" id="calc-dp-slider" min="10" max="50" step="5" value="20" style="width: 100%; margin-bottom: 0.75rem; accent-color: var(--bronze-500);">
-
-              <!-- Quick DP Chips -->
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <button type="button" class="btn btn-sm calc-dp-chip" data-dp="10" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: rgba(16,42,32,0.06); color: var(--color-primary); border: 1px solid rgba(16,42,32,0.12);">10% DP</button>
-                <button type="button" class="btn btn-sm calc-dp-chip active" data-dp="20" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: var(--bronze-500); color: #FFF; border: 1px solid var(--bronze-500);">20% DP</button>
-                <button type="button" class="btn btn-sm calc-dp-chip" data-dp="30" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: rgba(16,42,32,0.06); color: var(--color-primary); border: 1px solid rgba(16,42,32,0.12);">30% DP</button>
-                <button type="button" class="btn btn-sm calc-dp-chip" data-dp="50" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: rgba(16,42,32,0.06); color: var(--color-primary); border: 1px solid rgba(16,42,32,0.12);">50% DP</button>
-              </div>
-            </div>
-
-            <!-- Input 3: Payment Term Select -->
-            <div>
-              <label for="calc-term-select" style="font-weight: 600; margin-bottom: 0.5rem; display: block; color: var(--color-text);">Payment Term Length</label>
-              <select id="calc-term-select" class="form-control" style="font-weight: 600;">
-                <option value="12">12 Months (1 Year)</option>
-                <option value="24" selected>24 Months (2 Years)</option>
-                <option value="36">36 Months (3 Years)</option>
-                <option value="60">60 Months (5 Years)</option>
-              </select>
-            </div>
-
-            <!-- Real-time Financial Breakdown Card -->
-            <div style="background: rgba(16, 42, 32, 0.04); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid rgba(16, 42, 32, 0.1); display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div>
-                <span style="font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Required Down Payment</span>
-                <div id="calc-summary-dp" style="font-weight: 700; color: var(--color-accent-text); font-size: 1.1rem; margin-top: 0.2rem;">₱0</div>
-              </div>
-              <div>
-                <span style="font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Balance to Finance</span>
-                <div id="calc-summary-balance" style="font-weight: 700; color: var(--color-primary); font-size: 1.1rem; margin-top: 0.2rem;">₱0</div>
-              </div>
-            </div>
-
-            <!-- Final Monthly Amortization Output -->
-            <div class="calc-result-box" style="background: linear-gradient(135deg, var(--forest-900) 0%, var(--forest-950) 100%); color: #FFFFFF; padding: 1.25rem; border-radius: var(--radius-sm); text-align: center; box-shadow: var(--shadow-sm);">
-              <span style="font-size: 0.85rem; color: rgba(255,255,255,0.8); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Estimated Monthly Amortization</span>
-              <h3 id="calc-monthly-result" style="color: var(--bronze-300); font-family: var(--font-display); font-size: 2.25rem; margin-top: 0.25rem; font-weight: 700;">₱0 / mo</h3>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column: Sticky Sidebar -->
-      <div class="property-sidebar">
-        <!-- Site Visit Booking Form Card (Padded for Header Offset & Zero Cutoff) -->
-        <div id="inquiry-form-card" style="background: var(--color-surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: clamp(1.5rem, 3vw, 2.25rem); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.85); box-shadow: var(--glass-shadow); margin-bottom: 2rem; scroll-margin-top: 110px;">
-          <h3 style="margin-bottom: 0.5rem;">Book a Site Visit</h3>
-          <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">Submit your details to schedule an on-site inspection with our accredited agent.</p>
-
-          <div id="form-feedback" class="feedback-alert" role="status" aria-live="polite" style="display: none;"></div>
-
-          <form id="lead-inquiry-form">
-            <input type="hidden" name="propertyInterest" value="${DOMUtils.escapeHTML(property.propertyCode + ' - ' + property.title)}">
-            <input type="hidden" name="inquiryType" value="site_visit">
-
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label for="fullName">Full Name *</label>
-              <input type="text" id="fullName" name="fullName" class="form-control" placeholder="e.g. Juan Dela Cruz" required>
-            </div>
-
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label for="mobileNumber">Mobile Number *</label>
-              <input type="tel" id="mobileNumber" name="mobileNumber" class="form-control" placeholder="e.g. 09171234567" required>
-            </div>
-
-            <div class="form-group" style="margin-bottom: 1rem;">
-              <label for="preferredDate">Preferred Date</label>
-              <input type="date" id="preferredDate" name="preferredDate" class="form-control">
-            </div>
-
-            <div class="form-group" style="margin-bottom: 1.5rem;">
-              <label for="preferredContactMethod">Preferred Contact Channel</label>
-              <select id="preferredContactMethod" name="preferredContactMethod" class="form-control">
-                <option value="phone">Phone Call / SMS</option>
-                <option value="viber">Viber</option>
-                <option value="whatsapp">WhatsApp</option>
-                <option value="messenger">Facebook Messenger</option>
-              </select>
-            </div>
-
-            <button type="submit" class="btn btn-accent" style="width: 100%;">Confirm Site Inspection</button>
-          </form>
-        </div>
-
-        <!-- Android APK Handoff Card -->
-        <div style="background: rgba(11, 31, 24, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: #FFF; padding: 1.75rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.18);">
-          <h4 style="color: #FFF; margin-bottom: 0.5rem;">RenoLeads App Handoff</h4>
-          <p style="font-size: 0.88rem; color: rgba(255,255,255,0.75); margin-bottom: 1.25rem;">Open this listing directly inside the RenoLeads Android app.</p>
-          <a href="${appIntentUrl}" class="btn btn-app btn-sm" style="width: 100%;">Open in RenoLeads App</a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Mobile Contextual 2-Action Bottom Bar -->
-    <div class="property-bottom-bar">
-      <a href="#inquiry-form-card" class="btn btn-accent">Book Visit</a>
-      <a href="contact.html?property=${encodeURIComponent(property.propertyCode)}" class="btn btn-outline">Ask a Question</a>
-    </div>
-  `;
-
-  // Gallery Thumbnail Click Handler
-  const mainImg = document.getElementById("gallery-main-view");
-  const thumbBtns = document.querySelectorAll(".gallery-sub-item");
-
-  thumbBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const src = btn.dataset.src;
-      if (mainImg && src) {
-        mainImg.style.opacity = "0.4";
-        setTimeout(() => {
-          mainImg.src = src;
-          mainImg.style.opacity = "1";
-        }, 150);
-      }
-      thumbBtns.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-    });
-  });
-
-  // Interactive Calculator Logic with Live Custom Inputs & DP Chips
-  const totalPriceInput = document.getElementById("calc-total-price");
-  const dpSlider = document.getElementById("calc-dp-slider");
-  const dpText = document.getElementById("calc-dp-percent-text");
-  const dpAmountText = document.getElementById("calc-dp-amount-text");
-  const summaryDp = document.getElementById("calc-summary-dp");
-  const summaryBalance = document.getElementById("calc-summary-balance");
-  const termSelect = document.getElementById("calc-term-select");
-  const monthlyResult = document.getElementById("calc-monthly-result");
-  const dpChips = document.querySelectorAll(".calc-dp-chip");
-
-  function updateAmortization() {
-    if (!dpSlider || !termSelect || !monthlyResult) return;
-    
-    const totalPrice = parseFloat(totalPriceInput ? totalPriceInput.value : property.totalPrice) || 0;
-    const dpPercent = parseFloat(dpSlider.value) || 20;
-
-    if (dpText) dpText.textContent = `${dpPercent}%`;
-
-    const downPayment = totalPrice * (dpPercent / 100);
-    const remainingBalance = Math.max(0, totalPrice - downPayment);
-    const months = parseInt(termSelect.value) || 24;
-
-    const formattedDp = DOMUtils.formatCurrency(downPayment);
-    const formattedBalance = DOMUtils.formatCurrency(remainingBalance);
-    const monthlyPayment = months > 0 ? remainingBalance / months : 0;
-
-    if (dpAmountText) dpAmountText.textContent = formattedDp;
-    if (summaryDp) summaryDp.textContent = formattedDp;
-    if (summaryBalance) summaryBalance.textContent = formattedBalance;
-
-    monthlyResult.textContent = `${DOMUtils.formatCurrency(monthlyPayment)} / mo`;
-
-    // Highlight active chip
-    dpChips.forEach(chip => {
-      const isSelected = parseFloat(chip.dataset.dp) === dpPercent;
-      chip.classList.toggle("active", isSelected);
-      chip.style.background = isSelected ? "var(--bronze-500)" : "rgba(16,42,32,0.06)";
-      chip.style.borderColor = isSelected ? "var(--bronze-500)" : "rgba(16,42,32,0.12)";
-      chip.style.color = isSelected ? "#FFFFFF" : "var(--color-primary)";
-    });
+  let property;
+  try {
+    property = await fetchPropertyById(propertyId);
+  } catch (error) {
+    console.error("[RenoLeads] Property detail load failed:", error);
+    renderNotFound(container);
+    return;
   }
 
-  // Quick DP Chip click listeners
-  dpChips.forEach(chip => {
-    chip.addEventListener("click", () => {
-      const dpValue = parseFloat(chip.dataset.dp);
-      if (!isNaN(dpValue) && dpSlider) {
-        dpSlider.value = dpValue;
-        updateAmortization();
-      }
-    });
-  });
+  if (!property) {
+    renderNotFound(container);
+    return;
+  }
 
-  if (totalPriceInput) totalPriceInput.addEventListener("input", updateAmortization);
-  if (dpSlider) dpSlider.addEventListener("input", updateAmortization);
-  if (termSelect) termSelect.addEventListener("change", updateAmortization);
-  updateAmortization();
+  RetentionManager.addRecentlyViewed(property.id);
+  document.title = `${property.title || "Property"} — RenoLeads`;
+  setInquiryContext(property);
+
+  const images = getPropertyImages(property);
+  container.replaceChildren();
+  renderBreadcrumbs(container, property);
+  renderHeader(container, property);
+
+  const layout = document.createElement("div");
+  layout.className = "detail-layout";
+
+  const mainColumn = document.createElement("div");
+  mainColumn.className = "detail-main";
+  renderGallery(mainColumn, images, property);
+  renderSpecifications(mainColumn, property);
+  renderDescription(mainColumn, property);
+  renderAccessAndSite(mainColumn, property);
+  renderMap(mainColumn, property);
+  renderCalculator(mainColumn, property);
+  await renderSimilarProperties(mainColumn, property);
+
+  const sidebar = document.createElement("aside");
+  sidebar.className = "detail-sidebar";
+  renderInquiryCard(sidebar, property);
+  renderSellerProfile(sidebar);
+  renderAPKHandoff(sidebar, property);
+
+  layout.appendChild(mainColumn);
+  layout.appendChild(sidebar);
+  container.appendChild(layout);
+
+  initLightbox(images, property.title || "Property");
 });
+
+function getPropertyImages(property) {
+  const candidates = [property.thumbnailUrl, ...(property.imageUrls || [])];
+  return candidates.filter((url, index, list) => Boolean(url) && list.indexOf(url) === index && !/sample-(?:res|farm|com)|polomolok-hero-bg/i.test(url));
+}
+
+function titleCase(value) {
+  return String(value || "lot").replace(/[-_]/g, " ").replace(/\b\w/g, character => character.toUpperCase());
+}
+
+function setInquiryContext(property) {
+  const propertyCode = property.propertyCode || property.id || "General inquiry";
+  const hiddenField = document.getElementById("propertyInterest");
+  if (hiddenField) hiddenField.value = propertyCode;
+
+  const label = document.getElementById("inquiry-sheet-property");
+  if (label) label.textContent = property.title || propertyCode;
+
+  document.querySelectorAll("[data-property-action]").forEach(element => {
+    element.dataset.propertyId = property.id;
+    element.dataset.propertyCode = propertyCode;
+  });
+}
+
+function renderBreadcrumbs(container, property) {
+  const breadcrumbs = document.createElement("nav");
+  breadcrumbs.className = "detail-breadcrumbs";
+  breadcrumbs.setAttribute("aria-label", "Breadcrumb");
+
+  const home = document.createElement("a");
+  home.href = "index.html";
+  home.textContent = "Home";
+  breadcrumbs.appendChild(home);
+  breadcrumbs.appendChild(IconUtils.create("chevron"));
+
+  const lots = document.createElement("a");
+  lots.href = "properties.html";
+  lots.textContent = "Available lots";
+  breadcrumbs.appendChild(lots);
+  breadcrumbs.appendChild(IconUtils.create("chevron"));
+
+  const current = document.createElement("span");
+  current.textContent = property.propertyCode || "Property";
+  current.setAttribute("aria-current", "page");
+  breadcrumbs.appendChild(current);
+  container.appendChild(breadcrumbs);
+}
+
+function renderHeader(container, property) {
+  const header = document.createElement("header");
+  header.className = "detail-header";
+
+  const titleGroup = document.createElement("div");
+  titleGroup.className = "detail-title-group";
+
+  const statusRow = document.createElement("div");
+  statusRow.className = "detail-status-row";
+  const status = String(property.status || "available").toLowerCase();
+  const badge = document.createElement("span");
+  badge.className = `badge badge-${status}`;
+  badge.textContent = titleCase(status);
+  statusRow.appendChild(badge);
+
+  const code = document.createElement("span");
+  code.className = "detail-verified";
+  code.textContent = property.propertyCode || property.id || "Property listing";
+  statusRow.appendChild(code);
+  titleGroup.appendChild(statusRow);
+
+  const title = document.createElement("h1");
+  title.className = "detail-title";
+  title.textContent = property.title || "Land lot in Polomolok";
+  titleGroup.appendChild(title);
+
+  const location = document.createElement("div");
+  location.className = "detail-location";
+  location.appendChild(IconUtils.create("map"));
+  const locationText = document.createElement("span");
+  locationText.textContent = [property.barangay, property.municipality || "Polomolok", property.province || "South Cotabato"].filter(Boolean).join(", ");
+  location.appendChild(locationText);
+  titleGroup.appendChild(location);
+
+  const priceArea = document.createElement("div");
+  priceArea.className = "detail-price-area";
+  const price = document.createElement("strong");
+  price.className = "detail-price";
+  price.textContent = DOMUtils.formatCurrency(property.totalPrice);
+  priceArea.appendChild(price);
+  const area = document.createElement("span");
+  area.className = "detail-area";
+  area.textContent = `${DOMUtils.formatNumber(property.lotAreaSqm)} sqm · ${DOMUtils.formatCurrency(property.pricePerSqm)} / sqm`;
+  priceArea.appendChild(area);
+  titleGroup.appendChild(priceArea);
+  header.appendChild(titleGroup);
+
+  const actions = document.createElement("div");
+  actions.className = "detail-actions";
+  const save = document.createElement("button");
+  const saved = RetentionManager.isShortlisted(property.id);
+  save.type = "button";
+  save.className = `detail-action-btn${saved ? " saved" : ""}`;
+  save.dataset.saveId = property.id;
+  save.setAttribute("aria-label", saved ? "Remove from saved" : "Save property");
+  save.setAttribute("aria-pressed", String(saved));
+  save.appendChild(IconUtils.create("heart"));
+  actions.appendChild(save);
+
+  const share = document.createElement("button");
+  share.type = "button";
+  share.className = "detail-action-btn";
+  share.dataset.share = "true";
+  share.dataset.title = property.title || "RenoLeads property";
+  share.dataset.text = `${property.title || "Land lot"} in ${property.municipality || "Polomolok"}`;
+  share.dataset.url = window.location.href;
+  share.setAttribute("aria-label", "Share property");
+  share.appendChild(IconUtils.create("share"));
+  actions.appendChild(share);
+  header.appendChild(actions);
+  container.appendChild(header);
+}
+
+function renderGallery(container, images, property) {
+  const section = document.createElement("section");
+  section.className = "gallery-section";
+  const gallery = document.createElement("div");
+  gallery.className = "gallery";
+
+  if (!images.length) {
+    const placeholder = document.createElement("div");
+    placeholder.className = "gallery-main gallery-placeholder";
+    placeholder.appendChild(IconUtils.create("area"));
+    const title = document.createElement("strong");
+    title.textContent = "Property photos coming soon";
+    placeholder.appendChild(title);
+    const copy = document.createElement("span");
+    copy.textContent = `${property.propertyCode || property.id || "Lot"} · Ask the seller for current site photos.`;
+    placeholder.appendChild(copy);
+    gallery.appendChild(placeholder);
+    section.appendChild(gallery);
+    container.appendChild(section);
+    return;
+  }
+
+  const main = document.createElement("button");
+  main.type = "button";
+  main.className = "gallery-main";
+  main.id = "gallery-main-wrap";
+  main.setAttribute("aria-label", "Open property photo viewer");
+  const image = document.createElement("img");
+  image.id = "gallery-main-img";
+  image.src = images[0];
+  image.alt = `${property.title || "Property"} — photo 1 of ${images.length}`;
+  image.width = 960;
+  image.height = 600;
+  image.loading = "eager";
+  main.appendChild(image);
+
+  const count = document.createElement("span");
+  count.className = "gallery-count";
+  count.appendChild(IconUtils.create("area"));
+  count.appendChild(document.createTextNode(`${images.length} photo${images.length === 1 ? "" : "s"}`));
+  main.appendChild(count);
+  gallery.appendChild(main);
+
+  if (images.length > 1) {
+    const thumbs = document.createElement("div");
+    thumbs.className = "gallery-thumbs";
+    images.forEach((src, index) => {
+      const thumb = document.createElement("button");
+      thumb.type = "button";
+      thumb.className = `gallery-thumb${index === 0 ? " active" : ""}`;
+      thumb.setAttribute("aria-label", `View property photo ${index + 1}`);
+      const thumbImage = document.createElement("img");
+      thumbImage.src = src;
+      thumbImage.alt = `Photo ${index + 1}`;
+      thumbImage.loading = "lazy";
+      thumb.appendChild(thumbImage);
+      thumb.addEventListener("click", () => {
+        image.src = src;
+        image.alt = `${property.title || "Property"} — photo ${index + 1} of ${images.length}`;
+        thumbs.querySelectorAll(".gallery-thumb").forEach(item => item.classList.remove("active"));
+        thumb.classList.add("active");
+      });
+      thumbs.appendChild(thumb);
+    });
+    gallery.appendChild(thumbs);
+  }
+
+  section.appendChild(gallery);
+  container.appendChild(section);
+}
+
+function initLightbox(images, title) {
+  const lightbox = document.getElementById("lightbox");
+  const image = document.getElementById("lightbox-img");
+  const counter = document.getElementById("lightbox-counter");
+  const main = document.getElementById("gallery-main-wrap");
+  if (!lightbox || !image) return;
+  if (!main || !images.length) {
+    lightbox.remove();
+    return;
+  }
+
+  let current = 0;
+  const show = index => {
+    current = (index + images.length) % images.length;
+    image.src = images[current];
+    image.alt = `${title} — photo ${current + 1} of ${images.length}`;
+    if (counter) counter.textContent = `${current + 1} / ${images.length}`;
+  };
+  show(0);
+  const open = () => {
+    show(current);
+    lightbox.classList.add("is-open");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.classList.add("is-lightbox-open");
+    lightbox.querySelector(".lightbox-close")?.focus();
+  };
+  const close = () => {
+    lightbox.classList.remove("is-open");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("is-lightbox-open");
+    main.focus();
+  };
+
+  main.addEventListener("click", open);
+  lightbox.querySelector(".lightbox-close")?.addEventListener("click", close);
+  lightbox.querySelector(".lightbox-prev")?.addEventListener("click", () => show(current - 1));
+  lightbox.querySelector(".lightbox-next")?.addEventListener("click", () => show(current + 1));
+  lightbox.addEventListener("click", event => {
+    if (event.target === lightbox) close();
+  });
+  lightbox.addEventListener("keydown", event => {
+    if (event.key === "Escape") close();
+    if (event.key === "ArrowLeft") show(current - 1);
+    if (event.key === "ArrowRight") show(current + 1);
+  });
+}
+
+function renderSpecifications(container, property) {
+  const section = document.createElement("section");
+  section.className = "spec-section";
+  section.appendChild(createSectionTitle("Property details"));
+
+  const list = document.createElement("dl");
+  list.className = "spec-grid";
+  const entries = [
+    ["Lot area", `${DOMUtils.formatNumber(property.lotAreaSqm)} sqm`],
+    ["Property type", titleCase(property.propertyType)],
+    ["Total price", DOMUtils.formatCurrency(property.totalPrice)],
+    ["Price per sqm", DOMUtils.formatCurrency(property.pricePerSqm)],
+    ["Availability", titleCase(property.status)],
+    ["Payment options", (property.paymentOptions || []).map(titleCase).join(", ") || "Ask the seller"],
+    ["Document note", property.documentStatus ? "Details supplied by seller; verify independently" : "Ask the seller"],
+    ["Listing code", property.propertyCode || property.id]
+  ];
+  entries.forEach(([label, value]) => {
+    const item = document.createElement("div");
+    item.className = "spec-item";
+    const term = document.createElement("dt");
+    term.className = "spec-label";
+    term.textContent = label;
+    const detail = document.createElement("dd");
+    detail.className = "spec-value";
+    detail.textContent = value;
+    item.append(term, detail);
+    list.appendChild(item);
+  });
+  section.appendChild(list);
+  container.appendChild(section);
+}
+
+function renderDescription(container, property) {
+  if (!property.description) return;
+  const section = document.createElement("section");
+  section.className = "spec-section detail-copy";
+  section.appendChild(createSectionTitle("About this property"));
+  const text = document.createElement("p");
+  text.textContent = property.description;
+  section.appendChild(text);
+  container.appendChild(section);
+}
+
+function renderAccessAndSite(container, property) {
+  if (!property.nearbyLandmarks?.length) return;
+  const section = document.createElement("section");
+  section.className = "spec-section detail-copy";
+  section.appendChild(createSectionTitle("Nearby context"));
+  const note = document.createElement("p");
+  note.textContent = "Use these nearby places as orientation points. Confirm travel time, road access, and utilities during a site visit.";
+  section.appendChild(note);
+  const list = document.createElement("ul");
+  list.className = "detail-list";
+  property.nearbyLandmarks.forEach(landmark => {
+    const item = document.createElement("li");
+    item.appendChild(IconUtils.create("check"));
+    item.appendChild(document.createTextNode(landmark));
+    list.appendChild(item);
+  });
+  section.appendChild(list);
+  container.appendChild(section);
+}
+
+function renderMap(container, property) {
+  if (!property.latitude || !property.longitude) return;
+  const section = document.createElement("section");
+  section.className = "spec-section";
+  section.appendChild(createSectionTitle("Map reference"));
+  const note = document.createElement("p");
+  note.className = "detail-map-note";
+  note.textContent = "Map coordinates are for orientation. Confirm the exact boundary and access route before committing.";
+  section.appendChild(note);
+  const map = document.createElement("div");
+  map.className = "map-container";
+  const frame = document.createElement("iframe");
+  frame.src = `https://maps.google.com/maps?q=${property.latitude},${property.longitude}&z=15&output=embed`;
+  frame.title = `Map reference for ${property.title || "property"}`;
+  frame.loading = "lazy";
+  frame.setAttribute("allowfullscreen", "");
+  frame.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
+  map.appendChild(frame);
+  section.appendChild(map);
+  container.appendChild(section);
+}
+
+function renderCalculator(container, property) {
+  const section = document.createElement("section");
+  section.className = "spec-section";
+  const card = document.createElement("div");
+  card.className = "calculator-card";
+  const title = document.createElement("h2");
+  title.textContent = "Payment estimator";
+  card.appendChild(title);
+  const copy = document.createElement("p");
+  copy.textContent = "A simple principal-only estimate. Confirm final terms with the seller or your lender.";
+  card.appendChild(copy);
+
+  const priceGroup = document.createElement("div");
+  priceGroup.className = "calc-input-group";
+  priceGroup.appendChild(createCalcLabel("Total contract price", "calc-total-price"));
+  const price = document.createElement("input");
+  price.id = "calc-total-price";
+  price.className = "calc-input";
+  price.type = "number";
+  price.min = "0";
+  price.step = "1000";
+  price.value = property.totalPrice || 0;
+  priceGroup.appendChild(price);
+  card.appendChild(priceGroup);
+
+  const downLabel = document.createElement("span");
+  downLabel.className = "calc-label";
+  downLabel.textContent = "Down payment";
+  card.appendChild(downLabel);
+  const chips = document.createElement("div");
+  chips.className = "calc-chips";
+  [10, 20, 30, 50].forEach(percent => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = `calc-chip${percent === 20 ? " active" : ""}`;
+    chip.dataset.dp = percent;
+    chip.textContent = `${percent}%`;
+    chips.appendChild(chip);
+  });
+  card.appendChild(chips);
+
+  const slider = document.createElement("input");
+  slider.id = "calc-dp-slider";
+  slider.className = "calc-slider";
+  slider.type = "range";
+  slider.min = "0";
+  slider.max = "80";
+  slider.value = "20";
+  slider.setAttribute("aria-label", "Down payment percentage");
+  card.appendChild(slider);
+
+  const downInfo = document.createElement("div");
+  downInfo.className = "calc-label";
+  card.appendChild(downInfo);
+
+  const termGroup = document.createElement("div");
+  termGroup.className = "calc-input-group";
+  termGroup.appendChild(createCalcLabel("Payment term", "calc-term-select"));
+  const term = document.createElement("select");
+  term.id = "calc-term-select";
+  term.className = "calc-select";
+  [6, 12, 24, 36, 60].forEach(months => {
+    const option = document.createElement("option");
+    option.value = months;
+    option.textContent = `${months} months`;
+    if (months === 24) option.selected = true;
+    term.appendChild(option);
+  });
+  termGroup.appendChild(term);
+  card.appendChild(termGroup);
+
+  const result = document.createElement("div");
+  result.className = "calc-result";
+  const resultLabel = document.createElement("div");
+  resultLabel.className = "calc-result-label";
+  resultLabel.textContent = "Estimated monthly payment";
+  result.appendChild(resultLabel);
+  const resultValue = document.createElement("div");
+  resultValue.className = "calc-result-value";
+  result.appendChild(resultValue);
+  const summary = document.createElement("div");
+  summary.className = "calc-result-summary";
+  const downSummary = createCalcSummary("Down payment");
+  const balanceSummary = createCalcSummary("Balance");
+  summary.append(downSummary.wrapper, balanceSummary.wrapper);
+  result.appendChild(summary);
+  card.appendChild(result);
+  section.appendChild(card);
+  container.appendChild(section);
+
+  function update() {
+    const total = Number(price.value) || 0;
+    const percent = Number(slider.value) || 0;
+    const months = Number(term.value) || 24;
+    const down = total * percent / 100;
+    const balance = Math.max(total - down, 0);
+    downInfo.textContent = `Down payment: ${percent}% · ${DOMUtils.formatCurrency(down)}`;
+    resultValue.textContent = DOMUtils.formatCurrency(months ? balance / months : 0);
+    downSummary.value.textContent = DOMUtils.formatCurrency(down);
+    balanceSummary.value.textContent = DOMUtils.formatCurrency(balance);
+    chips.querySelectorAll(".calc-chip").forEach(chip => chip.classList.toggle("active", Number(chip.dataset.dp) === percent));
+  }
+
+  chips.querySelectorAll(".calc-chip").forEach(chip => chip.addEventListener("click", () => {
+    slider.value = chip.dataset.dp;
+    update();
+  }));
+  [price, slider, term].forEach(input => input.addEventListener("input", update));
+  term.addEventListener("change", update);
+  update();
+}
+
+function createCalcLabel(text, inputId) {
+  const label = document.createElement("label");
+  label.className = "calc-label";
+  label.htmlFor = inputId;
+  label.textContent = text;
+  return label;
+}
+
+function createCalcSummary(labelText) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "calc-summary-item";
+  const label = document.createElement("span");
+  label.textContent = labelText;
+  const value = document.createElement("span");
+  value.className = "calc-summary-value";
+  wrapper.append(label, value);
+  return { wrapper, value };
+}
+
+function renderInquiryCard(container, property) {
+  const card = document.createElement("div");
+  card.className = "sidebar-card detail-cta-card";
+  const title = document.createElement("h2");
+  title.className = "sidebar-card-title";
+  title.textContent = "Plan a closer look";
+  card.appendChild(title);
+  const copy = document.createElement("p");
+  copy.textContent = "Ask for current photos, boundary details, payment terms, or a site visit for this lot.";
+  card.appendChild(copy);
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "btn btn-accent btn-block";
+  button.dataset.openInquiry = "inquiry-sheet";
+  button.dataset.propertyAction = "true";
+  button.textContent = "Book a site visit";
+  card.appendChild(button);
+  container.appendChild(card);
+}
+
+function renderSellerProfile(container) {
+  const profile = document.createElement("div");
+  profile.className = "seller-profile";
+  const avatar = document.createElement("div");
+  avatar.className = "seller-avatar";
+  avatar.textContent = "R";
+  profile.appendChild(avatar);
+  const info = document.createElement("div");
+  info.className = "seller-info";
+  const name = document.createElement("strong");
+  name.className = "seller-name";
+  name.textContent = RENO_CONFIG.seller.name;
+  info.appendChild(name);
+  const role = document.createElement("span");
+  role.className = "seller-role";
+  role.textContent = RENO_CONFIG.seller.role;
+  info.appendChild(role);
+  const area = document.createElement("span");
+  area.className = "seller-area";
+  area.textContent = RENO_CONFIG.seller.area;
+  info.appendChild(area);
+  profile.appendChild(info);
+  container.appendChild(profile);
+}
+
+function renderAPKHandoff(container, property) {
+  if (!RENO_CONFIG.androidPackage || !/Android/i.test(navigator.userAgent)) return;
+  const link = document.createElement("a");
+  link.className = "app-handoff";
+  link.href = `intent://property.html?id=${encodeURIComponent(property.id)}#Intent;scheme=https;package=${RENO_CONFIG.androidPackage};end`;
+  link.appendChild(IconUtils.create("grid"));
+  link.appendChild(document.createTextNode("Open in the RenoLeads app"));
+  container.appendChild(link);
+}
+
+function renderSimilarProperties(container, current) {
+  return fetchPublishedProperties().then(properties => {
+    const similar = properties.filter(property => property.id !== current.id && property.status === "available")
+      .filter(property => property.propertyType === current.propertyType || property.barangay === current.barangay)
+      .slice(0, 3);
+    if (!similar.length) return;
+    const section = document.createElement("section");
+    section.className = "spec-section similar-section";
+    section.appendChild(createSectionTitle("More lots to compare"));
+    const grid = document.createElement("div");
+    grid.className = "properties-grid";
+    similar.forEach(property => grid.appendChild(createPropertyCard(property)));
+    section.appendChild(grid);
+    container.appendChild(section);
+  }).catch(error => console.warn("[RenoLeads] Similar properties unavailable:", error));
+}
+
+function createSectionTitle(text) {
+  const title = document.createElement("h2");
+  title.className = "spec-section-title";
+  title.textContent = text;
+  return title;
+}
+
+function renderLoadingSkeleton(container) {
+  container.replaceChildren();
+  ["detail-breadcrumbs", "detail-header", "gallery skeleton-detail-media", "spec-section skeleton-detail-copy"].forEach(className => {
+    const skeleton = document.createElement("div");
+    skeleton.className = `skeleton ${className}`;
+    container.appendChild(skeleton);
+  });
+}
+
+function renderNotFound(container) {
+  const state = document.createElement("div");
+  state.className = "empty-state detail-not-found";
+  state.appendChild(IconUtils.create("info"));
+  const title = document.createElement("h1");
+  title.className = "empty-state-title";
+  title.textContent = "Property not found";
+  state.appendChild(title);
+  const copy = document.createElement("p");
+  copy.className = "empty-state-text";
+  copy.textContent = "This listing may have been removed or the link may be incomplete.";
+  state.appendChild(copy);
+  const link = document.createElement("a");
+  link.className = "btn btn-primary";
+  link.href = "properties.html";
+  link.textContent = "Browse available lots";
+  state.appendChild(link);
+  container.replaceChildren(state);
+}

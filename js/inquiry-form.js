@@ -1,117 +1,91 @@
-/**
- * Lead Inquiry & Site Tour Form Handling (Phase 10 Conversion & Trust Engine)
- */
+/* RenoLeads V2 — truthful inquiry form handling for page and sheet forms. */
 
-document.addEventListener("DOMContentLoaded", () => {
-  const inquiryForm = document.getElementById("lead-inquiry-form");
-  const formFeedback = document.getElementById("form-feedback");
+function bindInquiryForm(form) {
+  if (!form || form.dataset.bound === "true") return;
+  form.dataset.bound = "true";
 
-  // Query Parameter Property Prefill logic
-  const urlParams = new URLSearchParams(window.location.search);
-  const propertyParam = urlParams.get("property");
-  const propertyInterestInput = document.getElementById("form-property-interest") || document.getElementById("propertyInterest");
+  const feedback = form.closest(".inquiry-sheet, .contact-form-card")?.querySelector("[data-form-feedback]") || document.getElementById("form-feedback");
+  const propertyField = form.querySelector("[name=propertyInterest]");
+  const propertyParam = new URLSearchParams(window.location.search).get("property");
+  if (propertyField && propertyParam) propertyField.value = propertyParam;
 
-  if (propertyInterestInput && propertyParam) {
-    propertyInterestInput.value = decodeURIComponent(propertyParam);
-  }
-
-  if (!inquiryForm) return;
-
-  inquiryForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const submitBtn = inquiryForm.querySelector("button[type='submit']");
-    const originalBtnText = submitBtn ? submitBtn.innerHTML : "Submit Inquiry";
-
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `Submitting Inquiry...`;
-    }
-
-    if (formFeedback) {
-      formFeedback.style.display = "none";
-      formFeedback.className = "feedback-alert";
-      formFeedback.innerHTML = "";
-    }
-
-    const formData = new FormData(inquiryForm);
-    const leadPayload = {
-      fullName: (formData.get("fullName") || "").trim(),
-      mobileNumber: (formData.get("mobileNumber") || "").trim(),
-      email: (formData.get("email") || "").trim(),
-      propertyCode: (formData.get("propertyInterest") || "General Inquiries").trim(),
-      inquiryType: (formData.get("inquiryType") || "site_visit").trim(),
-      preferredDate: (formData.get("preferredDate") || "").trim(),
-      preferredContactMethod: (formData.get("preferredContactMethod") || "phone").trim(),
-      message: (formData.get("message") || "").trim(),
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    const submit = form.querySelector("button[type=submit]");
+    const originalLabel = submit ? submit.textContent : "Submit inquiry";
+    const data = new FormData(form);
+    const lead = {
+      fullName: String(data.get("fullName") || "").trim(),
+      mobileNumber: String(data.get("mobileNumber") || "").trim(),
+      email: String(data.get("email") || "").trim(),
+      propertyCode: String(data.get("propertyInterest") || "General inquiries").trim(),
+      inquiryType: String(data.get("inquiryType") || "general_question").trim(),
+      preferredDate: String(data.get("preferredDate") || "").trim(),
+      preferredContactMethod: String(data.get("preferredContactMethod") || "phone").trim(),
+      message: String(data.get("message") || "").trim(),
       source: "website_funnel"
     };
 
-    // Validation
-    if (!leadPayload.fullName || !leadPayload.mobileNumber) {
-      if (formFeedback) {
-        formFeedback.style.display = "block";
-        formFeedback.className = "feedback-alert feedback-warning";
-        formFeedback.setAttribute("role", "alert");
-        formFeedback.textContent = "Please provide your Full Name and Mobile Number.";
-      }
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-      }
+    if (!lead.fullName || !lead.mobileNumber) {
+      showFormFeedback(feedback, "warning", "Please provide your full name and mobile number.");
       return;
     }
 
-    try {
-      const result = await submitLeadToFirestore(leadPayload);
+    if (form.querySelector("[name=consent]") && !form.querySelector("[name=consent]").checked) {
+      showFormFeedback(feedback, "warning", "Please confirm that we may contact you about this inquiry.");
+      return;
+    }
 
-      if (result && result.success) {
-        if (result.isLive) {
-          // Live Firebase Success
-          inquiryForm.reset();
-          if (formFeedback) {
-            formFeedback.style.display = "block";
-            formFeedback.className = "feedback-alert feedback-success";
-            formFeedback.setAttribute("role", "status");
-            formFeedback.innerHTML = `
-              <strong>Inquiry Received!</strong><br>
-              Thank you, ${DOMUtils.escapeHTML(leadPayload.fullName)}. Your site visit request for ${DOMUtils.escapeHTML(leadPayload.propertyCode)} has been logged. Our land agent will contact you via ${DOMUtils.escapeHTML(leadPayload.preferredContactMethod.toUpperCase())} shortly.
-            `;
-          }
-        } else {
-          // Offline / Local Buffer Notice (Truthful Messaging - Phase 10)
-          if (formFeedback) {
-            formFeedback.style.display = "block";
-            formFeedback.className = "feedback-alert feedback-warning";
-            formFeedback.setAttribute("role", "status");
-            formFeedback.innerHTML = `
-              <strong>Inquiry Saved Locally!</strong><br>
-              ${DOMUtils.escapeHTML(result.message)}
-              <div style="margin-top: 0.75rem;">
-                <a href="${RENO_CONFIG.contact.viberUrl}" class="btn btn-sm btn-accent">Click to Message Agent on Viber</a>
-              </div>
-            `;
-          }
-        }
+    if (submit) {
+      submit.disabled = true;
+      submit.textContent = "Sending…";
+    }
+    clearFormFeedback(feedback);
+
+    try {
+      const result = await submitLeadToFirestore(lead);
+      if (!result || !result.success) throw new Error(result?.error || "Submission failed");
+      if (typeof trackFunnelEvent === "function") trackFunnelEvent("lead_submit", { property_code: lead.propertyCode, inquiry_type: lead.inquiryType });
+
+      if (result.isLive) {
+        form.reset();
+        if (propertyField) propertyField.value = lead.propertyCode;
+        showFormFeedback(feedback, "success", `Inquiry received. Thank you, ${lead.fullName}. We’ll follow up about ${lead.propertyCode}.`);
       } else {
-        throw new Error(result.error || "Submission failed");
+        showFormFeedback(feedback, "warning", `${result.message || "Your inquiry was saved locally."} Please use the direct contact options below to confirm.`);
       }
-    } catch (err) {
-      console.error("[RenoLeads] Lead Form Error:", err);
-      if (formFeedback) {
-        formFeedback.style.display = "block";
-        formFeedback.className = "feedback-alert feedback-error";
-        formFeedback.setAttribute("role", "alert");
-        formFeedback.innerHTML = `
-          <strong>Submission Error</strong><br>
-          We could not reach the server at this moment. Please call or SMS us directly at <strong>${RENO_CONFIG.contact.phoneDisplay}</strong>.
-        `;
-      }
+    } catch (error) {
+      console.error("[RenoLeads] Inquiry submission failed:", error);
+      showFormFeedback(feedback, "error", `We could not reach the server. Please call or SMS ${RENO_CONFIG.contact.phoneDisplay} directly.`);
     } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
+      if (submit) {
+        submit.disabled = false;
+        submit.textContent = originalLabel;
       }
     }
   });
+}
+
+function clearFormFeedback(element) {
+  if (!element) return;
+  element.replaceChildren();
+  element.hidden = true;
+  element.className = "form-feedback";
+}
+
+function showFormFeedback(element, kind, message) {
+  if (!element) return;
+  element.replaceChildren();
+  element.hidden = false;
+  element.className = `feedback-alert feedback-${kind}`;
+  element.setAttribute("role", kind === "error" || kind === "warning" ? "alert" : "status");
+  const copy = document.createElement("p");
+  copy.textContent = message;
+  element.appendChild(copy);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("form[data-inquiry-form], #lead-inquiry-form").forEach(bindInquiryForm);
 });
+
+window.bindInquiryForm = bindInquiryForm;

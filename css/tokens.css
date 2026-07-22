@@ -1,0 +1,110 @@
+/* RenoLeads V2 — Design Tokens */
+/* "Editorial Tropical Land Discovery" */
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap');
+
+:root {
+  /* ── Color Palette ── */
+  --forest-950: #0b1f18;
+  --forest-900: #102a20;
+  --forest-800: #173f30;
+  --forest-700: #245943;
+  --forest-100: #dbe8df;
+  --forest-050: #eef5f0;
+
+  --linen-100: #f3eee4;
+  --linen-050: #faf7f1;
+  --paper: #fffdf9;
+
+  --bronze-700: #8f5b27;
+  --bronze-600: #a96c31;
+  --bronze-500: #c18443;
+  --bronze-300: #cda372;
+  --bronze-100: #f4e3ce;
+
+  --ink-950: #101b16;
+  --ink-800: #24332c;
+  --ink-600: #5a6861;
+  --ink-400: #8a9690;
+  --border: #d9e0da;
+
+  /* ── Semantic Colors ── */
+  --color-primary: var(--forest-900);
+  --color-primary-hover: var(--forest-800);
+  --color-accent: var(--bronze-600);
+  --color-accent-hover: var(--bronze-700);
+  --color-text: var(--ink-950);
+  --color-text-secondary: var(--ink-800);
+  --color-text-muted: var(--ink-600);
+  --color-text-faint: var(--ink-400);
+  --color-bg: var(--linen-050);
+  --color-surface: var(--paper);
+  --color-surface-muted: var(--linen-100);
+
+  /* ── Status ── */
+  --status-available: #1a7a4c;
+  --status-available-bg: #e8f5ee;
+  --status-reserved: #99621e;
+  --status-reserved-bg: #fef3e2;
+  --status-sold: #a43f3f;
+  --status-sold-bg: #fde8e8;
+  --danger: #d93838;
+
+  /* ── Typography ── */
+  --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --text-display: clamp(2.6rem, 7vw, 5rem);
+  --text-h1: clamp(2rem, 5vw, 3.5rem);
+  --text-h2: clamp(1.6rem, 3vw, 2.5rem);
+  --text-h3: clamp(1.15rem, 1.5vw, 1.45rem);
+  --text-body-lg: clamp(1.05rem, 1vw, 1.15rem);
+  --text-body: 1rem;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
+
+  /* ── Spacing ── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* ── Layout ── */
+  --container-max: 1200px;
+  --page-gutter: clamp(1rem, 4vw, 2.5rem);
+
+  /* ── Shape ── */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 100px;
+
+  /* ── Depth ── */
+  --shadow-sm: 0 1px 3px rgba(11, 31, 24, 0.06);
+  --shadow-md: 0 4px 12px rgba(11, 31, 24, 0.08);
+  --shadow-lg: 0 8px 30px rgba(11, 31, 24, 0.1);
+  --shadow-card: 0 2px 8px rgba(11, 31, 24, 0.06), 0 0 1px rgba(11, 31, 24, 0.08);
+
+  /* ── Motion ── */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* ── Z-Index ── */
+  --z-base: 0;
+  --z-sticky: 100;
+  --z-nav: 200;
+  --z-overlay: 300;
+  --z-sheet: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+}

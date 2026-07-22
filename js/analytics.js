@@ -5,7 +5,12 @@
 function trackFunnelEvent(eventName, eventParams = {}) {
   console.log(`[Analytics Event] ${eventName}:`, eventParams);
   
-  if (typeof firebase !== 'undefined' && firebase.analytics) {
+  if (
+    typeof firebase !== 'undefined' &&
+    typeof isFirebaseActive !== 'undefined' &&
+    isFirebaseActive &&
+    firebase.analytics
+  ) {
     try {
       firebase.analytics().logEvent(eventName, eventParams);
     } catch (err) {
