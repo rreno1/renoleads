@@ -398,6 +398,10 @@ function renderCalculator(container, property) {
   copy.textContent = "A simple principal-only estimate. Confirm final terms with the seller or your lender.";
   card.appendChild(copy);
 
+  const controlGrid = document.createElement("div");
+  controlGrid.className = "calc-control-grid";
+  card.appendChild(controlGrid);
+
   const priceGroup = document.createElement("div");
   priceGroup.className = "calc-input-group";
   priceGroup.appendChild(createCalcLabel("Total contract price", "calc-total-price"));
@@ -409,37 +413,7 @@ function renderCalculator(container, property) {
   price.step = "1000";
   price.value = property.totalPrice || 0;
   priceGroup.appendChild(price);
-  card.appendChild(priceGroup);
-
-  const downLabel = document.createElement("span");
-  downLabel.className = "calc-label";
-  downLabel.textContent = "Down payment";
-  card.appendChild(downLabel);
-  const chips = document.createElement("div");
-  chips.className = "calc-chips";
-  [10, 20, 30, 50].forEach(percent => {
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = `calc-chip${percent === 20 ? " active" : ""}`;
-    chip.dataset.dp = percent;
-    chip.textContent = `${percent}%`;
-    chips.appendChild(chip);
-  });
-  card.appendChild(chips);
-
-  const slider = document.createElement("input");
-  slider.id = "calc-dp-slider";
-  slider.className = "calc-slider";
-  slider.type = "range";
-  slider.min = "0";
-  slider.max = "80";
-  slider.value = "20";
-  slider.setAttribute("aria-label", "Down payment percentage");
-  card.appendChild(slider);
-
-  const downInfo = document.createElement("div");
-  downInfo.className = "calc-label";
-  card.appendChild(downInfo);
+  controlGrid.appendChild(priceGroup);
 
   const termGroup = document.createElement("div");
   termGroup.className = "calc-input-group";
@@ -455,7 +429,40 @@ function renderCalculator(container, property) {
     term.appendChild(option);
   });
   termGroup.appendChild(term);
-  card.appendChild(termGroup);
+  controlGrid.appendChild(termGroup);
+
+  const downPayment = document.createElement("div");
+  downPayment.className = "calc-down-payment";
+  const downLabel = document.createElement("span");
+  downLabel.className = "calc-label";
+  downLabel.textContent = "Down payment";
+  downPayment.appendChild(downLabel);
+  const chips = document.createElement("div");
+  chips.className = "calc-chips";
+  [10, 20, 30, 50].forEach(percent => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = `calc-chip${percent === 20 ? " active" : ""}`;
+    chip.dataset.dp = percent;
+    chip.textContent = `${percent}%`;
+    chips.appendChild(chip);
+  });
+  downPayment.appendChild(chips);
+
+  const slider = document.createElement("input");
+  slider.id = "calc-dp-slider";
+  slider.className = "calc-slider";
+  slider.type = "range";
+  slider.min = "0";
+  slider.max = "80";
+  slider.value = "20";
+  slider.setAttribute("aria-label", "Down payment percentage");
+  downPayment.appendChild(slider);
+
+  const downInfo = document.createElement("div");
+  downInfo.className = "calc-label";
+  downPayment.appendChild(downInfo);
+  card.appendChild(downPayment);
 
   const result = document.createElement("div");
   result.className = "calc-result";

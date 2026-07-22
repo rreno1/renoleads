@@ -202,7 +202,7 @@ function setActiveNavigation() {
   const path = window.location.pathname.split("/").pop() || "index.html";
   const isSaved = new URLSearchParams(window.location.search).get("filter") === "saved";
 
-  document.querySelectorAll(".nav-link, .bottom-nav-item").forEach(link => {
+  document.querySelectorAll(".nav-link, .mobile-menu-link").forEach(link => {
     const href = link.getAttribute("href") || "";
     let active = false;
     if (href === "index.html" || href === "") active = path === "index.html";
@@ -213,6 +213,33 @@ function setActiveNavigation() {
     link.classList.toggle("active", active);
     if (active) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
+  });
+}
+
+function setupMobileMenu() {
+  const toggle = document.querySelector(".mobile-menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  if (!toggle || !menu) return;
+
+  const links = [...menu.querySelectorAll("a")];
+  const setOpen = (open, restoreFocus = false) => {
+    menu.hidden = !open;
+    menu.classList.toggle("is-open", open);
+    toggle.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    document.body.classList.toggle("mobile-menu-open", open);
+    if (open) links[0]?.focus();
+    else if (restoreFocus) toggle.focus();
+  };
+
+  toggle.addEventListener("click", () => setOpen(menu.hidden));
+  links.forEach(link => link.addEventListener("click", () => setOpen(false)));
+  document.addEventListener("click", event => {
+    if (!menu.hidden && !event.target.closest(".site-header")) setOpen(false);
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !menu.hidden) setOpen(false, true);
   });
 }
 
@@ -267,6 +294,7 @@ function setupDelegatedActions() {
 
 document.addEventListener("DOMContentLoaded", () => {
   setActiveNavigation();
+  setupMobileMenu();
   setupHeaderScroll();
   hydrateContactDetails();
   setupDelegatedActions();
