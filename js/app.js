@@ -1,5 +1,7 @@
 /* RenoLeads V2 — shared navigation, retention, sheets, and contact hydration. */
 
+document.documentElement.classList.add("js");
+
 const RetentionManager = {
   SHORTLIST_KEY: "renoleads_shortlist",
   RECENT_KEY: "renoleads_recently_viewed",
@@ -251,6 +253,47 @@ function setupHeaderScroll() {
   window.addEventListener("scroll", update, { passive: true });
 }
 
+function setupScrollReveal() {
+  if (!document.querySelector(".hero")) return;
+
+  const revealSelector = "[data-scroll-reveal]";
+  const markVisible = () => document.querySelectorAll(revealSelector).forEach(element => element.classList.add("is-visible"));
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+  if (reducedMotion || !("IntersectionObserver" in window)) {
+    document.documentElement.classList.add("no-scroll-reveal");
+    window.refreshScrollReveal = markVisible;
+    markVisible();
+    return;
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: "0px 0px -10% 0px", threshold: 0.12 });
+
+  const observeTargets = () => {
+    document.querySelectorAll(`${revealSelector}:not(.is-visible)`).forEach((element, index) => {
+      if (!element.dataset.revealReady) {
+        element.dataset.revealReady = "true";
+        element.style.setProperty("--reveal-delay", `${Math.min(index, 4) * 70}ms`);
+      }
+      observer.observe(element);
+    });
+  };
+
+  window.refreshScrollReveal = observeTargets;
+  observeTargets();
+  const main = document.querySelector("main");
+  if (main && "MutationObserver" in window) {
+    const mutations = new MutationObserver(observeTargets);
+    mutations.observe(main, { childList: true, subtree: true });
+  }
+}
+
 function setupDelegatedActions() {
   document.addEventListener("click", event => {
     const saveButton = event.target.closest(".card-save-btn, .detail-action-btn[data-save-id]");
@@ -296,6 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setActiveNavigation();
   setupMobileMenu();
   setupHeaderScroll();
+  setupScrollReveal();
   hydrateContactDetails();
   setupDelegatedActions();
 });

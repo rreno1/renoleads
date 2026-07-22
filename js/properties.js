@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const available = properties.filter(property => property.status === "available");
     const shown = (featured.length ? featured : available).slice(0, 4);
     target.replaceChildren(...shown.map(createPropertyCard));
+    window.refreshScrollReveal?.();
     renderRecentlyViewed(properties);
   }
 });
@@ -100,6 +101,7 @@ function createPropertyCard(property) {
   const article = document.createElement("article");
   article.className = "property-card";
   article.dataset.id = property.id;
+  article.dataset.scrollReveal = "up";
 
   const mediaWrap = document.createElement("div");
   mediaWrap.className = "card-image-wrap";
@@ -379,12 +381,14 @@ function renderRecentlyViewed(properties) {
 
   section.hidden = false;
   container.replaceChildren(...recent.map(createPropertyStripCard));
+  window.refreshScrollReveal?.();
 }
 
 function createPropertyStripCard(property) {
   const link = document.createElement("a");
   link.className = "strip-card";
   link.href = `property.html?id=${encodeURIComponent(property.id)}`;
+  link.dataset.scrollReveal = "up";
   link.appendChild(createPropertyMedia(property, true));
 
   const info = document.createElement("div");

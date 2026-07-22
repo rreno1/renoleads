@@ -11,15 +11,16 @@
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-10);
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(var(--space-8), 6vw, var(--space-16));
   align-items: center;
 }
 
 .hero-content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-5);
+  max-width: 36rem;
 }
 
 .hero-eyebrow {
@@ -41,8 +42,8 @@
 .hero-description {
   font-size: var(--text-body-lg);
   color: var(--color-text-secondary);
-  max-width: 480px;
-  line-height: 1.7;
+  max-width: 34rem;
+  line-height: 1.65;
 }
 
 .hero-actions {
@@ -82,17 +83,21 @@
 
 /* Discovery chips */
 .discovery-section {
-  padding: var(--space-10) 0;
+  padding: clamp(var(--space-8), 5vw, var(--space-12)) 0;
   background: var(--color-surface);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+}
+
+.discovery-section .section-header {
+  margin-bottom: var(--space-6);
 }
 
 .discovery-chips {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .discovery-chip {
@@ -145,6 +150,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
+  max-width: 38rem;
+  justify-self: end;
 }
 
 .why-facts {
@@ -185,6 +192,7 @@
 
 .why-fact p {
   font-size: var(--text-sm);
+  max-width: 48ch;
 }
 
 /* Process steps */
@@ -235,31 +243,65 @@
   font-size: var(--text-sm);
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.6;
+  max-width: 30ch;
 }
 
 /* Credibility section */
 .credibility-section {
-  padding: var(--space-12) 0;
+  padding: clamp(var(--space-10), 6vw, var(--space-16)) 0;
   background: var(--forest-050);
 }
 
 .credibility-grid {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-8);
+  grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(var(--space-8), 6vw, var(--space-12));
   align-items: center;
-  max-width: 700px;
+  max-width: 920px;
   margin: 0 auto;
+}
+
+.credibility-grid > :last-child {
+  max-width: 48ch;
 }
 
 /* Inquiry panel */
 .inquiry-panel {
-  padding: var(--space-12) 0;
+  padding: clamp(var(--space-12), 5vw, var(--space-16)) 0;
 }
 
 .inquiry-panel-inner {
-  max-width: 600px;
+  max-width: 640px;
   margin: 0 auto;
+}
+
+/* Homepage scroll reveals. The html.js guard keeps content visible if scripts fail. */
+html.js [data-scroll-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--transition-reveal), transform var(--transition-reveal);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+html.js [data-scroll-reveal="left"] {
+  transform: translateX(-24px);
+}
+
+html.js [data-scroll-reveal="right"] {
+  transform: translateX(24px);
+}
+
+html.js [data-scroll-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+html.no-scroll-reveal [data-scroll-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 /* ═══════════════════════════════════════════════ */

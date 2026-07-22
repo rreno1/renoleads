@@ -1040,6 +1040,20 @@ select.form-control {
   transform: translateY(0);
 }
 
+@media (min-width: 769px) {
+  .inquiry-sheet {
+    left: 50%;
+    right: auto;
+    width: min(calc(100% - (var(--page-gutter) * 2)), 1040px);
+    transform: translate(-50%, 100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .inquiry-sheet.is-open {
+    transform: translate(-50%, 0);
+  }
+}
+
 .sheet-handle {
   width: 40px;
   height: 4px;
