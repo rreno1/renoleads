@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.renoleads.app",
+      "sha256_cert_fingerprints": [
+        "14:6D:E8:A4:C5:4F:EA:6F:43:8C:38:B4:42:F0:48:FA:7D:6D:88:51:71:A3:30:AE:5E:FE:09:A6:61:95:C0:00"
+      ]
+    }
+  }
+]
