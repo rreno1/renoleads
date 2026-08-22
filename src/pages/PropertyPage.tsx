@@ -68,7 +68,7 @@ export function PropertyPage() {
         {similar.length ? <section className="spec-section similar-section"><h2 className="spec-section-title" data-reveal="up">More lots to compare</h2><div className="properties-grid">{similar.map((item) => <PropertyCard key={item.id} property={item}/>)}</div></section> : null}
       </div>
 
-      <aside className="detail-sidebar" data-reveal="right"><div className="sidebar-card detail-cta-card"><h2 className="sidebar-card-title">Ask about this lot</h2><p>Request current photos, documents, boundary details, final terms, or a site visit.</p><InquiryForm property={currentProperty} compact/></div><div className="seller-profile"><div className="seller-avatar" aria-hidden="true">R</div><div className="seller-info"><strong className="seller-name">renoleads</strong><span className="seller-role">Polomolok land lot service</span><span className="seller-area">Connected to NJ125 inventory</span></div></div></aside>
+      <aside className="detail-sidebar" data-reveal="right"><div className="sidebar-card detail-cta-card"><h2 className="sidebar-card-title">Ask about this lot</h2><p>Request current photos, documents, boundary details, final terms, or a site visit.</p><InquiryForm property={currentProperty} compact/></div><div className="seller-profile"><div className="seller-avatar" aria-hidden="true">R</div><div className="seller-info"><strong className="seller-name">renoleads</strong><span className="seller-role">Polomolok land lot service</span><span className="seller-area">Live published inventory</span></div></div></aside>
     </div>
   </div>;
 }
