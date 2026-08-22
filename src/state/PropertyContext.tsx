@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { fetchPublishedProperties } from '../lib/nj125Api';
+import { fetchPublishedProperties } from '../lib/propertyApi';
 import type { Property } from '../types';
 
 type PropertyState = {
