@@ -6,6 +6,7 @@ import '../css/base.css';
 import '../css/components.css';
 import '../css/pages.css';
 import '../css/responsive.css';
+import '../css/typography.css';
 import { App } from './App';
 import { captureAttribution } from './lib/nj125Api';
 import { PropertyProvider } from './state/PropertyContext';
