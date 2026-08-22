@@ -1,0 +1,69 @@
+name: Temporary NJ125 lockfile generator
+
+on:
+  push:
+    branches: [feat/phase4-1-catalog-freshness]
+    paths:
+      - .github/workflows/temp-nj125-lockfile.yml
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate exact NJ125 npm lockfile
+        shell: bash
+        run: |
+          rm -rf .nj125-lock
+          mkdir .nj125-lock
+          cat > .nj125-lock/package.json <<'JSON'
+          {
+            "name": "nj125-corp",
+            "private": true,
+            "version": "0.1.0",
+            "type": "module",
+            "scripts": {
+              "dev": "vite",
+              "env": "node scripts/env-check.mjs",
+              "typecheck": "tsc -b",
+              "test:structure": "node scripts/structure-test.mjs",
+              "test:security": "node scripts/security-test.mjs",
+              "test:data": "node scripts/data-test.mjs",
+              "test": "npm run test:structure && npm run test:security && npm run test:data",
+              "build:code": "tsc -b && vite build",
+              "build": "npm run env && npm run build:code",
+              "deploy": "firebase deploy --only hosting"
+            },
+            "dependencies": {
+              "@supabase/supabase-js": "2.112.3",
+              "react": "19.1.1",
+              "react-dom": "19.1.1"
+            },
+            "devDependencies": {
+              "@types/node": "26.2.0",
+              "@types/react": "19.1.10",
+              "@types/react-dom": "19.1.7",
+              "@vitejs/plugin-react": "6.0.5",
+              "typescript": "5.8.3",
+              "vite": "8.2.1"
+            },
+            "engines": { "node": ">=22.12.0" }
+          }
+          JSON
+          cd .nj125-lock
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          npm ci --ignore-scripts --no-audit --no-fund
+          node -e "const l=require('./package-lock.json'); if(l.lockfileVersion!==3) process.exit(1); console.log('packages', Object.keys(l.packages).length)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nj125-package-lock
+          path: .nj125-lock/package-lock.json
+          if-no-files-found: error
+          retention-days: 1
