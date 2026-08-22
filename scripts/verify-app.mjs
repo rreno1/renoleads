@@ -5,7 +5,12 @@ const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const exists = (file) => fs.existsSync(path.join(root, file));
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
-const imageTags = (source) => source.match(/<img\b[^>]*\/>/g) ?? [];
+const imageTags = (source) => [...source.matchAll(/<img\b/g)].flatMap((match) => {
+  const start = match.index ?? -1;
+  if (start < 0) return [];
+  const end = source.indexOf('/>', start);
+  return end < 0 ? [] : [source.slice(start, end + 2)];
+});
 const hasImageAttr = (tag, name, value) => new RegExp(`${name}\\s*=\\s*["']${value}["']`).test(tag);
 const hasNumericJsxAttr = (tag, name) => new RegExp(`${name}\\s*=\\s*\\{\\d+\\}`).test(tag);
 
