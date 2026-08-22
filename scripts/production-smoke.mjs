@@ -67,7 +67,7 @@ const inquiry = await fetch(API, {
       fullName: 'Production Smoke Test',
       mobileNumber: '+639000000000',
       email: 'smoke-test@example.invalid',
-      inquiryType: 'general_question',
+      inquiryType: 'general',
       preferredContactMethod: 'email',
       message: 'Non-persistent production smoke test.',
       consent: { accepted: false, noticeVersion: '2026-08-22' },
