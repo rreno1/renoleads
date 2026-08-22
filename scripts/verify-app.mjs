@@ -5,6 +5,9 @@ const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const exists = (file) => fs.existsSync(path.join(root, file));
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
+const imageTags = (source) => source.match(/<img\b[^>]*\/>/g) ?? [];
+const hasImageAttr = (tag, name, value) => new RegExp(`${name}\\s*=\\s*["']${value}["']`).test(tag);
+const hasNumericJsxAttr = (tag, name) => new RegExp(`${name}\\s*=\\s*\\{\\d+\\}`).test(tag);
 
 const required = [
   'package.json', 'tsconfig.json', 'vite.config.ts', 'firebase.json', 'src/main.tsx', 'src/App.tsx',
@@ -71,10 +74,21 @@ assert(styles.includes('font-family: var(--font-body)') || styles.includes("--fo
 assert(styles.includes('[data-reveal]'), 'Scroll reveal styling is missing');
 assert(source.includes('IntersectionObserver'), 'Scroll reveal observer is missing');
 
-assert(/loading=['"]lazy['"]/.test(propertyCard) && /decoding=['"]async['"]/.test(propertyCard), 'Property cards must lazy-load and asynchronously decode images');
-assert(/loading=['"]eager['"]/.test(homePage) && /fetchPriority=['"]high['"]/.test(homePage), 'Homepage LCP image priority controls are missing');
-assert(/decoding=['"]async['"]/.test(homePage), 'Homepage images must use asynchronous decoding');
-assert(/fetchPriority=['"]high['"]/.test(propertyPage) && /loading=['"]lazy['"]/.test(propertyPage), 'Property detail image priority/lazy-loading controls are missing');
+const cardImages = imageTags(propertyCard);
+assert(cardImages.length > 0, 'Property cards must render an image element');
+assert(cardImages.every((tag) => hasImageAttr(tag, 'loading', 'lazy') && hasImageAttr(tag, 'decoding', 'async') && hasImageAttr(tag, 'fetchPriority', 'low') && hasNumericJsxAttr(tag, 'width') && hasNumericJsxAttr(tag, 'height')), 'Property card images must reserve dimensions and use lazy/async/low-priority loading');
+
+const homeImages = imageTags(homePage);
+assert(homeImages.length >= 2, 'Homepage image elements are missing');
+assert(homeImages.every((tag) => hasImageAttr(tag, 'decoding', 'async') && hasNumericJsxAttr(tag, 'width') && hasNumericJsxAttr(tag, 'height')), 'Homepage images must reserve dimensions and asynchronously decode');
+assert(homeImages.some((tag) => hasImageAttr(tag, 'loading', 'eager') && hasImageAttr(tag, 'fetchPriority', 'high')), 'Homepage LCP image priority controls are missing');
+assert(homeImages.some((tag) => hasImageAttr(tag, 'loading', 'lazy') && hasImageAttr(tag, 'fetchPriority', 'low')), 'Below-the-fold homepage image controls are missing');
+
+const detailImages = imageTags(propertyPage);
+assert(detailImages.length >= 2, 'Property detail image elements are missing');
+assert(detailImages.every((tag) => hasImageAttr(tag, 'decoding', 'async') && hasNumericJsxAttr(tag, 'width') && hasNumericJsxAttr(tag, 'height')), 'Property detail images must reserve dimensions and asynchronously decode');
+assert(detailImages.some((tag) => hasImageAttr(tag, 'loading', 'eager') && hasImageAttr(tag, 'fetchPriority', 'high')), 'Property detail primary image priority controls are missing');
+assert(detailImages.some((tag) => hasImageAttr(tag, 'loading', 'lazy') && hasImageAttr(tag, 'fetchPriority', 'low')), 'Property detail thumbnail loading controls are missing');
 
 for (const header of ['Strict-Transport-Security', 'Cross-Origin-Resource-Policy', 'X-Permitted-Cross-Domain-Policies', 'Content-Security-Policy']) {
   assert(firebaseText.includes(header), `${header} is missing from Firebase Hosting headers`);
