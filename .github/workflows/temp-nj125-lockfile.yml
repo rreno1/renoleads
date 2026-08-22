@@ -1,6 +1,8 @@
 name: Temporary NJ125 lockfile generator
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [feat/phase4-1-catalog-freshness]
     paths:
