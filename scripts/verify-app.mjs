@@ -7,23 +7,11 @@ const exists = (file) => fs.existsSync(path.join(root, file));
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
 
 const required = [
-  'package.json',
-  'tsconfig.json',
-  'vite.config.ts',
-  'firebase.json',
-  'src/main.tsx',
-  'src/App.tsx',
-  'src/styles/app.css',
-  'src/styles/forms.css',
-  'src/hooks/useScrollReveal.ts',
-  'src/lib/propertyApi.ts',
-  'src/components/InquiryForm.tsx',
-  'src/components/PropertyCard.tsx',
-  'src/pages/HomePage.tsx',
-  'src/pages/PropertiesPage.tsx',
-  'src/pages/PropertyPage.tsx',
-  'src/pages/ContactPage.tsx',
-  'public/.well-known/assetlinks.json',
+  'package.json', 'tsconfig.json', 'vite.config.ts', 'firebase.json', 'src/main.tsx', 'src/App.tsx',
+  'src/styles/app.css', 'src/styles/forms.css', 'src/hooks/useScrollReveal.ts', 'src/lib/propertyApi.ts',
+  'src/components/InquiryForm.tsx', 'src/components/PropertyCard.tsx', 'src/pages/HomePage.tsx',
+  'src/pages/PropertiesPage.tsx', 'src/pages/PropertyPage.tsx', 'src/pages/ContactPage.tsx',
+  'public/.well-known/assetlinks.json'
 ];
 required.forEach((file) => assert(exists(file), `Missing production file: ${file}`));
 
@@ -34,7 +22,7 @@ assert(pkg.dependencies?.['react-router-dom'], 'React Router dependency is requi
 assert(pkg.devDependencies?.typescript, 'TypeScript dependency is required');
 assert(pkg.devDependencies?.vite, 'Vite dependency is required');
 assert(!pkg.dependencies?.firebase && !pkg.devDependencies?.firebase, 'Firebase SDK must not be a RenoLeads runtime/build dependency');
-assert(!pkg.dependencies?.['@supabase/supabase-js'], 'RenoLeads must call the Edge API, not Supabase tables through supabase-js');
+assert(!pkg.dependencies?.['@supabase/supabase-js'], 'RenoLeads must not include the Supabase client SDK');
 
 const firebase = JSON.parse(read('firebase.json'));
 assert(firebase.hosting?.public === 'dist', 'Firebase Hosting must serve dist/');
@@ -52,19 +40,26 @@ function walk(dir) {
 walk('src');
 const source = sourceFiles.map(read).join('\n');
 const app = read('src/App.tsx');
+const api = read('src/lib/propertyApi.ts');
 const main = read('src/main.tsx');
 const styles = `${read('src/styles/app.css')}\n${read('src/styles/forms.css')}`;
+const firebaseText = read('firebase.json');
 
 assert(source.includes('https://dnsgfsgpopniqeuqfslp.supabase.co/functions/v1/api'), 'Public Edge endpoint is missing');
-assert(source.includes("'public-properties'"), 'public-properties action is missing');
-assert(source.includes("'submit-property-inquiry'"), 'submit-property-inquiry action is missing');
+assert(api.includes("new Set(['public-properties', 'submit-property-inquiry'])"), 'Public action allowlist is missing');
+assert(api.includes('AbortController'), 'Public API timeout control is missing');
+assert(api.includes("credentials: 'omit'"), 'Public API must omit credentials');
+assert(api.includes("cache: 'no-store'"), 'Public API must disable cache');
+assert(api.includes('responseLimitBytes'), 'Public API response-size cap is missing');
+assert(api.includes("content-type"), 'Public API response content-type validation is missing');
 assert(source.includes('privacyNoticeVersion'), 'Privacy notice version evidence is missing');
 assert(source.includes('utmCampaign') && source.includes('referrer'), 'Attribution fields are missing');
 assert(!/MOCK_PROPERTIES|sample-res|sample-farm|sample-com/i.test(source), 'Runtime mock inventory is forbidden');
 assert(!/localStorage\.setItem\([^\n]*(fullName|mobile|email|message|inquiry)/i.test(source), 'Inquiry PII must not be persisted in localStorage');
 assert(!/firebase(app|\.firestore|\.analytics|Config)/i.test(source), 'Firebase runtime code is forbidden');
 assert(!/service_role|sb_secret_|SUPABASE_SERVICE_ROLE_KEY/i.test(source), 'Server secrets must not appear in browser source');
-assert(!/917 123 4567|info@renoleads\.com/i.test(source), 'Placeholder contact data must not ship in browser source');
+assert(!/signIn|signOut|auth\.|getSession|access_token|Authorization/i.test(source), 'RenoLeads must remain unauthenticated/public-only');
+assert(!/admin|dashboard|staff-api/i.test(app), 'RenoLeads must not expose an admin/staff route');
 assert(!/\bnj125\b/i.test(source), 'NJ125 branding must not appear in RenoLeads frontend source');
 assert(sourceFiles.every((file) => !/nj125/i.test(file)), 'NJ125 branding must not appear in RenoLeads frontend file paths');
 assert(!app.includes('.html'), 'Legacy .html compatibility routes must not return');
@@ -73,15 +68,17 @@ assert(styles.includes("font-family: var(--font-body)") || styles.includes("--fo
 assert(styles.includes('[data-reveal]'), 'Scroll reveal styling is missing');
 assert(source.includes('IntersectionObserver'), 'Scroll reveal observer is missing');
 
+for (const header of ['Strict-Transport-Security', 'Cross-Origin-Resource-Policy', 'X-Permitted-Cross-Domain-Policies', 'Content-Security-Policy']) {
+  assert(firebaseText.includes(header), `${header} is missing from Firebase Hosting headers`);
+}
+assert(firebaseText.includes('https://dnsgfsgpopniqeuqfslp.supabase.co'), 'CSP must use the exact Supabase project origin');
+assert(!firebaseText.includes('https://*.supabase.co'), 'Wildcard Supabase CSP origins are forbidden');
+
 const forbiddenLegacy = [
-  'css',
-  '.firebaserc.example',
-  'scripts/phase3-check.mjs',
-  '.github/workflows/phase3.yml',
+  'css', '.firebaserc.example', 'scripts/phase3-check.mjs', '.github/workflows/phase3.yml',
   'contact.html', 'properties.html', 'property.html', 'privacy.html', 'buying-process.html', 'why-invest.html',
   'js/app.js', 'js/config.js', 'js/nj125-api.js', 'js/inquiry-form.js', 'js/properties.js', 'js/property-details.js', 'js/analytics.js',
-  'src/lib/nj125Api.ts',
-  '.well-known/assetlinks.json',
+  'src/lib/nj125Api.ts', '.well-known/assetlinks.json'
 ];
 forbiddenLegacy.forEach((file) => assert(!exists(file), `Legacy path must be removed: ${file}`));
 

@@ -14,6 +14,8 @@ class RenoApiError extends Error {
 }
 
 type JsonObject = Record<string, unknown>;
+const responseLimitBytes = 1024 * 1024;
+const publicActions = new Set(['public-properties', 'submit-property-inquiry']);
 
 const isObject = (value: unknown): value is JsonObject => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 const text = (value: unknown) => typeof value === 'string' ? value.trim() : '';
@@ -23,6 +25,8 @@ function requestId() {
 }
 
 async function callPublicApi(action: string, payload: JsonObject = {}): Promise<JsonObject> {
+  if (!publicActions.has(action)) throw new RenoApiError('invalid-action', 'This public action is not allowed.');
+
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), config.backend.timeoutMs);
 
@@ -43,7 +47,20 @@ async function callPublicApi(action: string, payload: JsonObject = {}): Promise<
       signal: controller.signal,
     });
 
-    const body: unknown = await response.json().catch(() => null);
+    const declaredSize = Number(response.headers.get('content-length') || 0);
+    if (declaredSize > responseLimitBytes) throw new RenoApiError('invalid-response', 'The server response is too large.', response.status);
+    const contentType = (response.headers.get('content-type') || '').toLowerCase();
+    if (!contentType.startsWith('application/json')) throw new RenoApiError('invalid-response', 'The server returned an invalid response.', response.status);
+
+    const raw = await response.text();
+    if (new TextEncoder().encode(raw).byteLength > responseLimitBytes) throw new RenoApiError('invalid-response', 'The server response is too large.', response.status);
+
+    let body: unknown = null;
+    try {
+      body = JSON.parse(raw);
+    } catch {
+      throw new RenoApiError('invalid-response', 'The server returned an invalid response.', response.status);
+    }
     if (!isObject(body)) throw new RenoApiError('invalid-response', 'The server returned an invalid response.', response.status);
 
     if (!response.ok || body.ok !== true) {
