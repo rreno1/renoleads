@@ -1,5 +1,5 @@
 /**
- * RenoLeads Centralized Platform Configuration & Safe DOM Utilities
+ * RenoLeads centralized public-site configuration and safe DOM utilities.
  */
 const RENO_CONFIG = {
   appName: "RenoLeads",
@@ -10,7 +10,7 @@ const RENO_CONFIG = {
     role: "Polomolok land lot service",
     area: "Serving Polomolok, South Cotabato"
   },
-  
+
   contact: {
     phoneDisplay: "+63 917 123 4567",
     phoneTel: "+639171234567",
@@ -20,19 +20,16 @@ const RENO_CONFIG = {
     address: "Polomolok, South Cotabato, Philippines"
   },
 
-  firebase: {
-    apiKey: "YOUR_FIREBASE_API_KEY",
-    authDomain: "renoleads.firebaseapp.com",
-    projectId: "renoleads",
-    storageBucket: "renoleads.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abcdef1234567890",
-    measurementId: "G-MEASUREMENT_ID"
+  backend: {
+    endpoint: "https://dnsgfsgpopniqeuqfslp.supabase.co/functions/v1/api",
+    source: "renoleads",
+    privacyNoticeVersion: "2026-08-22",
+    timeoutMs: 12000
   }
 };
 
 /**
- * Safe DOM Text Sanitizer & Element Creator
+ * Safe DOM text sanitizer and element utilities.
  */
 const DOMUtils = {
   escapeHTML(str) {
@@ -46,15 +43,20 @@ const DOMUtils = {
   },
 
   formatCurrency(amount) {
+    if (amount === null || amount === undefined || amount === '') return "Price on request";
+    const numeric = Number(amount);
+    if (!Number.isFinite(numeric)) return "Price on request";
     return new Intl.NumberFormat('en-PH', {
       style: 'currency',
       currency: 'PHP',
       maximumFractionDigits: 0
-    }).format(amount || 0);
+    }).format(numeric);
   },
 
   formatNumber(num) {
-    return new Intl.NumberFormat('en-PH').format(num || 0);
+    const numeric = Number(num);
+    if (!Number.isFinite(numeric)) return "—";
+    return new Intl.NumberFormat('en-PH').format(numeric);
   }
 };
 
