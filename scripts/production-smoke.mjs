@@ -1,6 +1,9 @@
 const SITE = 'https://renoleads-11e2b.web.app';
 const API = 'https://dnsgfsgpopniqeuqfslp.supabase.co/functions/v1/api';
+const STAFF_API = 'https://dnsgfsgpopniqeuqfslp.supabase.co/functions/v1/staff-api';
 const ORIGIN = SITE;
+const STAFF_ORIGIN = 'https://nj125-corp.web.app';
+const DENIED_ORIGIN = 'https://example.com';
 
 const failures = [];
 function check(condition, message) {
@@ -38,6 +41,7 @@ const feed = await fetch(API, {
 const feedBody = await feed.json().catch(() => null);
 check(feed.status === 200, `public-properties: expected 200, got ${feed.status}`);
 check(feed.headers.get('access-control-allow-origin') === ORIGIN, `public-properties: CORS origin mismatch: ${feed.headers.get('access-control-allow-origin')}`);
+check(feed.headers.get('x-request-id') === 'renoleads-production-smoke-feed', 'public-properties: request correlation header missing');
 check(feedBody?.ok === true && Array.isArray(feedBody?.data?.properties), 'public-properties: invalid response contract');
 
 const preflight = await fetch(API, {
@@ -51,8 +55,25 @@ const preflight = await fetch(API, {
 check(preflight.status === 204, `preflight: expected 204, got ${preflight.status}`);
 check(preflight.headers.get('access-control-allow-origin') === ORIGIN, `preflight: CORS origin mismatch: ${preflight.headers.get('access-control-allow-origin')}`);
 
-// Negative inquiry smoke test: reaches live API/CORS/validation but deliberately omits
-// consent so no inquiry/lead/audit business record is created.
+const denied = await fetch(API, {
+  method: 'POST',
+  headers: { Origin: DENIED_ORIGIN, 'Content-Type': 'application/json' },
+  body: JSON.stringify({ action: 'public-properties', payload: {} })
+});
+const deniedBody = await denied.json().catch(() => null);
+check(denied.status === 403, `denied origin: expected 403, got ${denied.status}`);
+check(denied.headers.get('access-control-allow-origin') === null, 'denied origin: must not emit Access-Control-Allow-Origin');
+check(deniedBody?.ok === false && deniedBody?.error?.code === 'origin-denied', `denied origin: expected origin-denied, got ${JSON.stringify(deniedBody)}`);
+
+const staffActionOnPublic = await fetch(API, {
+  method: 'POST',
+  headers: { Origin: ORIGIN, 'Content-Type': 'application/json' },
+  body: JSON.stringify({ action: 'get-state', payload: {} })
+});
+const staffActionBody = await staffActionOnPublic.json().catch(() => null);
+check(staffActionOnPublic.status === 404, `public boundary isolation: expected 404, got ${staffActionOnPublic.status}`);
+check(staffActionBody?.ok === false && staffActionBody?.error?.code === 'unknown-action', `public boundary isolation: expected unknown-action, got ${JSON.stringify(staffActionBody)}`);
+
 const inquiry = await fetch(API, {
   method: 'POST',
   headers: {
@@ -79,6 +100,24 @@ const inquiryBody = await inquiry.json().catch(() => null);
 check(inquiry.status === 400, `inquiry validation: expected 400, got ${inquiry.status}`);
 check(inquiry.headers.get('access-control-allow-origin') === ORIGIN, `inquiry validation: CORS origin mismatch: ${inquiry.headers.get('access-control-allow-origin')}`);
 check(inquiryBody?.ok === false && inquiryBody?.error?.code === 'consent-required', `inquiry validation: expected consent-required, got ${JSON.stringify(inquiryBody)}`);
+
+const staffPreflight = await fetch(STAFF_API, {
+  method: 'OPTIONS',
+  headers: {
+    Origin: STAFF_ORIGIN,
+    'Access-Control-Request-Method': 'POST',
+    'Access-Control-Request-Headers': 'authorization,content-type,x-request-id'
+  }
+});
+check(staffPreflight.status === 204, `staff preflight: expected 204, got ${staffPreflight.status}`);
+check(staffPreflight.headers.get('access-control-allow-origin') === STAFF_ORIGIN, `staff preflight: CORS origin mismatch: ${staffPreflight.headers.get('access-control-allow-origin')}`);
+
+const staffUnauthenticated = await fetch(STAFF_API, {
+  method: 'POST',
+  headers: { Origin: STAFF_ORIGIN, 'Content-Type': 'application/json' },
+  body: JSON.stringify({ action: 'get-state', payload: {} })
+});
+check(staffUnauthenticated.status === 401, `staff JWT gate: expected 401, got ${staffUnauthenticated.status}`);
 
 if (failures.length) {
   console.error('Production smoke test FAILED');
