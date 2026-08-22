@@ -1,4 +1,4 @@
-/* RenoLeads V2 — property cards, catalog filters, and recently viewed. */
+/* RenoLeads — authoritative NJ125 property cards and catalog filters. */
 
 document.addEventListener("DOMContentLoaded", async () => {
   const catalogGrid = document.getElementById("properties-grid-container");
@@ -12,23 +12,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     properties = await fetchPublishedProperties();
   } catch (error) {
-    console.error("[RenoLeads] Property load failed:", error);
     renderErrorState(target);
     return;
   }
 
-  if (!properties || properties.length === 0) {
-    renderEmptyState(target, "No properties available", "Check back soon for new land lot listings in Polomolok.");
+  if (!properties.length) {
+    renderEmptyState(target, "No properties available", "There are no published available lots in NJ125 right now.");
     return;
   }
 
   if (catalogGrid) {
     initCatalogFilters(properties, catalogGrid, document.getElementById("properties-count"));
   } else {
-    const featured = properties.filter(property => property.featured && property.status === "available").slice(0, 4);
-    const available = properties.filter(property => property.status === "available");
-    const shown = (featured.length ? featured : available).slice(0, 4);
-    target.replaceChildren(...shown.map(createPropertyCard));
+    featuredGrid.replaceChildren(...properties.slice(0, 4).map(createPropertyCard));
     window.refreshScrollReveal?.();
     renderRecentlyViewed(properties);
   }
@@ -40,35 +36,27 @@ function titleCase(value) {
     .replace(/\b\w/g, character => character.toUpperCase());
 }
 
-function isDocumentaryImage(url) {
-  return Boolean(url) && !/sample-(?:res|farm|com)|polomolok-hero-bg/i.test(url);
-}
-
 function getPropertyImage(property) {
-  const candidates = [property.thumbnailUrl, ...(property.imageUrls || [])];
-  return candidates.find(isDocumentaryImage) || "";
+  return property.thumbnailUrl || property.imageUrls?.[0] || "";
 }
 
 function createPropertyMedia(property, compact = false) {
   const media = document.createElement("div");
   media.className = compact ? "property-media property-media-compact" : "property-media";
-
   const imageUrl = getPropertyImage(property);
+
   if (imageUrl) {
     const image = document.createElement("img");
     image.src = imageUrl;
     image.alt = property.title || "Property lot";
-    image.loading = compact ? "lazy" : "lazy";
+    image.loading = "lazy";
     image.width = compact ? 96 : 480;
     image.height = compact ? 72 : 300;
-    image.addEventListener("error", () => {
-      image.replaceWith(createPropertyPlaceholder(property, compact));
-    }, { once: true });
+    image.addEventListener("error", () => image.replaceWith(createPropertyPlaceholder(property, compact)), { once: true });
     media.appendChild(image);
-    return media;
+  } else {
+    media.appendChild(createPropertyPlaceholder(property, compact));
   }
-
-  media.appendChild(createPropertyPlaceholder(property, compact));
   return media;
 }
 
@@ -76,25 +64,22 @@ function createPropertyPlaceholder(property, compact = false) {
   const placeholder = document.createElement("div");
   placeholder.className = compact ? "property-media-placeholder property-media-placeholder-compact" : "property-media-placeholder";
   placeholder.appendChild(IconUtils.create("area"));
-
   const copy = document.createElement("span");
   copy.className = "property-media-copy";
   copy.textContent = compact ? "Photos coming soon" : "Property photos coming soon";
   placeholder.appendChild(copy);
-
   const code = document.createElement("small");
-  code.textContent = property.propertyCode || property.id || "LOT";
+  code.textContent = property.lotNumber ? `Lot ${property.lotNumber}` : "LOT";
   placeholder.appendChild(code);
   return placeholder;
 }
 
 function renderLoadingState(container, count) {
-  const skeletons = Array.from({ length: count }, () => {
+  container.replaceChildren(...Array.from({ length: count }, () => {
     const skeleton = document.createElement("div");
     skeleton.className = "skeleton skeleton-card";
     return skeleton;
-  });
-  container.replaceChildren(...skeletons);
+  }));
 }
 
 function createPropertyCard(property) {
@@ -112,10 +97,9 @@ function createPropertyCard(property) {
   imageLink.appendChild(createPropertyMedia(property));
   mediaWrap.appendChild(imageLink);
 
-  const status = String(property.status || "available").toLowerCase();
   const statusBadge = document.createElement("span");
-  statusBadge.className = `badge card-status-badge badge-${status}`;
-  statusBadge.textContent = titleCase(status);
+  statusBadge.className = "badge card-status-badge badge-available";
+  statusBadge.textContent = "Available";
   mediaWrap.appendChild(statusBadge);
 
   const saveButton = document.createElement("button");
@@ -134,14 +118,14 @@ function createPropertyCard(property) {
 
   const eyebrow = document.createElement("span");
   eyebrow.className = "card-eyebrow";
-  eyebrow.textContent = `${titleCase(property.propertyType)} lot`;
+  eyebrow.textContent = property.project ? `${property.project} · Land lot` : "Land lot";
   body.appendChild(eyebrow);
 
   const title = document.createElement("h3");
   title.className = "card-title";
   const titleLink = document.createElement("a");
   titleLink.href = `property.html?id=${encodeURIComponent(property.id)}`;
-  titleLink.textContent = property.title || "Untitled property";
+  titleLink.textContent = property.title || (property.lotNumber ? `Lot ${property.lotNumber}` : "Available land lot");
   title.appendChild(titleLink);
   body.appendChild(title);
 
@@ -149,7 +133,7 @@ function createPropertyCard(property) {
   location.className = "card-location";
   location.appendChild(IconUtils.create("map"));
   const locationText = document.createElement("span");
-  locationText.textContent = [property.barangay, property.municipality || "Polomolok"].filter(Boolean).join(", ");
+  locationText.textContent = [property.municipality, property.province].filter(Boolean).join(", ") || "Location available on inquiry";
   location.appendChild(locationText);
   body.appendChild(location);
 
@@ -158,17 +142,11 @@ function createPropertyCard(property) {
   price.textContent = DOMUtils.formatCurrency(property.totalPrice);
   body.appendChild(price);
 
-  if (property.pricePerSqm) {
-    const pricePerSqm = document.createElement("div");
-    pricePerSqm.className = "card-price-sqm";
-    pricePerSqm.textContent = `${DOMUtils.formatCurrency(property.pricePerSqm)} / sqm`;
-    body.appendChild(pricePerSqm);
-  }
-
   const facts = document.createElement("div");
   facts.className = "card-specs";
-  facts.appendChild(createFact("area", `${DOMUtils.formatNumber(property.lotAreaSqm)} sqm`));
-  if (property.documentStatus) facts.appendChild(createFact("document", "Ask to review documents"));
+  if (property.lotAreaSqm) facts.appendChild(createFact("area", `${DOMUtils.formatNumber(property.lotAreaSqm)} sqm`));
+  const placement = [property.phase && `Phase ${property.phase}`, property.block && `Block ${property.block}`, property.lotNumber && `Lot ${property.lotNumber}`].filter(Boolean).join(" · ");
+  if (placement) facts.appendChild(createFact("document", placement));
   body.appendChild(facts);
 
   const actions = document.createElement("div");
@@ -181,7 +159,7 @@ function createPropertyCard(property) {
 
   const inquiryLink = document.createElement("a");
   inquiryLink.className = "btn btn-outline btn-sm";
-  inquiryLink.href = `contact.html?property=${encodeURIComponent(property.propertyCode || property.id)}`;
+  inquiryLink.href = `contact.html?property=${encodeURIComponent(property.id)}`;
   inquiryLink.textContent = "Quick inquiry";
   actions.appendChild(inquiryLink);
   body.appendChild(actions);
@@ -203,11 +181,9 @@ function createFact(iconName, text) {
 function initCatalogFilters(allProperties, container, countDisplay) {
   const params = new URLSearchParams(window.location.search);
   const state = {
-    type: params.get("type") || "all",
-    status: params.get("status") || "",
     budget: params.get("budget") || "",
     area: params.get("area") || "",
-    sort: params.get("sort") || "newest",
+    sort: params.get("sort") || "updated",
     saved: params.get("filter") === "saved"
   };
 
@@ -217,12 +193,10 @@ function initCatalogFilters(allProperties, container, countDisplay) {
     activeFilters: document.getElementById("active-filter-chips"),
     openSheet: document.getElementById("open-filter-sheet"),
     clear: document.getElementById("clear-filters-btn"),
-    status: document.getElementById("filter-status"),
     budget: document.getElementById("filter-max-price"),
     area: document.getElementById("filter-area"),
     sort: document.getElementById("filter-sort"),
     sheet: document.getElementById("filter-sheet"),
-    sheetStatus: document.getElementById("sheet-filter-status"),
     sheetBudget: document.getElementById("sheet-filter-max-price"),
     sheetArea: document.getElementById("sheet-filter-area"),
     sheetSort: document.getElementById("sheet-filter-sort"),
@@ -230,49 +204,43 @@ function initCatalogFilters(allProperties, container, countDisplay) {
     sheetApply: document.getElementById("apply-filter-sheet")
   };
 
-  const typeButtons = [...document.querySelectorAll("[data-filter-type]")];
-
   function syncControls() {
-    typeButtons.forEach(button => button.classList.toggle("active", !state.saved && button.dataset.filterType === state.type));
-    [
-      [refs.status, state.status], [refs.budget, state.budget], [refs.area, state.area], [refs.sort, state.sort],
-      [refs.sheetStatus, state.status], [refs.sheetBudget, state.budget], [refs.sheetArea, state.area], [refs.sheetSort, state.sort]
-    ].forEach(([element, value]) => {
+    [[refs.budget, state.budget], [refs.area, state.area], [refs.sort, state.sort], [refs.sheetBudget, state.budget], [refs.sheetArea, state.area], [refs.sheetSort, state.sort]].forEach(([element, value]) => {
       if (element) element.value = value;
     });
     if (refs.heading) refs.heading.textContent = state.saved ? "Saved lots" : "Available lots";
-    if (refs.subtitle) refs.subtitle.textContent = state.saved ? "Your shortlist, stored on this device." : "Browse focused land opportunities in and around Polomolok.";
+    if (refs.subtitle) refs.subtitle.textContent = state.saved ? "Your shortlist, stored on this device." : "Published available lots from the NJ125 inventory.";
   }
 
   function writeUrl() {
     const next = new URLSearchParams();
     if (state.saved) next.set("filter", "saved");
-    else if (state.type !== "all") next.set("type", state.type);
-    if (state.status) next.set("status", state.status);
     if (state.budget) next.set("budget", state.budget);
     if (state.area) next.set("area", state.area);
-    if (state.sort !== "newest") next.set("sort", state.sort);
+    if (state.sort !== "updated") next.set("sort", state.sort);
     const query = next.toString();
     window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
   }
 
   function getFilteredProperties() {
-    let filtered = allProperties.filter(property => property.published !== false);
+    let filtered = allProperties.slice();
     if (state.saved) filtered = filtered.filter(property => RetentionManager.isShortlisted(property.id));
-    if (!state.saved && state.type !== "all") filtered = filtered.filter(property => property.propertyType === state.type);
-    if (state.status) filtered = filtered.filter(property => property.status === state.status);
-    if (state.budget) filtered = filtered.filter(property => Number(property.totalPrice) <= Number(state.budget));
+    if (state.budget) filtered = filtered.filter(property => property.totalPrice !== null && Number(property.totalPrice) <= Number(state.budget));
     if (state.area) {
       const [minimum, maximum] = state.area.split("-").map(Number);
       filtered = filtered.filter(property => Number(property.lotAreaSqm) >= minimum && (!maximum || Number(property.lotAreaSqm) <= maximum));
     }
 
     return filtered.sort((first, second) => {
-      if (state.sort === "price-asc") return Number(first.totalPrice) - Number(second.totalPrice);
-      if (state.sort === "price-desc") return Number(second.totalPrice) - Number(first.totalPrice);
-      if (state.sort === "area-asc") return Number(first.lotAreaSqm) - Number(second.lotAreaSqm);
-      return new Date(second.createdAt || 0) - new Date(first.createdAt || 0);
+      if (state.sort === "price-asc") return nullablePrice(first.totalPrice, Infinity) - nullablePrice(second.totalPrice, Infinity);
+      if (state.sort === "price-desc") return nullablePrice(second.totalPrice, -Infinity) - nullablePrice(first.totalPrice, -Infinity);
+      if (state.sort === "area-asc") return Number(first.lotAreaSqm || 0) - Number(second.lotAreaSqm || 0);
+      return new Date(second.updatedAt || 0) - new Date(first.updatedAt || 0);
     });
+  }
+
+  function nullablePrice(value, fallback) {
+    return value === null || value === undefined ? fallback : Number(value);
   }
 
   function renderAppliedFilters() {
@@ -280,8 +248,6 @@ function initCatalogFilters(allProperties, container, countDisplay) {
     refs.activeFilters.replaceChildren();
     const filters = [];
     if (state.saved) filters.push(["saved", "Saved lots"]);
-    if (!state.saved && state.type !== "all") filters.push(["type", titleCase(state.type)]);
-    if (state.status) filters.push(["status", titleCase(state.status)]);
     if (state.budget) filters.push(["budget", `Under ${DOMUtils.formatCurrency(state.budget)}`]);
     if (state.area) filters.push(["area", `${state.area.replace("-", "–")} sqm`]);
 
@@ -297,8 +263,6 @@ function initCatalogFilters(allProperties, container, countDisplay) {
       chip.appendChild(close);
       chip.addEventListener("click", () => {
         if (key === "saved") state.saved = false;
-        if (key === "type") state.type = "all";
-        if (key === "status") state.status = "";
         if (key === "budget") state.budget = "";
         if (key === "area") state.area = "";
         render();
@@ -313,31 +277,22 @@ function initCatalogFilters(allProperties, container, countDisplay) {
     syncControls();
     renderAppliedFilters();
     if (countDisplay) countDisplay.textContent = `${filtered.length} ${filtered.length === 1 ? "lot" : "lots"}`;
-
     if (!filtered.length) {
-      renderEmptyState(container, state.saved ? "No saved lots yet" : "No lots match those filters", state.saved ? "Save a lot you like and it will appear here. Saved lots stay on this device." : "Try removing a filter or browse all available lots.");
+      renderEmptyState(container, state.saved ? "No saved lots yet" : "No lots match those filters", state.saved ? "Save a lot you like and it will appear here." : "Try removing a budget or area filter.");
       return;
     }
     container.replaceChildren(...filtered.map(createPropertyCard));
   }
 
   function resetFilters() {
-    state.type = "all";
-    state.status = "";
     state.budget = "";
     state.area = "";
-    state.sort = "newest";
+    state.sort = "updated";
     state.saved = false;
     render();
   }
 
-  typeButtons.forEach(button => button.addEventListener("click", () => {
-    state.saved = false;
-    state.type = button.dataset.filterType;
-    render();
-  }));
-
-  [[refs.status, "status"], [refs.budget, "budget"], [refs.area, "area"], [refs.sort, "sort"]].forEach(([element, key]) => {
+  [[refs.budget, "budget"], [refs.area, "area"], [refs.sort, "sort"]].forEach(([element, key]) => {
     if (element) element.addEventListener("change", () => {
       state[key] = element.value;
       state.saved = false;
@@ -347,21 +302,16 @@ function initCatalogFilters(allProperties, container, countDisplay) {
 
   if (refs.openSheet && refs.sheet) refs.openSheet.addEventListener("click", () => SheetController.open(refs.sheet));
   if (refs.sheetApply) refs.sheetApply.addEventListener("click", () => {
-    state.status = refs.sheetStatus?.value || "";
     state.budget = refs.sheetBudget?.value || "";
     state.area = refs.sheetArea?.value || "";
-    state.sort = refs.sheetSort?.value || "newest";
+    state.sort = refs.sheetSort?.value || "updated";
     state.saved = false;
     SheetController.close();
     render();
   });
   if (refs.sheetClear) refs.sheetClear.addEventListener("click", resetFilters);
   if (refs.clear) refs.clear.addEventListener("click", resetFilters);
-
-  document.addEventListener("renoleads:shortlist-changed", () => {
-    if (state.saved) render();
-  });
-
+  document.addEventListener("renoleads:shortlist-changed", () => { if (state.saved) render(); });
   render();
 }
 
@@ -369,89 +319,55 @@ function renderRecentlyViewed(properties) {
   const section = document.getElementById("recently-viewed-section");
   const container = document.getElementById("recently-viewed-container");
   if (!section || !container) return;
-
-  const recent = RetentionManager.getRecentlyViewed()
-    .map(id => properties.find(property => property.id === id))
-    .filter(Boolean)
-    .slice(0, 4);
+  const recent = RetentionManager.getRecentlyViewed().map(id => properties.find(property => property.id === id)).filter(Boolean).slice(0, 4);
   if (!recent.length) {
     section.hidden = true;
     return;
   }
-
   section.hidden = false;
-  container.replaceChildren(...recent.map(createPropertyStripCard));
-  window.refreshScrollReveal?.();
+  container.replaceChildren(...recent.map(createCompactPropertyCard));
 }
 
-function createPropertyStripCard(property) {
+function createCompactPropertyCard(property) {
   const link = document.createElement("a");
-  link.className = "strip-card";
+  link.className = "property-strip-card";
   link.href = `property.html?id=${encodeURIComponent(property.id)}`;
-  link.dataset.scrollReveal = "up";
   link.appendChild(createPropertyMedia(property, true));
-
-  const info = document.createElement("div");
-  info.className = "strip-card-info";
-  const title = document.createElement("span");
-  title.className = "strip-card-title";
-  title.textContent = property.title || "Property lot";
-  info.appendChild(title);
-  const price = document.createElement("span");
-  price.className = "strip-card-price";
-  price.textContent = DOMUtils.formatCurrency(property.totalPrice);
-  info.appendChild(price);
+  const body = document.createElement("span");
+  body.className = "property-strip-copy";
+  const title = document.createElement("strong");
+  title.textContent = property.title || `Lot ${property.lotNumber || ""}`.trim();
   const meta = document.createElement("span");
-  meta.className = "strip-card-meta";
-  meta.textContent = `${DOMUtils.formatNumber(property.lotAreaSqm)} sqm · ${property.barangay || "Polomolok"}`;
-  info.appendChild(meta);
-  link.appendChild(info);
+  meta.textContent = [property.lotAreaSqm ? `${DOMUtils.formatNumber(property.lotAreaSqm)} sqm` : "", DOMUtils.formatCurrency(property.totalPrice)].filter(Boolean).join(" · ");
+  body.append(title, meta);
+  link.appendChild(body);
   return link;
 }
 
-function renderEmptyState(container, title, message) {
+function renderEmptyState(container, titleText, copyText) {
   const state = document.createElement("div");
   state.className = "empty-state";
-  state.appendChild(IconUtils.create("grid"));
-
-  const heading = document.createElement("h3");
-  heading.className = "empty-state-title";
-  heading.textContent = title;
-  state.appendChild(heading);
-
+  state.appendChild(IconUtils.create("info"));
+  const title = document.createElement("h3");
+  title.className = "empty-state-title";
+  title.textContent = titleText;
   const copy = document.createElement("p");
   copy.className = "empty-state-text";
-  copy.textContent = message;
-  state.appendChild(copy);
-
-  const link = document.createElement("a");
-  link.className = "btn btn-outline btn-sm";
-  link.href = "properties.html";
-  link.textContent = "View all lots";
-  state.appendChild(link);
+  copy.textContent = copyText;
+  state.append(title, copy);
   container.replaceChildren(state);
 }
 
 function renderErrorState(container) {
   const state = document.createElement("div");
-  state.className = "error-state";
+  state.className = "empty-state";
   state.appendChild(IconUtils.create("info"));
-
-  const heading = document.createElement("h3");
-  heading.className = "empty-state-title";
-  heading.textContent = "Unable to load properties";
-  state.appendChild(heading);
-
+  const title = document.createElement("h3");
+  title.className = "empty-state-title";
+  title.textContent = "Listings are temporarily unavailable";
   const copy = document.createElement("p");
   copy.className = "empty-state-text";
-  copy.textContent = "Please check your connection and try again.";
-  state.appendChild(copy);
-
-  const retry = document.createElement("button");
-  retry.type = "button";
-  retry.className = "btn btn-primary btn-sm";
-  retry.textContent = "Try again";
-  retry.addEventListener("click", () => window.location.reload());
-  state.appendChild(retry);
+  copy.textContent = "We could not load the current NJ125 inventory. Please try again later.";
+  state.append(title, copy);
   container.replaceChildren(state);
 }

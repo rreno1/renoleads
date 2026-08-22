@@ -1,29 +1,20 @@
 /**
- * Firebase Analytics & Funnel Activity Tracker
+ * RenoLeads local funnel event bridge.
+ * Phase 2 intentionally sends no analytics data to Firebase or another analytics backend.
  */
-
 function trackFunnelEvent(eventName, eventParams = {}) {
-  console.log(`[Analytics Event] ${eventName}:`, eventParams);
-  
-  if (
-    typeof firebase !== 'undefined' &&
-    typeof isFirebaseActive !== 'undefined' &&
-    isFirebaseActive &&
-    firebase.analytics
-  ) {
-    try {
-      firebase.analytics().logEvent(eventName, eventParams);
-    } catch (err) {
-      console.warn("Analytics logging exception:", err);
-    }
-  }
+  const safeName = String(eventName || "event").slice(0, 80);
+  const detail = eventParams && typeof eventParams === "object" && !Array.isArray(eventParams) ? eventParams : {};
+  document.dispatchEvent(new CustomEvent("renoleads:funnel-event", {
+    detail: { name: safeName, params: detail }
+  }));
 }
 
-// Track page view automatically
 document.addEventListener("DOMContentLoaded", () => {
-  trackFunnelEvent('page_view', {
+  trackFunnelEvent("page_view", {
     page_title: document.title,
-    page_location: window.location.href,
     page_path: window.location.pathname
   });
 });
+
+window.trackFunnelEvent = trackFunnelEvent;
