@@ -4,8 +4,7 @@ const revealSelector = '[data-reveal]';
 
 export function useScrollReveal(routeKey: string) {
   useEffect(() => {
-    const root = document.getElementById('main-content');
-    if (!root) return;
+    const root = document.body;
 
     document.documentElement.classList.add('reveal-enabled');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
