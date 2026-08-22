@@ -54,7 +54,7 @@ export function PropertiesPage() {
 
   return <section className="catalog-section section-padding">
     <div className="container">
-      <div className="catalog-heading-row" data-reveal="up"><div><span className="section-eyebrow">NJ125 published inventory</span><h1 id="catalog-heading">{savedOnly ? 'Saved lots' : 'Available lots'}</h1><p id="catalog-subtitle">{savedOnly ? 'Your shortlist, stored only on this device.' : 'Only lots currently published and available in NJ125 appear here.'}</p></div><div className="catalog-count" aria-live="polite">{loading ? 'Loading…' : `${filtered.length} lot${filtered.length === 1 ? '' : 's'}`}</div></div>
+      <div className="catalog-heading-row" data-reveal="up"><div><span className="section-eyebrow">Published inventory</span><h1 id="catalog-heading">{savedOnly ? 'Saved lots' : 'Available lots'}</h1><p id="catalog-subtitle">{savedOnly ? 'Your shortlist, stored only on this device.' : 'Only lots currently published and available appear here.'}</p></div><div className="catalog-count" aria-live="polite">{loading ? 'Loading…' : `${filtered.length} lot${filtered.length === 1 ? '' : 's'}`}</div></div>
 
       <div className="catalog-toolbar" aria-label="Property filters" data-reveal="up">
         <div className="filter-group"><label htmlFor="filter-max-price">Maximum price</label><select id="filter-max-price" value={budget} onChange={(event) => setFilter('budget', event.target.value)}><option value="">Any price</option><option value="750000">PHP 750,000</option><option value="1000000">PHP 1,000,000</option><option value="1500000">PHP 1,500,000</option><option value="2500000">PHP 2,500,000</option></select></div>
