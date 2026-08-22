@@ -16,7 +16,7 @@ const required = [
   'src/styles/app.css',
   'src/styles/forms.css',
   'src/hooks/useScrollReveal.ts',
-  'src/lib/nj125Api.ts',
+  'src/lib/propertyApi.ts',
   'src/components/InquiryForm.tsx',
   'src/components/PropertyCard.tsx',
   'src/pages/HomePage.tsx',
@@ -55,7 +55,7 @@ const app = read('src/App.tsx');
 const main = read('src/main.tsx');
 const styles = `${read('src/styles/app.css')}\n${read('src/styles/forms.css')}`;
 
-assert(source.includes('https://dnsgfsgpopniqeuqfslp.supabase.co/functions/v1/api'), 'NJ125 public Edge endpoint is missing');
+assert(source.includes('https://dnsgfsgpopniqeuqfslp.supabase.co/functions/v1/api'), 'Public Edge endpoint is missing');
 assert(source.includes("'public-properties'"), 'public-properties action is missing');
 assert(source.includes("'submit-property-inquiry'"), 'submit-property-inquiry action is missing');
 assert(source.includes('privacyNoticeVersion'), 'Privacy notice version evidence is missing');
@@ -65,6 +65,8 @@ assert(!/localStorage\.setItem\([^\n]*(fullName|mobile|email|message|inquiry)/i.
 assert(!/firebase(app|\.firestore|\.analytics|Config)/i.test(source), 'Firebase runtime code is forbidden');
 assert(!/service_role|sb_secret_|SUPABASE_SERVICE_ROLE_KEY/i.test(source), 'Server secrets must not appear in browser source');
 assert(!/917 123 4567|info@renoleads\.com/i.test(source), 'Placeholder contact data must not ship in browser source');
+assert(!/\bnj125\b/i.test(source), 'NJ125 branding must not appear in RenoLeads frontend source');
+assert(sourceFiles.every((file) => !/nj125/i.test(file)), 'NJ125 branding must not appear in RenoLeads frontend file paths');
 assert(!app.includes('.html'), 'Legacy .html compatibility routes must not return');
 assert(main.includes("'./styles/app.css'") && main.includes("'./styles/forms.css'"), 'Active styles must live under src/styles');
 assert(styles.includes("font-family: var(--font-body)") || styles.includes("--font-body: 'Poppins'"), 'Poppins typography foundation is missing');
@@ -78,6 +80,7 @@ const forbiddenLegacy = [
   '.github/workflows/phase3.yml',
   'contact.html', 'properties.html', 'property.html', 'privacy.html', 'buying-process.html', 'why-invest.html',
   'js/app.js', 'js/config.js', 'js/nj125-api.js', 'js/inquiry-form.js', 'js/properties.js', 'js/property-details.js', 'js/analytics.js',
+  'src/lib/nj125Api.ts',
   '.well-known/assetlinks.json',
 ];
 forbiddenLegacy.forEach((file) => assert(!exists(file), `Legacy path must be removed: ${file}`));
