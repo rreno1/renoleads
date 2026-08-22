@@ -4,6 +4,34 @@ function isUuid(value) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || "").trim());
 }
 
+async function hydrateSelectedPropertyField(field, propertyParam) {
+  if (!field || !propertyParam) return;
+  if (!isUuid(propertyParam) || field.type === "hidden") {
+    field.value = propertyParam;
+    return;
+  }
+
+  field.readOnly = true;
+  field.value = "Selected listing";
+  field.setAttribute("aria-busy", "true");
+  try {
+    const property = await fetchPropertyById(propertyParam);
+    if (property) {
+      const placement = [
+        property.project,
+        property.phase && `Phase ${property.phase}`,
+        property.block && `Block ${property.block}`,
+        property.lotNumber && `Lot ${property.lotNumber}`
+      ].filter(Boolean).join(" · ");
+      field.value = property.title ? `${property.title}${placement ? ` — ${placement}` : ""}` : (placement || "Selected listing");
+    }
+  } catch {
+    field.value = "Selected listing";
+  } finally {
+    field.removeAttribute("aria-busy");
+  }
+}
+
 function bindInquiryForm(form) {
   if (!form || form.dataset.bound === "true") return;
   form.dataset.bound = "true";
@@ -11,7 +39,7 @@ function bindInquiryForm(form) {
   const feedback = form.closest(".inquiry-sheet, .contact-form-card")?.querySelector("[data-form-feedback]") || document.getElementById("form-feedback");
   const propertyField = form.querySelector("[name=propertyInterest]");
   const propertyParam = new URLSearchParams(window.location.search).get("property");
-  if (propertyField && propertyParam) propertyField.value = propertyParam;
+  hydrateSelectedPropertyField(propertyField, propertyParam);
 
   form.addEventListener("submit", async event => {
     event.preventDefault();
@@ -20,7 +48,7 @@ function bindInquiryForm(form) {
     const data = new FormData(form);
     const propertyInterest = String(data.get("propertyInterest") || "").trim();
     const rawMessage = String(data.get("message") || "").trim();
-    const propertyId = isUuid(propertyInterest) ? propertyInterest : (isUuid(propertyParam) ? propertyParam : null);
+    const propertyId = isUuid(propertyParam) ? propertyParam : (isUuid(propertyInterest) ? propertyInterest : null);
     const message = propertyId || !propertyInterest
       ? rawMessage
       : [`Property or area of interest: ${propertyInterest}`, rawMessage].filter(Boolean).join("\n");
@@ -63,7 +91,7 @@ function bindInquiryForm(form) {
       }
 
       form.reset();
-      if (propertyField && propertyParam) propertyField.value = propertyParam;
+      await hydrateSelectedPropertyField(propertyField, propertyParam);
       const reference = result.requestId ? ` Reference: ${result.requestId}.` : "";
       showFormFeedback(feedback, "success", `Inquiry received. Thank you, ${inquiry.fullName}.${reference}`);
     } catch (error) {
