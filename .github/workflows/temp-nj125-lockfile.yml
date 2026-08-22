@@ -9,7 +9,7 @@ on:
       - .github/workflows/temp-nj125-lockfile.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   generate:
@@ -17,6 +17,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'push' && github.ref_name || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -69,3 +71,15 @@ jobs:
           path: .nj125-lock/package-lock.json
           if-no-files-found: error
           retention-days: 1
+      - name: Publish temporary lockfile to branch
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          mkdir -p tmp
+          cp .nj125-lock/package-lock.json tmp/nj125-package-lock.json
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add tmp/nj125-package-lock.json
+          git diff --cached --quiet && exit 0
+          git commit -m "ci: publish temporary NJ125 lockfile artifact"
+          git push origin HEAD:${GITHUB_REF_NAME}
