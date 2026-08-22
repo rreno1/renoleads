@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Icon } from '../components/Icon';
 import { InquiryForm } from '../components/InquiryForm';
 import { PropertyCard } from '../components/PropertyCard';
@@ -10,10 +10,9 @@ import { useProperties } from '../state/PropertyContext';
 
 export function PropertyPage() {
   const route = useParams<{ id: string }>();
-  const [query] = useSearchParams();
   const { properties, loading, error } = useProperties();
   const savedIds = useSavedLotIds();
-  const requestedId = route.id ?? query.get('id') ?? '';
+  const requestedId = route.id ?? '';
   const property = properties.find((item) => item.id === requestedId || item.slug === requestedId) ?? null;
   const [activeImage, setActiveImage] = useState(0);
   usePageTitle(property ? `${property.title} | renoleads` : 'Property | renoleads');
