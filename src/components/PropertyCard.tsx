@@ -12,7 +12,7 @@ export function PropertyCard({ property, compact = false }: { property: Property
   const image = property.media[0]?.url ?? '';
   const placement = propertyPlacement(property.phase, property.block, property.lotNumber);
 
-  return <article className={compact ? 'property-card property-card-compact' : 'property-card'}>
+  return <article className={compact ? 'property-card property-card-compact' : 'property-card'} data-reveal="up">
     <div className="card-image-wrap">
       <Link className="card-image-link" to={`/property/${encodeURIComponent(property.id)}`} aria-label={`View ${property.title}`}>
         {image && !imageFailed ? <div className={compact ? 'property-media property-media-compact' : 'property-media'}><img src={image} alt={property.media[0]?.alt || property.title} loading="lazy" onError={() => setImageFailed(true)}/></div> : <div className={compact ? 'property-media-placeholder property-media-placeholder-compact' : 'property-media-placeholder'}><Icon name="area"/><span className="property-media-copy">Photos coming soon</span><small>{property.lotNumber ? `Lot ${property.lotNumber}` : 'LOT'}</small></div>}
