@@ -36,13 +36,28 @@ const feed = await fetch(API, {
     'Content-Type': 'application/json',
     'X-Request-Id': 'renoleads-production-smoke-feed'
   },
-  body: JSON.stringify({ action: 'public-properties', payload: {} })
+  body: JSON.stringify({ action: 'public-properties', payload: { page: 1, pageSize: 4, sort: 'updated' } })
 });
 const feedBody = await feed.json().catch(() => null);
+const cacheControl = feed.headers.get('cache-control') || '';
 check(feed.status === 200, `public-properties: expected 200, got ${feed.status}`);
 check(feed.headers.get('access-control-allow-origin') === ORIGIN, `public-properties: CORS origin mismatch: ${feed.headers.get('access-control-allow-origin')}`);
 check(feed.headers.get('x-request-id') === 'renoleads-production-smoke-feed', 'public-properties: request correlation header missing');
+check(cacheControl.includes('public') && cacheControl.includes('max-age=60') && cacheControl.includes('stale-while-revalidate=300'), `public-properties: cache contract mismatch: ${cacheControl}`);
 check(feedBody?.ok === true && Array.isArray(feedBody?.data?.properties), 'public-properties: invalid response contract');
+check(feedBody?.data?.page === 1 && feedBody?.data?.pageSize === 4 && typeof feedBody?.data?.hasMore === 'boolean', `public-properties: pagination metadata mismatch: ${JSON.stringify(feedBody?.data)}`);
+check((feedBody?.data?.properties?.length ?? 0) <= 4, 'public-properties: page size exceeded');
+
+const secondPage = await fetch(API, {
+  method: 'POST',
+  headers: { Origin: ORIGIN, 'Content-Type': 'application/json', 'X-Request-Id': 'renoleads-production-smoke-page-2' },
+  body: JSON.stringify({ action: 'public-properties', payload: { page: 2, pageSize: 4, sort: 'updated' } })
+});
+const secondPageBody = await secondPage.json().catch(() => null);
+check(secondPage.status === 200, `public-properties page 2: expected 200, got ${secondPage.status}`);
+check(secondPage.headers.get('access-control-allow-origin') === ORIGIN, 'public-properties page 2: CORS origin mismatch');
+check(secondPageBody?.ok === true && secondPageBody?.data?.page === 2 && secondPageBody?.data?.pageSize === 4 && Array.isArray(secondPageBody?.data?.properties), `public-properties page 2: pagination contract mismatch: ${JSON.stringify(secondPageBody)}`);
+check((secondPageBody?.data?.properties?.length ?? 0) <= 4, 'public-properties page 2: page size exceeded');
 
 const preflight = await fetch(API, {
   method: 'OPTIONS',
@@ -73,6 +88,15 @@ const staffActionOnPublic = await fetch(API, {
 const staffActionBody = await staffActionOnPublic.json().catch(() => null);
 check(staffActionOnPublic.status === 404, `public boundary isolation: expected 404, got ${staffActionOnPublic.status}`);
 check(staffActionBody?.ok === false && staffActionBody?.error?.code === 'unknown-action', `public boundary isolation: expected unknown-action, got ${JSON.stringify(staffActionBody)}`);
+
+const wrongContentType = await fetch(API, {
+  method: 'POST',
+  headers: { Origin: ORIGIN, 'Content-Type': 'text/plain' },
+  body: JSON.stringify({ action: 'public-properties', payload: {} })
+});
+const wrongContentTypeBody = await wrongContentType.json().catch(() => null);
+check(wrongContentType.status === 415, `content type boundary: expected 415, got ${wrongContentType.status}`);
+check(wrongContentTypeBody?.ok === false && wrongContentTypeBody?.error?.code === 'unsupported-media-type', `content type boundary: expected unsupported-media-type, got ${JSON.stringify(wrongContentTypeBody)}`);
 
 const inquiry = await fetch(API, {
   method: 'POST',

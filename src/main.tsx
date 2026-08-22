@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './styles/app.css';
 import './styles/forms.css';
+import './styles/catalog.css';
 import { App } from './App';
 import { captureAttribution } from './lib/propertyApi';
 import { PropertyProvider } from './state/PropertyContext';
