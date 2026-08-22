@@ -4,7 +4,7 @@ import { config } from '../config';
 import { Icon } from './Icon';
 
 function Brand() {
-  return <Link className="brand-logo" to="/" aria-label="RenoLeads home"><Icon name="home"/>RenoLeads</Link>;
+  return <Link className="brand-logo" to="/" aria-label="renoleads home"><Icon name="home"/>renoleads</Link>;
 }
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -50,7 +50,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="footer-links"><h2 className="footer-heading">Explore</h2><Link to="/properties">Available lots</Link><Link to="/properties?filter=saved">Saved lots</Link><Link to="/why-polomolok">Why Polomolok</Link><Link to="/buying-process">Buying process</Link></div>
         <div className="footer-links"><h2 className="footer-heading">Contact</h2><Link to="/contact">Send an inquiry</Link>{config.contact.phoneTel ? <a className="footer-contact-item" href={`tel:${config.contact.phoneTel}`}><Icon name="phone"/><span>{config.contact.phoneDisplay}</span></a> : null}{config.contact.email ? <a className="footer-contact-item" href={`mailto:${config.contact.email}`}><Icon name="mail"/><span>{config.contact.email}</span></a> : null}<span className="footer-contact-item"><Icon name="map"/><span>{config.contact.address}</span></span></div>
       </div>
-      <div className="container footer-bottom"><span>© 2026 RenoLeads. Verify property details before purchase.</span><Link to="/privacy">Privacy</Link></div>
+      <div className="container footer-bottom"><span>© 2026 renoleads. Verify property details before purchase.</span><Link to="/privacy">Privacy</Link></div>
     </footer>
   </>;
 }
