@@ -1,131 +1,113 @@
-# RenoLeads - Polomolok Real Estate Land Lot Sales Funnel & Shared Platform
+# RenoLeads
 
-A high-converting public sales funnel for land lot properties in **Polomolok, South Cotabato, Philippines**, built with pure HTML5, Vanilla CSS3, and JavaScript, integrated with a shared **Firebase Cloud Firestore** database, **Cloud Functions**, and **Firebase Cloud Messaging (FCM)** to connect seamlessly with your **RenoLeads Android Management APK**.
+Public land-lot discovery and inquiry frontend for NJ125 Corporation.
 
----
+## Architecture
 
-## Architecture Overview
+RenoLeads and the NJ125 internal operations application are separate frontends and separate deployments using one dedicated Supabase backend as the source of truth.
 
-```
-Shared Firebase Project (renoleads)
- ├── Web Application (Public Sales Funnel on Firebase Hosting)
- └── Android Application (RenoLeads APK)
-```
-
-- **Website Funnel Role**: Publicly showcase land lot properties in Polomolok, capture buyer inquiries, schedule site visits, and hand off visitors to the Android app.
-- **Android APK Role**: Allow authorized owners to manage land listings, upload property photos, track lead inquiries, update site visit statuses, and receive real-time push notifications.
-- **Cloud Function Trigger**: Whenever a new lead document is created under `leads/{leadId}`, a Cloud Function dispatches an FCM push notification directly to registered APK device tokens in `deviceTokens/{tokenId}`.
-
----
-
-## Directory Structure
-
-```
-renoleads/
-├── public/
-│   ├── index.html              # Landing Page (Hero, Featured Lots, Stepper, FAQs, Inquiry Form)
-│   ├── properties.html         # Properties Catalog & Filters (Residential, Farm, Commercial)
-│   ├── property.html           # Property Detail Page & Android App Link handoff
-│   ├── contact.html            # Standalone Inquiry & Site-Visit Request Form
-│   ├── privacy.html            # Privacy Policy
-│   ├── .well-known/
-│   │   └── assetlinks.json     # Android App Links domain verification
-│   ├── css/
-│   │   ├── variables.css       # HSL color tokens & typography
-│   │   ├── global.css          # Typography & utility styles
-│   │   ├── components.css      # Hero, Property Cards, Calculator, Forms, Accordion
-│   │   └── responsive.css      # Mobile & tablet breakpoints
-│   ├── js/
-│   │   ├── firebase-config.js  # Firebase SDK v10 init & fallback properties engine
-│   │   ├── properties.js      # Listings grid filtering & sorting logic
-│   │   ├── property-details.js # Property detail renderer, gallery, & payment calculator
-│   │   ├── inquiry-form.js     # Form handler & Firestore lead creation
-│   │   └── analytics.js        # Firebase Analytics tracker
-│   └── assets/
-│       └── images/             # Polomolok hero backdrop & land thumbnails
-├── functions/
-│   ├── package.json
-│   └── src/
-│       └── index.js            # FCM push notification trigger on new lead creation
-├── firebase.json               # Firebase Hosting & Cloud Functions config
-├── firestore.rules             # Role-based Firestore Security Rules
-├── storage.rules               # Cloud Storage Rules
-├── firestore.indexes.json      # Firestore composite indexes
-└── README.md
+```text
+RenoLeads public frontend
+        ↓
+NJ125 Supabase Edge API
+        ↓
+Supabase PostgreSQL / Storage
+        ↑
+NJ125 internal operations frontend
 ```
 
----
+RenoLeads does **not** access NJ125 database tables directly. The browser uses only the public Edge API contract.
 
-## Setup & Deployment Guide
+## Phase 2 integration
 
-### 1. Connecting Your Firebase Project
+Current branch: `feat/shared-supabase-backend`
 
-1. Go to the [Firebase Console](https://console.firebase.google.com/) and select your project `renoleads`.
-2. Register a **Web App** inside your project.
-3. Open `public/js/firebase-config.js` and replace the placeholder `firebaseConfig` object with your project credentials:
+Public backend endpoint:
 
-```javascript
-const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "renoleads.firebaseapp.com",
-  projectId: "renoleads",
-  storageBucket: "renoleads.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef1234567890"
-};
+```text
+https://dnsgfsgpopniqeuqfslp.supabase.co/functions/v1/api
 ```
 
-### 2. Registering the Android APK
+Supported RenoLeads actions:
 
-1. In the same Firebase Project (`renoleads`), register an **Android Application**.
-2. Set the Package Name to `com.renoleads.app` (matching `public/.well-known/assetlinks.json`).
-3. Download the `google-services.json` file and place it inside your Android APK project root under `app/google-services.json`.
-4. Copy your SHA-256 certificate fingerprint from Android Studio / Gradle (`./gradlew signingReport`) into `public/.well-known/assetlinks.json`.
+- `public-properties` — returns only NJ125 lots that are both published and currently available.
+- `submit-property-inquiry` — creates the public inquiry and lead atomically after validation, consent recording, rate limiting and deduplication.
 
-### 3. Deploying Security Rules & Functions
+RenoLeads never receives internal inquiry IDs or lead IDs. Successful submissions return an opaque public request reference.
 
-Using the Firebase CLI:
+## Data ownership
+
+NJ125 Supabase is authoritative for:
+
+- projects, phases, blocks and lots
+- public property media
+- inquiries and leads
+- staff assignment and internal CRM state
+- clients, reservations, sales, payments and documents
+
+RenoLeads stores no separate property database and has no mock/fallback listings.
+
+Browser storage is limited to non-PII convenience state:
+
+- saved lot identifiers
+- recently viewed lot identifiers
+- first-touch landing/referrer/UTM attribution for the current session
+
+Inquiry PII is never buffered in local storage when a submission fails.
+
+## Runtime
+
+The site is intentionally plain HTML, CSS and JavaScript. No Supabase secret or service-role key is present in browser code. The public browser calls the Edge API directly over HTTPS.
+
+Important files:
+
+```text
+js/config.js           Public RenoLeads configuration
+js/nj125-api.js        NJ125 public Edge API adapter
+js/properties.js       Published inventory renderer and filters
+js/property-details.js Property detail renderer
+js/inquiry-form.js     Inquiry submission flow
+js/app.js              Shared navigation and non-PII local retention
+js/analytics.js        Local funnel event bridge; no Firebase Analytics
+privacy.html           Privacy Notice version 2026-08-22
+firebase.json          Firebase Hosting-only target for Phase 3
+```
+
+## Verification
+
+Run the zero-dependency Phase 2 contract check with Node:
 
 ```bash
-# Login to Firebase CLI
-firebase login
-
-# Select target project
-firebase use renoleads
-
-# Deploy Firestore Security Rules & Storage Rules
-firebase deploy --only firestore:rules,storage:rules
-
-# Deploy Cloud Functions for Push Notifications
-cd functions
-npm install
-firebase deploy --only functions
+node scripts/phase2-check.mjs
 ```
 
-### 4. Deploying Web Funnel to Firebase Hosting & GitHub Pages
+The check rejects legacy Firebase runtime/backend references, mock property data, PII inquiry buffering, and missing NJ125 public-contract fields.
+
+## Deployment state
+
+During Phase 2, the existing public deployment remains GitHub Pages:
+
+```text
+https://rreno1.github.io/renoleads/
+```
+
+Phase 3 will migrate the public frontend to Firebase Hosting. `firebase.json` is already hosting-only, but Phase 2 does not require or claim that Firebase Hosting migration has occurred.
+
+## Security boundary
+
+- Public reads return only sanitized published/available property fields.
+- Inquiry request bodies are limited and validated server-side.
+- Consent version and source attribution are persisted with the inquiry.
+- Public intake has server-side rate limiting and deduplication.
+- RenoLeads sends no browser credential or secret to the Edge API.
+- Internal NJ125 actions remain authenticated and role-authorized separately from the public RenoLeads actions.
+
+## Local development
+
+Serve the repository over a local HTTP server so browser fetch/CORS behavior matches production more closely, for example:
 
 ```bash
-# Deploy to Firebase Hosting
-firebase deploy --only hosting
+python -m http.server 8080
 ```
 
-To push to GitHub:
-```bash
-git init
-git add .
-git commit -m "Initial commit of RenoLeads"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/renoleads.git
-git push -u origin main
-```
-
-
----
-
-## Testing the Data Flow & Lead Hand-off
-
-1. **Browsing Listings**: Open `index.html` or `properties.html` locally or on Firebase Hosting.
-2. **Submitting Lead**: Fill out the inquiry form on `contact.html` or `property.html`.
-3. **Firestore Document Creation**: A document is written to `leads/{leadId}` with `status: "new"`.
-4. **Cloud Function Trigger**: `notifyNewLeadInquiry` detects the new document and sends an FCM push notification to all APK device tokens.
-5. **Android App Link Handoff**: Clicking "Open in App" on `property.html` launches your Android app directly to the property screen via Android App Links.
+Then open `http://localhost:8080/`. The NJ125 Edge API explicitly permits localhost development origins.
