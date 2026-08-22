@@ -10,7 +10,8 @@
     "dev": "vite",
     "typecheck": "tsc --noEmit",
     "test": "node scripts/phase3-check.mjs",
-    "build": "npm run typecheck && npm test && vite build",
+    "build": "vite build",
+    "verify": "npm run typecheck && npm test && npm run build",
     "preview": "vite preview"
   },
   "dependencies": {
