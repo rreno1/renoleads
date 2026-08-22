@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { RenoApiError, submitInquiry } from '../lib/nj125Api';
+import { RenoApiError, submitInquiry } from '../lib/propertyApi';
 import type { InquiryInput, Property } from '../types';
 
 const emptyForm: InquiryInput = {
