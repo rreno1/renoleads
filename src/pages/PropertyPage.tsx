@@ -31,13 +31,14 @@ export function PropertyPage() {
   if (error) return <State title="Property service unavailable" text={error}/>;
   if (!property) return <State title="Property not found" text="This listing may have been removed, unpublished, sold, reserved, or the link may be incomplete."/>;
 
-  const location = [property.municipality, property.province].filter(Boolean).join(', ') || 'Location available on inquiry';
-  const placement = propertyPlacement(property.phase, property.block, property.lotNumber);
-  const saved = savedIds.includes(property.id);
-  const currentMedia = property.media[activeImage] ?? property.media[0];
+  const currentProperty = property;
+  const location = [currentProperty.municipality, currentProperty.province].filter(Boolean).join(', ') || 'Location available on inquiry';
+  const placement = propertyPlacement(currentProperty.phase, currentProperty.block, currentProperty.lotNumber);
+  const saved = savedIds.includes(currentProperty.id);
+  const currentMedia = currentProperty.media[activeImage] ?? currentProperty.media[0];
 
   async function share() {
-    const data = { title: property.title, text: `${property.title} in ${location}`, url: window.location.href };
+    const data = { title: currentProperty.title, text: `${currentProperty.title} in ${location}`, url: window.location.href };
     try {
       if (navigator.share) await navigator.share(data);
       else await navigator.clipboard.writeText(window.location.href);
@@ -47,28 +48,28 @@ export function PropertyPage() {
   }
 
   return <div className="container property-detail-container">
-    <nav className="detail-breadcrumbs" aria-label="Breadcrumb"><Link to="/">Home</Link><span aria-hidden="true">›</span><Link to="/properties">Available lots</Link><span aria-hidden="true">›</span><span aria-current="page">{property.lotNumber ? `Lot ${property.lotNumber}` : property.title}</span></nav>
+    <nav className="detail-breadcrumbs" aria-label="Breadcrumb"><Link to="/">Home</Link><span aria-hidden="true">›</span><Link to="/properties">Available lots</Link><span aria-hidden="true">›</span><span aria-current="page">{currentProperty.lotNumber ? `Lot ${currentProperty.lotNumber}` : currentProperty.title}</span></nav>
 
     <header className="detail-header">
-      <div className="detail-title-group"><div className="detail-status-row"><span className="badge badge-available">Available</span><span className="detail-verified">{placement || property.project || 'Published lot'}</span></div><h1 className="detail-title">{property.title}</h1><div className="detail-location"><Icon name="map"/><span>{location}</span></div><div className="detail-price-area"><strong className="detail-price">{formatCurrency(property.displayPrice)}</strong>{property.areaSqm !== null ? <span className="detail-area">{formatNumber(property.areaSqm)} sqm</span> : null}</div></div>
-      <div className="detail-actions"><button type="button" className={`detail-action-btn${saved ? ' saved' : ''}`} aria-label={saved ? 'Remove from saved' : 'Save property'} aria-pressed={saved} onClick={() => toggleSaved(property.id)}><Icon name="heart"/></button><button type="button" className="detail-action-btn" aria-label="Share property" onClick={() => void share()}><Icon name="share"/></button></div>
+      <div className="detail-title-group"><div className="detail-status-row"><span className="badge badge-available">Available</span><span className="detail-verified">{placement || currentProperty.project || 'Published lot'}</span></div><h1 className="detail-title">{currentProperty.title}</h1><div className="detail-location"><Icon name="map"/><span>{location}</span></div><div className="detail-price-area"><strong className="detail-price">{formatCurrency(currentProperty.displayPrice)}</strong>{currentProperty.areaSqm !== null ? <span className="detail-area">{formatNumber(currentProperty.areaSqm)} sqm</span> : null}</div></div>
+      <div className="detail-actions"><button type="button" className={`detail-action-btn${saved ? ' saved' : ''}`} aria-label={saved ? 'Remove from saved' : 'Save property'} aria-pressed={saved} onClick={() => toggleSaved(currentProperty.id)}><Icon name="heart"/></button><button type="button" className="detail-action-btn" aria-label="Share property" onClick={() => void share()}><Icon name="share"/></button></div>
     </header>
 
     <div className="detail-layout">
       <div className="detail-main">
         <section className="gallery-section">
-          {currentMedia ? <div className="gallery"><div className="gallery-main"><img src={currentMedia.url} alt={currentMedia.alt || property.title}/><span className="gallery-count">{property.media.length} photo{property.media.length === 1 ? '' : 's'}</span></div>{property.media.length > 1 ? <div className="gallery-thumbs">{property.media.map((media, index) => <button key={`${media.url}-${index}`} type="button" className={`gallery-thumb${index === activeImage ? ' active' : ''}`} aria-label={`View property photo ${index + 1}`} onClick={() => setActiveImage(index)}><img src={media.url} alt={media.alt || `Property photo ${index + 1}`} loading="lazy"/></button>)}</div> : null}</div> : <div className="gallery gallery-placeholder"><Icon name="area"/><strong>Property photos coming soon</strong><span>Ask for current site photos in your inquiry.</span></div>}
+          {currentMedia ? <div className="gallery"><div className="gallery-main"><img src={currentMedia.url} alt={currentMedia.alt || currentProperty.title}/><span className="gallery-count">{currentProperty.media.length} photo{currentProperty.media.length === 1 ? '' : 's'}</span></div>{currentProperty.media.length > 1 ? <div className="gallery-thumbs">{currentProperty.media.map((media, index) => <button key={`${media.url}-${index}`} type="button" className={`gallery-thumb${index === activeImage ? ' active' : ''}`} aria-label={`View property photo ${index + 1}`} onClick={() => setActiveImage(index)}><img src={media.url} alt={media.alt || `Property photo ${index + 1}`} loading="lazy"/></button>)}</div> : null}</div> : <div className="gallery gallery-placeholder"><Icon name="area"/><strong>Property photos coming soon</strong><span>Ask for current site photos in your inquiry.</span></div>}
         </section>
 
-        <section className="spec-section"><h2 className="spec-section-title">Property details</h2><dl className="spec-grid"><Spec label="Project" value={property.project || 'Ask for details'}/><Spec label="Phase" value={property.phase || 'Ask for details'}/><Spec label="Block" value={property.block || 'Ask for details'}/><Spec label="Lot" value={property.lotNumber || 'Ask for details'}/><Spec label="Lot area" value={property.areaSqm !== null ? `${formatNumber(property.areaSqm)} sqm` : 'Ask for details'}/><Spec label="Published price" value={formatCurrency(property.displayPrice)}/><Spec label="Availability" value="Available"/><Spec label="Location" value={location}/></dl></section>
+        <section className="spec-section"><h2 className="spec-section-title">Property details</h2><dl className="spec-grid"><Spec label="Project" value={currentProperty.project || 'Ask for details'}/><Spec label="Phase" value={currentProperty.phase || 'Ask for details'}/><Spec label="Block" value={currentProperty.block || 'Ask for details'}/><Spec label="Lot" value={currentProperty.lotNumber || 'Ask for details'}/><Spec label="Lot area" value={currentProperty.areaSqm !== null ? `${formatNumber(currentProperty.areaSqm)} sqm` : 'Ask for details'}/><Spec label="Published price" value={formatCurrency(currentProperty.displayPrice)}/><Spec label="Availability" value="Available"/><Spec label="Location" value={location}/></dl></section>
 
-        {property.description ? <section className="spec-section detail-copy"><h2 className="spec-section-title">About this property</h2><p>{property.description}</p></section> : null}
+        {currentProperty.description ? <section className="spec-section detail-copy"><h2 className="spec-section-title">About this property</h2><p>{currentProperty.description}</p></section> : null}
         <section className="spec-section detail-copy"><h2 className="spec-section-title">What to verify</h2><p>Confirm ownership, survey and boundaries, access, utilities, final price, payment terms, taxes, and any other material condition before making a commitment.</p></section>
 
         {similar.length ? <section className="spec-section similar-section"><h2 className="spec-section-title">More lots to compare</h2><div className="properties-grid">{similar.map((item) => <PropertyCard key={item.id} property={item}/>)}</div></section> : null}
       </div>
 
-      <aside className="detail-sidebar"><div className="sidebar-card detail-cta-card"><h2 className="sidebar-card-title">Ask about this lot</h2><p>Request current photos, documents, boundary details, final terms, or a site visit.</p><InquiryForm property={property} compact/></div><div className="seller-profile"><div className="seller-avatar" aria-hidden="true">R</div><div className="seller-info"><strong className="seller-name">RenoLeads</strong><span className="seller-role">Polomolok land lot service</span><span className="seller-area">Connected to NJ125 inventory</span></div></div></aside>
+      <aside className="detail-sidebar"><div className="sidebar-card detail-cta-card"><h2 className="sidebar-card-title">Ask about this lot</h2><p>Request current photos, documents, boundary details, final terms, or a site visit.</p><InquiryForm property={currentProperty} compact/></div><div className="seller-profile"><div className="seller-avatar" aria-hidden="true">R</div><div className="seller-info"><strong className="seller-name">RenoLeads</strong><span className="seller-role">Polomolok land lot service</span><span className="seller-area">Connected to NJ125 inventory</span></div></div></aside>
     </div>
   </div>;
 }
