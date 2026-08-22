@@ -27,5 +27,4 @@ jobs:
       - name: Production build
         run: npm run build
       - name: Production Firebase smoke test
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: node scripts/production-smoke.mjs
