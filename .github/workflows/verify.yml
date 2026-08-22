@@ -1,4 +1,4 @@
-name: Phase 3 verification
+name: RenoLeads verification
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Typecheck
         run: npm run typecheck
-      - name: Contract tests
+      - name: Contract and architecture tests
         run: npm test
       - name: Production build
         run: npm run build

@@ -45,21 +45,28 @@ export function InquiryForm({ property = null, compact = false }: { property?: P
     }
   }
 
-  return <form className={compact ? 'inquiry-form inquiry-form-compact' : 'inquiry-form'} onSubmit={onSubmit} noValidate>
-    {property ? <div className="form-group"><label htmlFor="propertyInterest">Property</label><input id="propertyInterest" value={property.title} readOnly aria-readonly="true"/></div> : null}
-    <div className="form-row">
-      <div className="form-group"><label htmlFor="fullName">Full name</label><input id="fullName" name="fullName" autoComplete="name" maxLength={160} required value={form.fullName} onChange={(event) => update('fullName', event.target.value)}/></div>
-      <div className="form-group"><label htmlFor="mobileNumber">Mobile number</label><input id="mobileNumber" name="mobileNumber" autoComplete="tel" inputMode="tel" maxLength={40} required value={form.mobileNumber} onChange={(event) => update('mobileNumber', event.target.value)}/></div>
-    </div>
-    <div className="form-row">
-      <div className="form-group"><label htmlFor="email">Email <span className="text-muted">optional</span></label><input id="email" name="email" type="email" autoComplete="email" maxLength={254} value={form.email} onChange={(event) => update('email', event.target.value)}/></div>
-      <div className="form-group"><label htmlFor="inquiryType">What do you need?</label><select id="inquiryType" value={form.inquiryType} onChange={(event) => update('inquiryType', event.target.value)}><option value="general">General inquiry</option><option value="site-visit">Schedule a site visit</option><option value="pricing">Pricing and terms</option><option value="documents">Property documents</option></select></div>
-    </div>
-    <div className="form-row">
-      <div className="form-group"><label htmlFor="preferredDate">Preferred date <span className="text-muted">optional</span></label><input id="preferredDate" type="date" min={minDate} value={form.preferredDate} onChange={(event) => update('preferredDate', event.target.value)}/></div>
-      <div className="form-group"><label htmlFor="preferredContact">Preferred contact</label><select id="preferredContact" value={form.preferredContactMethod} onChange={(event) => update('preferredContactMethod', event.target.value)}><option value="call-or-text">Call or text</option><option value="email">Email</option><option value="viber">Viber</option><option value="messenger">Messenger</option></select></div>
-    </div>
-    <div className="form-group"><label htmlFor="message">Message <span className="text-muted">optional</span></label><textarea id="message" rows={5} maxLength={2000} value={form.message} onChange={(event) => update('message', event.target.value)} placeholder="Tell us what you want to verify or ask about."/></div>
+  return <form className={compact ? 'inquiry-form inquiry-form-compact' : 'inquiry-form'} onSubmit={onSubmit} noValidate aria-busy={submitting}>
+    {property ? <div className="form-group property-interest"><label htmlFor="propertyInterest">Selected property</label><input id="propertyInterest" value={property.title} readOnly aria-readonly="true"/></div> : null}
+
+    <fieldset className="form-section">
+      <legend>Contact details</legend>
+      <div className="form-row">
+        <div className="form-group"><label htmlFor="fullName"><span>Full name</span><span className="field-required">Required</span></label><input id="fullName" name="fullName" autoComplete="name" maxLength={160} required value={form.fullName} onChange={(event) => update('fullName', event.target.value)} placeholder="Your full name"/></div>
+        <div className="form-group"><label htmlFor="mobileNumber"><span>Mobile number</span><span className="field-required">Required</span></label><input id="mobileNumber" name="mobileNumber" autoComplete="tel" inputMode="tel" maxLength={40} required value={form.mobileNumber} onChange={(event) => update('mobileNumber', event.target.value)} placeholder="09xx xxx xxxx"/></div>
+      </div>
+      <div className="form-group"><label htmlFor="email"><span>Email</span><span className="text-muted">Optional</span></label><input id="email" name="email" type="email" autoComplete="email" maxLength={254} value={form.email} onChange={(event) => update('email', event.target.value)} placeholder="name@example.com"/></div>
+    </fieldset>
+
+    <fieldset className="form-section">
+      <legend>Inquiry details</legend>
+      <div className="form-row">
+        <div className="form-group"><label htmlFor="inquiryType">What do you need?</label><select id="inquiryType" value={form.inquiryType} onChange={(event) => update('inquiryType', event.target.value)}><option value="general">General inquiry</option><option value="site-visit">Schedule a site visit</option><option value="pricing">Pricing and terms</option><option value="documents">Property documents</option></select></div>
+        <div className="form-group"><label htmlFor="preferredContact">Preferred contact</label><select id="preferredContact" value={form.preferredContactMethod} onChange={(event) => update('preferredContactMethod', event.target.value)}><option value="call-or-text">Call or text</option><option value="email">Email</option><option value="viber">Viber</option><option value="messenger">Messenger</option></select></div>
+      </div>
+      <div className="form-group"><label htmlFor="preferredDate"><span>Preferred date</span><span className="text-muted">Optional</span></label><input id="preferredDate" type="date" min={minDate} value={form.preferredDate} onChange={(event) => update('preferredDate', event.target.value)}/></div>
+      <div className="form-group"><label htmlFor="message"><span>Message</span><span className="text-muted">Optional</span></label><textarea id="message" rows={5} maxLength={2000} value={form.message} onChange={(event) => update('message', event.target.value)} placeholder="Tell us what you want to verify, ask about, or see during a site visit."/></div>
+    </fieldset>
+
     <label className="consent-check"><input type="checkbox" checked={form.consent} onChange={(event) => update('consent', event.target.checked)}/><span>I have read the <Link to="/privacy">Privacy Notice</Link> and agree that the information I submit may be used to respond to this inquiry.</span></label>
     {error ? <div className="form-status form-status-error" role="alert">{error}</div> : null}
     {success ? <div className="form-status form-status-success" role="status"><strong>{success.message}</strong>{success.requestId ? <span> Reference: {success.requestId}</span> : null}</div> : null}

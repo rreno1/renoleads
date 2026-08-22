@@ -1,10 +1,8 @@
-# RenoLeads
+# renoleads
 
 Public land-lot discovery and inquiry frontend for NJ125 Corporation.
 
 ## Production
-
-RenoLeads is deployed on Firebase Hosting at:
 
 ```text
 https://renoleads-11e2b.web.app
@@ -12,12 +10,12 @@ https://renoleads-11e2b.web.app
 
 The repository is bound to Firebase project `renoleads-11e2b` through `.firebaserc`.
 
-## Production architecture
+## Architecture
 
-RenoLeads and NJ125 remain separate applications and separate repositories, while sharing one dedicated Supabase backend.
+renoleads and NJ125 remain separate applications and repositories while sharing one dedicated Supabase backend.
 
 ```text
-RenoLeads
+renoleads
 React + TypeScript + Vite
 Firebase Hosting only
         ↓
@@ -30,26 +28,27 @@ React + TypeScript + Vite
 Firebase Hosting only
 ```
 
-RenoLeads never talks directly to NJ125 database tables. Public browser access is limited to the Edge API actions `public-properties` and `submit-property-inquiry`.
+renoleads never talks directly to NJ125 database tables. Public browser access is limited to the Edge API actions `public-properties` and `submit-property-inquiry`.
 
-## Phase 3 modernization
-
-The former page-by-page HTML/Vanilla JavaScript runtime was replaced with a single React application.
+## Frontend
 
 - React 19 + TypeScript
 - Vite production build
-- React Router with clean routes
-- compatibility aliases for the old `.html` URLs
-- existing RenoLeads CSS visual language retained
-- NJ125 public API adapter rewritten in strict TypeScript
+- React Router with clean routes only
+- Poppins typography throughout
+- lowercase `renoleads` wordmark in Poppins SemiBold
+- responsive property discovery and inquiry UI
+- accessible IntersectionObserver-based scroll reveals with reduced-motion support
 - one shared inventory fetch through React context
-- inquiry form rewritten as a typed controlled React form
-- saved/recent lot IDs remain optional non-PII browser convenience state
+- typed controlled inquiry form
+- saved/recent lot IDs as optional non-PII browser convenience state
 - no inquiry PII browser buffering
 - no runtime mock inventory
 - no Firebase SDK
 - no Firestore, Firebase Auth, Firebase Storage, or Cloud Functions backend
 - Firebase Hosting serves only `dist/`
+
+Active styles live under `src/styles/`. The former root `css/` bundle and old `.html` compatibility routes have been removed.
 
 ## Routes
 
@@ -62,8 +61,6 @@ The former page-by-page HTML/Vanilla JavaScript runtime was replaced with a sing
 /buying-process
 /why-polomolok
 ```
-
-Legacy aliases such as `/properties.html`, `/property.html?id=...`, `/contact.html`, `/privacy.html`, `/buying-process.html`, and `/why-invest.html` are still handled by React Router after Firebase's SPA rewrite.
 
 ## Shared backend contract
 
@@ -125,27 +122,17 @@ npm ci
 npm run dev
 ```
 
-Verification:
-
-```bash
-npm run typecheck
-npm test
-npm run build
-```
-
-Or run the complete gate:
+Complete verification:
 
 ```bash
 npm run verify
 ```
 
-The production output is written to `dist/`.
+This runs strict TypeScript, the production architecture/security gate, and the Vite build. The production output is written to `dist/`.
 
 ## Firebase Hosting deployment
 
-Firebase is hosting only. No Firebase backend products are part of the RenoLeads application architecture.
-
-From an authenticated workstation:
+Firebase is hosting only.
 
 ```bash
 firebase login
@@ -163,7 +150,7 @@ Do not commit Firebase access tokens, service-account credentials, Supabase secr
 
 `node scripts/production-smoke.mjs` validates the deployed Firebase application from an external network path. CI verifies:
 
-- `/`, `/properties`, `/contact`, `/privacy`, and a legacy `/property.html?id=...` route return the React SPA
+- `/`, `/properties`, `/contact`, `/privacy`, and a clean `/property/:id` route return the React SPA
 - security headers are present
 - `/.well-known/assetlinks.json` is served as JSON
 - the NJ125 `public-properties` Edge action accepts `Origin: https://renoleads-11e2b.web.app`
@@ -174,7 +161,7 @@ Do not commit Firebase access tokens, service-account credentials, Supabase secr
 
 The Privacy Notice version used by the inquiry contract is `2026-08-22`.
 
-RenoLeads may store only:
+renoleads may store only:
 
 - saved NJ125 lot IDs in local storage
 - recently viewed NJ125 lot IDs in local storage
@@ -182,6 +169,6 @@ RenoLeads may store only:
 
 Names, mobile numbers, email addresses, inquiry messages, and other inquiry PII are never buffered locally when a submission fails.
 
-## Current data state
+## Data state
 
-RenoLeads does not ship sample properties. If NJ125 has no published available lots, the catalog intentionally displays an empty state.
+renoleads does not ship sample properties. If NJ125 has no published available lots, the catalog intentionally displays an empty state.

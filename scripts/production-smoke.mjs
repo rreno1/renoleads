@@ -15,7 +15,7 @@ async function fetchText(path) {
   return { response, text };
 }
 
-for (const path of ['/', '/properties', '/contact', '/privacy', '/property.html?id=00000000-0000-4000-8000-000000000000']) {
+for (const path of ['/', '/properties', '/contact', '/privacy', '/property/00000000-0000-4000-8000-000000000000']) {
   const { response } = await fetchText(path);
   const csp = response.headers.get('content-security-policy') || '';
   check(csp.includes("default-src 'self'"), `${path}: CSP missing expected default-src`);

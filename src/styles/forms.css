@@ -1,0 +1,43 @@
+.form-section {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 253, 249, 0.58);
+}
+
+.form-section legend {
+  padding-inline: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--forest-700);
+}
+
+.field-required {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bronze-700);
+}
+
+.property-interest {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--forest-050);
+  border: 1px solid rgba(36, 89, 67, 0.14);
+}
+
+.inquiry-form-compact .form-section {
+  padding: var(--space-4);
+}
+
+@media (max-width: 620px) {
+  .form-section {
+    padding: var(--space-4);
+  }
+}

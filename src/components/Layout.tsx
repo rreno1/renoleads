@@ -1,27 +1,39 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { config } from '../config';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 import { Icon } from './Icon';
 
 function Brand() {
-  return <Link className="brand-logo" to="/" aria-label="renoleads home"><Icon name="home"/>renoleads</Link>;
+  return <Link className="brand-logo" to="/" aria-label="renoleads home"><Icon name="home"/><span>renoleads</span></Link>;
 }
 
 export function Layout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const routeKey = `${location.pathname}${location.search}`;
   const savedView = location.pathname.includes('properties') && new URLSearchParams(location.search).get('filter') === 'saved';
   const propertiesActive = location.pathname.includes('properties') && !savedView;
   const contactActive = location.pathname.includes('contact');
 
+  useScrollReveal(routeKey);
+
   useEffect(() => {
     setMobileOpen(false);
     window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [location.pathname, location.search]);
+  }, [routeKey]);
+
+  useEffect(() => {
+    const syncScrollState = () => setScrolled(window.scrollY > 12);
+    syncScrollState();
+    window.addEventListener('scroll', syncScrollState, { passive: true });
+    return () => window.removeEventListener('scroll', syncScrollState);
+  }, []);
 
   return <>
     <a className="skip-link" href="#main-content">Skip to content</a>
-    <header className="site-header">
+    <header className={`site-header${scrolled ? ' scrolled' : ''}`}>
       <nav className="navbar container" aria-label="Primary navigation">
         <Brand/>
         <div className="desktop-nav">
@@ -44,7 +56,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
     <main id="main-content">{children}</main>
 
-    <footer className="site-footer">
+    <footer className="site-footer" data-reveal="up">
       <div className="container footer-grid">
         <div className="footer-brand"><Brand/><p>Focused land-lot discovery for Polomolok, South Cotabato.</p></div>
         <div className="footer-links"><h2 className="footer-heading">Explore</h2><Link to="/properties">Available lots</Link><Link to="/properties?filter=saved">Saved lots</Link><Link to="/why-polomolok">Why Polomolok</Link><Link to="/buying-process">Buying process</Link></div>
