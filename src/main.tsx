@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './styles/app.css';
+import './styles/forms.css';
 import { App } from './App';
 import { captureAttribution } from './lib/nj125Api';
 import { PropertyProvider } from './state/PropertyContext';
