@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './styles/app.css';
 import './styles/forms.css';
 import { App } from './App';
-import { captureAttribution } from './lib/nj125Api';
+import { captureAttribution } from './lib/propertyApi';
 import { PropertyProvider } from './state/PropertyContext';
 
 captureAttribution();
