@@ -44,14 +44,17 @@ const api = read('src/lib/propertyApi.ts');
 const main = read('src/main.tsx');
 const styles = `${read('src/styles/app.css')}\n${read('src/styles/forms.css')}`;
 const firebaseText = read('firebase.json');
+const propertyCard = read('src/components/PropertyCard.tsx');
+const homePage = read('src/pages/HomePage.tsx');
+const propertyPage = read('src/pages/PropertyPage.tsx');
 
 assert(source.includes('https://dnsgfsgpopniqeuqfslp.supabase.co/functions/v1/api'), 'Public Edge endpoint is missing');
 assert(api.includes("new Set(['public-properties', 'submit-property-inquiry'])"), 'Public action allowlist is missing');
 assert(api.includes('AbortController'), 'Public API timeout control is missing');
-assert(api.includes("credentials: 'omit'"), 'Public API must omit credentials');
-assert(api.includes("cache: 'no-store'"), 'Public API must disable cache');
+assert(/credentials\s*:\s*['"]omit['"]/.test(api), 'Public API must omit credentials');
+assert(/cache\s*:\s*['"]no-store['"]/.test(api), 'Public API must disable cache');
 assert(api.includes('responseLimitBytes'), 'Public API response-size cap is missing');
-assert(api.includes("content-type"), 'Public API response content-type validation is missing');
+assert(api.includes('content-type'), 'Public API response content-type validation is missing');
 assert(source.includes('privacyNoticeVersion'), 'Privacy notice version evidence is missing');
 assert(source.includes('utmCampaign') && source.includes('referrer'), 'Attribution fields are missing');
 assert(!/MOCK_PROPERTIES|sample-res|sample-farm|sample-com/i.test(source), 'Runtime mock inventory is forbidden');
@@ -64,9 +67,14 @@ assert(!/\bnj125\b/i.test(source), 'NJ125 branding must not appear in RenoLeads 
 assert(sourceFiles.every((file) => !/nj125/i.test(file)), 'NJ125 branding must not appear in RenoLeads frontend file paths');
 assert(!app.includes('.html'), 'Legacy .html compatibility routes must not return');
 assert(main.includes("'./styles/app.css'") && main.includes("'./styles/forms.css'"), 'Active styles must live under src/styles');
-assert(styles.includes("font-family: var(--font-body)") || styles.includes("--font-body: 'Poppins'"), 'Poppins typography foundation is missing');
+assert(styles.includes('font-family: var(--font-body)') || styles.includes("--font-body: 'Poppins'"), 'Poppins typography foundation is missing');
 assert(styles.includes('[data-reveal]'), 'Scroll reveal styling is missing');
 assert(source.includes('IntersectionObserver'), 'Scroll reveal observer is missing');
+
+assert(/loading=['"]lazy['"]/.test(propertyCard) && /decoding=['"]async['"]/.test(propertyCard), 'Property cards must lazy-load and asynchronously decode images');
+assert(/loading=['"]eager['"]/.test(homePage) && /fetchPriority=['"]high['"]/.test(homePage), 'Homepage LCP image priority controls are missing');
+assert(/decoding=['"]async['"]/.test(homePage), 'Homepage images must use asynchronous decoding');
+assert(/fetchPriority=['"]high['"]/.test(propertyPage) && /loading=['"]lazy['"]/.test(propertyPage), 'Property detail image priority/lazy-loading controls are missing');
 
 for (const header of ['Strict-Transport-Security', 'Cross-Origin-Resource-Policy', 'X-Permitted-Cross-Domain-Policies', 'Content-Security-Policy']) {
   assert(firebaseText.includes(header), `${header} is missing from Firebase Hosting headers`);
