@@ -2,6 +2,16 @@
 
 Public land-lot discovery and inquiry frontend for NJ125 Corporation.
 
+## Production
+
+RenoLeads is deployed on Firebase Hosting at:
+
+```text
+https://renoleads-11e2b.web.app
+```
+
+The repository is bound to Firebase project `renoleads-11e2b` through `.firebaserc`.
+
 ## Production architecture
 
 RenoLeads and NJ125 remain separate applications and separate repositories, while sharing one dedicated Supabase backend.
@@ -111,7 +121,7 @@ The public response exposes only an opaque request reference. Internal inquiry a
 Requires Node.js 22.12 or newer.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -135,16 +145,11 @@ The production output is written to `dist/`.
 
 Firebase is hosting only. No Firebase backend products are part of the RenoLeads application architecture.
 
-Select the intended Firebase project once from an authenticated workstation:
+From an authenticated workstation:
 
 ```bash
 firebase login
-firebase use --add
-```
-
-Then build and deploy:
-
-```bash
+firebase use renoleads-11e2b
 npm ci
 npm run verify
 firebase deploy --only hosting
@@ -153,6 +158,17 @@ firebase deploy --only hosting
 Do not commit Firebase access tokens, service-account credentials, Supabase secret keys, or service-role credentials.
 
 `firebase.json` includes the SPA rewrite, immutable caching for hashed assets, no-cache HTML, CSP, frame protection, referrer policy, permissions policy, and COOP headers.
+
+## Production smoke verification
+
+`node scripts/production-smoke.mjs` validates the deployed Firebase application from an external network path. CI verifies:
+
+- `/`, `/properties`, `/contact`, `/privacy`, and a legacy `/property.html?id=...` route return the React SPA
+- security headers are present
+- `/.well-known/assetlinks.json` is served as JSON
+- the NJ125 `public-properties` Edge action accepts `Origin: https://renoleads-11e2b.web.app`
+- Edge CORS preflight succeeds
+- a deliberately consent-rejected inquiry reaches the live API and returns `consent-required` without creating production inquiry/lead records
 
 ## Privacy and retention
 
